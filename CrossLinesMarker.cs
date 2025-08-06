@@ -5,28 +5,30 @@ namespace com.github.lhervier.ksp {
     public class CrossLinesMarker {
         private readonly Vector2 center;
         private readonly Color color;
-        private readonly int lineLength;
         private readonly int thickness;
         
         public CrossLinesMarker(Vector2 center, Color color) {
             this.center = center;
             this.color = color;
-            this.lineLength = 50;
             this.thickness = 2;
         }
         
         public void Draw() {
-            // Ligne horizontale
+            // Obtenir les dimensions de l'écran
+            float screenWidth = Screen.width;
+            float screenHeight = Screen.height;
+            
+            // Ligne horizontale (de gauche à droite de l'écran)
             DrawLine(
-                new Vector2(center.x - lineLength, center.y),
-                new Vector2(center.x + lineLength, center.y),
+                new Vector2(0, center.y),
+                new Vector2(screenWidth, center.y),
                 color, thickness
             );
             
-            // Ligne verticale
+            // Ligne verticale (de haut en bas de l'écran)
             DrawLine(
-                new Vector2(center.x, center.y - lineLength),
-                new Vector2(center.x, center.y + lineLength),
+                new Vector2(center.x, 0),
+                new Vector2(center.x, screenHeight),
                 color, thickness
             );
         }
