@@ -120,7 +120,8 @@ namespace com.github.lhervier.ksp {
         private void DrawMarkerEditor(VisualMarker marker, bool isNew) {
             GUILayout.BeginVertical(GUI.skin.box);
             
-            marker.name = GUILayout.TextField("Name:", marker.name);
+            GUILayout.Label("Name:");
+            marker.name = GUILayout.TextField(marker.name, GUILayout.Width(200));
             
             // Type de repère
             GUILayout.Label("Type:");
