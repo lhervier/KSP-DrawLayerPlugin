@@ -173,7 +173,6 @@ namespace com.github.lhervier.ksp {
         public float positionY = 50f; // % de la hauteur
         public float radius = 10f; // % de la largeur (pour les cercles)
         public bool showGraduations = false;
-        public float mainGraduationAngle = 0f; // degrés
         public int mainGraduationDivisions = 12; // nombre de divisions principales (2, 4, 8, 12, 36)
         public int subGraduationDivisions = 3; // nombre de divisions pour les sous-graduations
         public Color color = Color.white;
@@ -189,7 +188,6 @@ namespace com.github.lhervier.ksp {
             this.positionY = other.positionY;
             this.radius = other.radius;
             this.showGraduations = other.showGraduations;
-            this.mainGraduationAngle = other.mainGraduationAngle;
             this.mainGraduationDivisions = other.mainGraduationDivisions;
             this.subGraduationDivisions = other.subGraduationDivisions;
             this.color = other.color;

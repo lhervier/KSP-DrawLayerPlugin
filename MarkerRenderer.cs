@@ -55,7 +55,7 @@ namespace com.github.lhervier.ksp {
             } else if (marker.type == MarkerType.Circle) {
                 float radius = Screen.width * marker.radius / 100f;
                 var circleMarker = new CircleMarker(screenPos, radius, marker.color, marker.showGraduations, 
-                                                   marker.mainGraduationAngle, marker.mainGraduationDivisions, marker.subGraduationDivisions);
+                                                   marker.mainGraduationDivisions, marker.subGraduationDivisions);
                 circleMarker.Draw();
             }
         }

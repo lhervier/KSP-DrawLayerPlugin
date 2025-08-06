@@ -103,7 +103,6 @@ namespace com.github.lhervier.ksp {
                     markerNode.SetValue("positionY", marker.positionY.ToString());
                     markerNode.SetValue("radius", marker.radius.ToString());
                     markerNode.SetValue("showGraduations", marker.showGraduations.ToString().ToLower());
-                    markerNode.SetValue("mainGraduationAngle", marker.mainGraduationAngle.ToString());
                     markerNode.SetValue("mainGraduationDivisions", marker.mainGraduationDivisions.ToString());
                     markerNode.SetValue("subGraduationDivisions", marker.subGraduationDivisions.ToString());
                     markerNode.SetValue("colorR", marker.color.r.ToString());
@@ -158,11 +157,6 @@ namespace com.github.lhervier.ksp {
                 string graduationsStr = markerNode.GetValue("showGraduations");
                 if (!string.IsNullOrEmpty(graduationsStr)) {
                     marker.showGraduations = graduationsStr.ToLower() == "true";
-                }
-                
-                string angleStr = markerNode.GetValue("mainGraduationAngle");
-                if (!string.IsNullOrEmpty(angleStr) && float.TryParse(angleStr, out float angle)) {
-                    marker.mainGraduationAngle = angle;
                 }
                 
                 // Divisions de la graduation principale

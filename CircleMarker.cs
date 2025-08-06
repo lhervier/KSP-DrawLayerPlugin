@@ -7,18 +7,16 @@ namespace com.github.lhervier.ksp {
         private readonly float radius;
         private readonly Color color;
         private readonly bool showGraduations;
-        private readonly float mainGraduationAngle;
         private readonly int mainGraduationDivisions;
         private readonly int subGraduationDivisions;
         private readonly int segments;
         
         public CircleMarker(Vector2 center, float radius, Color color, bool showGraduations, 
-                           float mainGraduationAngle, int mainGraduationDivisions, int subGraduationDivisions) {
+                           int mainGraduationDivisions, int subGraduationDivisions) {
             this.center = center;
             this.radius = radius;
             this.color = color;
             this.showGraduations = showGraduations;
-            this.mainGraduationAngle = mainGraduationAngle;
             this.mainGraduationDivisions = mainGraduationDivisions;
             this.subGraduationDivisions = subGraduationDivisions;
             this.segments = 64;
@@ -99,12 +97,9 @@ namespace com.github.lhervier.ksp {
             for (int i = 0; i < mainGraduationDivisions; i++) {
                 float angle = i * mainGraduationSize * Mathf.Deg2Rad;
                 
-                // Vérifier si c'est la graduation principale marquée
-                bool isMainMarked = Mathf.Abs(angle - (mainGraduationAngle * Mathf.Deg2Rad)) < 0.1f;
-                
-                // Taille de la graduation (plus grande si c'est la graduation marquée)
-                float graduationLength = isMainMarked ? 25f : 20f;
-                int thickness = isMainMarked ? 3 : 2;
+                // Taille de la graduation (toutes les graduations principales ont la même taille)
+                float graduationLength = 20f;
+                int thickness = 2;
                 
                 Vector2 outerPoint = center + new Vector2(
                     Mathf.Cos(angle) * radius,
