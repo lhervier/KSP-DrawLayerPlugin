@@ -12,7 +12,7 @@ namespace com.github.lhervier.ksp {
         
         // Interface utilisateur - Fenêtre d'édition
         private bool showEditorWindow = false;
-        private Rect editorWindowRect = new Rect(400, 50, 400, 600);
+        private Rect editorWindowRect = new Rect(400, 50, 400, 700);
         
         // État de l'interface
         private int selectedMarkerIndex = -1;
