@@ -109,24 +109,18 @@ namespace com.github.lhervier.ksp {
             
             GUILayout.EndScrollView();
             
-            // Bouton pour fermer l'interface
-            if (GUILayout.Button("Close")) {
-                showUI = false;
-            }
-            
             GUI.DragWindow();
         }
         
         private void DrawMarkerEditor(VisualMarker marker, bool isNew) {
             GUILayout.BeginVertical(GUI.skin.box);
             
+            // ===== PROPRIÉTÉS COMMUNES =====
+            GUILayout.Label("Common Properties:", GUI.skin.box);
+            
+            // Nom
             GUILayout.Label("Name:");
             marker.name = GUILayout.TextField(marker.name, GUILayout.Width(200));
-            
-            // Type de repère
-            GUILayout.Label("Type:");
-            marker.type = (MarkerType)GUILayout.SelectionGrid((int)marker.type, 
-                new string[] { "Cross Lines", "Circle" }, 2);
             
             // Position
             GUILayout.Label("Position (% width, % height):");
@@ -136,39 +130,10 @@ namespace com.github.lhervier.ksp {
             GUILayout.EndHorizontal();
             GUILayout.Label($"X: {marker.positionX:F1}%, Y: {marker.positionY:F1}%");
             
-            // Bouton de réinitialisation de la position pour les lignes croisées
-            if (marker.type == MarkerType.CrossLines) {
-                if (GUILayout.Button("Reset Position to Center (50%, 50%)")) {
-                    marker.positionX = 50f;
-                    marker.positionY = 50f;
-                }
-            }
-            
-            // Paramètres spécifiques au type
-            if (marker.type == MarkerType.CrossLines) {
-                // Pas de paramètres supplémentaires pour les lignes croisées
-            } else if (marker.type == MarkerType.Circle) {
-                GUILayout.Label("Radius (% width):");
-                marker.radius = GUILayout.HorizontalSlider(marker.radius, 1f, 50f);
-                GUILayout.Label($"Radius: {marker.radius:F1}%");
-                
-                marker.showGraduations = GUILayout.Toggle(marker.showGraduations, "Show graduations");
-                
-                if (marker.showGraduations) {
-                    GUILayout.Label("Main graduation divisions:");
-                    // Slider pour les divisions prédéfinies (1, 2, 3, 4, 6, 8, 12, 36)
-                    int[] divisions = { 1, 2, 3, 4, 6, 8, 12, 36 };
-                    int currentIndex = System.Array.IndexOf(divisions, marker.mainGraduationDivisions);
-                    if (currentIndex == -1) currentIndex = 2; // Valeur par défaut (4 divisions)
-                    
-                    currentIndex = (int)GUILayout.HorizontalSlider(currentIndex, 0, divisions.Length - 1);
-                    marker.mainGraduationDivisions = divisions[currentIndex];
-                    
-                                         // Afficher les degrés correspondants
-                     float degrees = marker.mainGraduationDivisions > 1 ? 360f / marker.mainGraduationDivisions : 0f;
-                     string divisionText = marker.mainGraduationDivisions == 1 ? "No graduations" : $"{marker.mainGraduationDivisions} divisions ({degrees:F0}°)";
-                     GUILayout.Label($"Divisions: {divisionText}");
-                }
+            // Bouton de réinitialisation de la position (commun aux deux types)
+            if (GUILayout.Button("Reset Position to Center (50%, 50%)")) {
+                marker.positionX = 50f;
+                marker.positionY = 50f;
             }
             
             // Couleur
@@ -223,6 +188,45 @@ namespace com.github.lhervier.ksp {
             GUILayout.Box("", GUILayout.Height(20), GUILayout.Width(100));
             GUI.color = originalColor;
             GUILayout.EndHorizontal();
+            
+            GUILayout.Space(10);
+            
+            // ===== TYPE DE MARQUEUR =====
+            GUILayout.Label("Marker Type:", GUI.skin.box);
+            marker.type = (MarkerType)GUILayout.SelectionGrid((int)marker.type, 
+                new string[] { "Cross Lines", "Circle" }, 2);
+            
+            GUILayout.Space(10);
+            
+            // ===== PROPRIÉTÉS SPÉCIFIQUES AU TYPE =====
+            if (marker.type == MarkerType.CrossLines) {
+                GUILayout.Label("Cross Lines Properties:", GUI.skin.box);
+                GUILayout.Label("No additional properties for cross lines.");
+            } else if (marker.type == MarkerType.Circle) {
+                GUILayout.Label("Circle Properties:", GUI.skin.box);
+                
+                GUILayout.Label("Radius (% width):");
+                marker.radius = GUILayout.HorizontalSlider(marker.radius, 1f, 50f);
+                GUILayout.Label($"Radius: {marker.radius:F1}%");
+                
+                marker.showGraduations = GUILayout.Toggle(marker.showGraduations, "Show graduations");
+                
+                if (marker.showGraduations) {
+                    GUILayout.Label("Main graduation divisions:");
+                    // Slider pour les divisions prédéfinies (1, 2, 3, 4, 6, 8, 12, 36)
+                    int[] divisions = { 1, 2, 3, 4, 6, 8, 12, 36 };
+                    int currentIndex = System.Array.IndexOf(divisions, marker.mainGraduationDivisions);
+                    if (currentIndex == -1) currentIndex = 2; // Valeur par défaut (4 divisions)
+                    
+                    currentIndex = (int)GUILayout.HorizontalSlider(currentIndex, 0, divisions.Length - 1);
+                    marker.mainGraduationDivisions = divisions[currentIndex];
+                    
+                    // Afficher les degrés correspondants
+                    float degrees = marker.mainGraduationDivisions > 1 ? 360f / marker.mainGraduationDivisions : 0f;
+                    string divisionText = marker.mainGraduationDivisions == 1 ? "No graduations" : $"{marker.mainGraduationDivisions} divisions ({degrees:F0}°)";
+                    GUILayout.Label($"Divisions: {divisionText}");
+                }
+            }
             
             // Boutons d'action
             GUILayout.BeginHorizontal();
