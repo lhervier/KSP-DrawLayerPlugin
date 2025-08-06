@@ -6,14 +6,17 @@ namespace com.github.lhervier.ksp {
     public class UIManager {
         private readonly ConfigManager configManager;
         
-        // Interface utilisateur
+        // Interface utilisateur - Fenêtre principale
         private bool showUI = false;
-        private Rect windowRect = new Rect(50, 50, 400, 600);
-        private Vector2 scrollPosition = Vector2.zero;
+        private Rect mainWindowRect = new Rect(50, 50, 300, 200);
+        
+        // Interface utilisateur - Fenêtre d'édition
+        private bool showEditorWindow = false;
+        private Rect editorWindowRect = new Rect(400, 50, 400, 700);
         
         // État de l'interface
         private int selectedMarkerIndex = -1;
-        private VisualMarker newMarker = new VisualMarker();
+        private VisualMarker editingMarker = new VisualMarker();
         private bool isCreatingNewMarker = false;
         private VisualMarker previewMarker = null; // Marqueur temporaire pour l'aperçu
         
@@ -30,44 +33,29 @@ namespace com.github.lhervier.ksp {
         
         public void DrawUI() {
             if (showUI) {
-                windowRect = GUI.Window(12345, windowRect, DrawUIWindow, "DrawLayer - Visual Markers");
+                mainWindowRect = GUI.Window(12345, mainWindowRect, DrawMainWindow, "DrawLayer - Visual Markers");
+                
+                if (showEditorWindow) {
+                    editorWindowRect = GUI.Window(12346, editorWindowRect, DrawEditorWindow, "Marker Editor");
+                }
             }
         }
         
-        private void DrawUIWindow(int windowID) {
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-            
+        private void DrawMainWindow(int windowID) {
             GUILayout.Label("Visual Markers", GUI.skin.box);
             GUILayout.Space(10);
             
             // Bouton pour créer un nouveau repère
             if (GUILayout.Button("New Marker")) {
                 isCreatingNewMarker = true;
-                newMarker = new VisualMarker();
-                newMarker.name = "New Marker";
+                editingMarker = new VisualMarker();
+                editingMarker.name = "New Marker";
+                showEditorWindow = true;
                 // Créer un marqueur temporaire pour l'aperçu
-                previewMarker = new VisualMarker(newMarker);
+                previewMarker = new VisualMarker(editingMarker);
             }
             
             GUILayout.Space(10);
-            
-            // Interface de création/édition
-            if (isCreatingNewMarker) {
-                DrawMarkerEditor(newMarker, true);
-                // Mettre à jour le marqueur d'aperçu en temps réel
-                if (previewMarker != null) {
-                    previewMarker.name = newMarker.name;
-                    previewMarker.type = newMarker.type;
-                    previewMarker.positionX = newMarker.positionX;
-                    previewMarker.positionY = newMarker.positionY;
-                    previewMarker.radius = newMarker.radius;
-                                         previewMarker.showGraduations = newMarker.showGraduations;
-                     previewMarker.mainGraduationDivisions = newMarker.mainGraduationDivisions;
-                    previewMarker.subGraduationDivisions = newMarker.subGraduationDivisions;
-                    previewMarker.color = newMarker.color;
-                    previewMarker.visible = true;
-                }
-            }
             
             // Liste des repères existants
             GUILayout.Label("Existing markers:", GUI.skin.box);
@@ -80,12 +68,15 @@ namespace com.github.lhervier.ksp {
                 if (GUILayout.Button(markers[i].name, GUILayout.ExpandWidth(true))) {
                     selectedMarkerIndex = i;
                     isCreatingNewMarker = false;
+                    editingMarker = new VisualMarker(markers[i]);
+                    showEditorWindow = true;
                 }
                 
                 if (GUILayout.Button("Del", GUILayout.Width(50))) {
                     configManager.RemoveMarker(i);
                     if (selectedMarkerIndex == i) {
                         selectedMarkerIndex = -1;
+                        showEditorWindow = false;
                     } else if (selectedMarkerIndex > i) {
                         selectedMarkerIndex--;
                     }
@@ -95,19 +86,25 @@ namespace com.github.lhervier.ksp {
                 GUILayout.EndHorizontal();
             }
             
-            // Édition du repère sélectionné
-            if (selectedMarkerIndex >= 0 && selectedMarkerIndex < markers.Count) {
-                GUILayout.Space(10);
-                GUILayout.Label("Edit:", GUI.skin.box);
-                DrawMarkerEditor(markers[selectedMarkerIndex], false);
+            GUI.DragWindow();
+        }
+        
+        private void DrawEditorWindow(int windowID) {
+            // Mettre à jour le marqueur d'aperçu en temps réel
+            if (previewMarker != null) {
+                previewMarker.name = editingMarker.name;
+                previewMarker.type = editingMarker.type;
+                previewMarker.positionX = editingMarker.positionX;
+                previewMarker.positionY = editingMarker.positionY;
+                previewMarker.radius = editingMarker.radius;
+                previewMarker.showGraduations = editingMarker.showGraduations;
+                previewMarker.mainGraduationDivisions = editingMarker.mainGraduationDivisions;
+                previewMarker.subGraduationDivisions = editingMarker.subGraduationDivisions;
+                previewMarker.color = editingMarker.color;
+                previewMarker.visible = true;
             }
             
-            // Nettoyer le marqueur d'aperçu si on n'est plus en mode création
-            if (!isCreatingNewMarker && previewMarker != null) {
-                previewMarker = null;
-            }
-            
-            GUILayout.EndScrollView();
+            DrawMarkerEditor(editingMarker, isCreatingNewMarker);
             
             GUI.DragWindow();
         }
@@ -234,10 +231,12 @@ namespace com.github.lhervier.ksp {
                 if (GUILayout.Button("Create")) {
                     configManager.AddMarker(new VisualMarker(marker));
                     isCreatingNewMarker = false;
+                    showEditorWindow = false;
                     previewMarker = null; // Nettoyer l'aperçu
                 }
                 if (GUILayout.Button("Cancel")) {
                     isCreatingNewMarker = false;
+                    showEditorWindow = false;
                     previewMarker = null; // Nettoyer l'aperçu
                 }
             } else {
@@ -247,8 +246,16 @@ namespace com.github.lhervier.ksp {
             }
             GUILayout.EndHorizontal();
             
+            // Bouton Close pour fermer la fenêtre d'édition
+            if (GUILayout.Button("Close")) {
+                showEditorWindow = false;
+                previewMarker = null; // Nettoyer l'aperçu
+            }
+            
             GUILayout.EndVertical();
         }
+        
+
         
         // Méthode pour détecter si deux couleurs sont similaires
         private bool IsColorSimilar(Color color1, Color color2) {
