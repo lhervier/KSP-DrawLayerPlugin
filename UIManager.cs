@@ -171,18 +171,57 @@ namespace com.github.lhervier.ksp {
             }
             
             // Couleur
-            GUILayout.Label("Color (R, G, B):");
-            GUILayout.BeginHorizontal();
-            marker.color.r = GUILayout.HorizontalSlider(marker.color.r, 0f, 1f);
-            marker.color.g = GUILayout.HorizontalSlider(marker.color.g, 0f, 1f);
-            marker.color.b = GUILayout.HorizontalSlider(marker.color.b, 0f, 1f);
-            GUILayout.EndHorizontal();
+            GUILayout.Label("Color:");
             
-            // Aperçu de la couleur
+            // Palette de couleurs prédéfinies
+            Color[] predefinedColors = {
+                Color.red,           // Rouge
+                Color.green,         // Vert
+                Color.blue,          // Bleu
+                Color.yellow,        // Jaune
+                Color.cyan,          // Cyan
+                Color.magenta,       // Magenta
+                Color.white,         // Blanc
+                Color.black,         // Noir
+                new Color(1f, 0.5f, 0f),    // Orange
+                new Color(0.5f, 0f, 1f),    // Violet
+                new Color(0f, 1f, 0.5f),    // Vert-bleu
+                new Color(1f, 0f, 0.5f),    // Rose
+                new Color(0.5f, 1f, 0f),    // Vert clair
+                new Color(0f, 0.5f, 1f),    // Bleu clair
+                new Color(1f, 0.5f, 0.5f),  // Rose clair
+                new Color(0.5f, 0.5f, 0.5f) // Gris
+            };
+            
+            string[] colorNames = {
+                "Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", 
+                "White", "Black", "Orange", "Purple", "Teal", "Pink",
+                "Lime", "Light Blue", "Light Pink", "Gray"
+            };
+            
+            // Sélection de couleur par boutons
+            int selectedColorIndex = -1;
+            for (int i = 0; i < predefinedColors.Length; i++) {
+                if (IsColorSimilar(marker.color, predefinedColors[i])) {
+                    selectedColorIndex = i;
+                    break;
+                }
+            }
+            
+            // Grille de boutons de couleurs (4 colonnes)
+            int newSelectedIndex = GUILayout.SelectionGrid(selectedColorIndex, colorNames, 4);
+            if (newSelectedIndex != selectedColorIndex && newSelectedIndex >= 0) {
+                marker.color = predefinedColors[newSelectedIndex];
+            }
+            
+            // Aperçu de la couleur actuelle
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Current color:");
             Color originalColor = GUI.color;
             GUI.color = marker.color;
-            GUILayout.Box("", GUILayout.Height(20));
+            GUILayout.Box("", GUILayout.Height(20), GUILayout.Width(100));
             GUI.color = originalColor;
+            GUILayout.EndHorizontal();
             
             // Boutons d'action
             GUILayout.BeginHorizontal();
@@ -204,6 +243,14 @@ namespace com.github.lhervier.ksp {
             GUILayout.EndHorizontal();
             
             GUILayout.EndVertical();
+        }
+        
+        // Méthode pour détecter si deux couleurs sont similaires
+        private bool IsColorSimilar(Color color1, Color color2) {
+            float tolerance = 0.1f; // Tolérance pour la comparaison
+            return Mathf.Abs(color1.r - color2.r) < tolerance &&
+                   Mathf.Abs(color1.g - color2.g) < tolerance &&
+                   Mathf.Abs(color1.b - color2.b) < tolerance;
         }
     }
 } 
