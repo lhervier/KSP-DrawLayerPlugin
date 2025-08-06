@@ -1,78 +1,195 @@
+using KSP.UI.Screens;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Expansions.Missions.Editor;
 using UnityEngine;
 
 namespace com.github.lhervier.ksp {
 	
-	[KSPAddon(KSPAddon.Startup.PSystemSpawn, false)]
+	[KSPAddon(KSPAddon.Startup.PSystemSpawn, true)]
     public class DrawLayerMod : MonoBehaviour {
         
-        private static bool DEBUG = false;
-        private static readonly string CONFIG_FILE = "draw_layer.cfg";
+        // Composants du mod
+        private UIManager uiManager;
+        private MarkerRenderer markerRenderer;
+        private ConfigManager configManager;
+        
+        // Application launcher
+        private ApplicationLauncherButton appLauncherButton;
 
-        private static void LogInternal(string level, string message) {
-            Debug.Log($"[DrawLayerMod][{level}] {message}");
-        }
-
-        private static void LogInfo(string message) {
-            LogInternal("INFO", message);
-        }
-
-        private static void LogDebug(string message) {
-            if( !DEBUG ) {
-                return;
-            }
-            LogInternal("DEBUG", message);
-        }
-
-        private static void LogError(string message) {
-            LogInternal("ERROR", message);
-        }
-
-        private static void InitDebugMode() {
+        private void InitDebugMode() {
             try {
-                // Get the directory where the mod DLL is located
-                string dllPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                string modDirectory = Path.GetDirectoryName(dllPath);
-                string configPath = Path.Combine(modDirectory, CONFIG_FILE);
-
-                if (File.Exists(configPath)) {
-                    string[] lines = File.ReadAllLines(configPath);
-                    foreach (string line in lines) {
-                        string trimmedLine = line.Trim();
-                        if( trimmedLine.StartsWith("#") ) {
-                            continue;
-                        }
-                        if (trimmedLine.StartsWith("debug=")) {
-                            string value = trimmedLine.Substring(6).Trim().ToLower();
-                            DEBUG = (value == "true" || value == "1" || value == "yes");
-                            break;
-                        }
-                    }
+                // Utiliser le ConfigManager pour lire la configuration
+                if (configManager != null) {
+                    bool debugMode = configManager.GetDebugMode();
+                    Logger.SetDebugMode(debugMode);
+                    Logger.LogInfo($"Debug mode initialized: {debugMode}");
+                } else {
+                    Logger.LogError("ConfigManager not available for debug mode initialization");
                 }
             }
             catch (Exception ex) {
-                Debug.LogError($"[DrawLayerMod] Error reading config file: {ex.Message}");
+                Logger.LogError($"Error initializing debug mode: {ex.Message}");
             }
         }
 
-        // ================================================================
-
         protected void Awake() 
         {
-            InitDebugMode();
-            LogInfo("Awaked");
+            Logger.LogInfo("Awaked");
             DontDestroyOnLoad(this);
+            
+            // Initialiser les composants
+            configManager = new ConfigManager();
+            markerRenderer = new MarkerRenderer();
+            uiManager = new UIManager(configManager);
+            
+            // Initialiser le mode debug après avoir créé le ConfigManager
+            InitDebugMode();
         }
 
         public void Start() {
-            LogInfo("Plugin started");
+            Logger.LogInfo("Plugin started");
+            configManager.LoadMarkers();
+            
+            // Ajouter le bouton à l'Application Launcher
+            GameEvents.onGUIApplicationLauncherReady.Add(OnGUIApplicationLauncherReady);
+            GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIApplicationLauncherDestroyed);
         }
 
         public void OnDestroy() {
-            LogInfo("Plugin stopped");
+            Logger.LogInfo("Plugin stopped");
+            configManager.SaveMarkers();
+            
+            // Nettoyer les composants
+            markerRenderer?.Dispose();
+            
+            // Supprimer le bouton de l'Application Launcher
+            RemoveAppLauncherButton();
+        }
+        
+        private void OnGUIApplicationLauncherReady() {
+            if (ApplicationLauncher.Instance != null && appLauncherButton == null) {
+                // Créer une texture pour l'icône (cercle simple)
+                Texture2D iconTexture = CreateIconTexture();
+                
+                appLauncherButton = ApplicationLauncher.Instance.AddModApplication(
+                    OnAppLauncherTrue,    // Callback quand le bouton est activé
+                    OnAppLauncherFalse,   // Callback quand le bouton est désactivé
+                    null,                 // Callback quand la souris survole le bouton
+                    null,                 // Callback quand la souris quitte le bouton
+                    null,                 // Callback quand le bouton est cliqué
+                    null,                 // Callback quand le bouton est cliqué avec le bouton droit
+                    ApplicationLauncher.AppScenes.ALWAYS,
+                    iconTexture
+                );
+                
+                Logger.LogInfo("Application Launcher button added");
+            }
+        }
+        
+        private void OnGUIApplicationLauncherDestroyed() {
+            RemoveAppLauncherButton();
+        }
+        
+        private void RemoveAppLauncherButton() {
+            if (appLauncherButton != null) {
+                ApplicationLauncher.Instance.RemoveModApplication(appLauncherButton);
+                appLauncherButton = null;
+                Logger.LogInfo("Application Launcher button removed");
+            }
+        }
+        
+        private void OnAppLauncherTrue() {
+            uiManager.ShowUI = true;
+            Logger.LogDebug("UI opened via Application Launcher");
+        }
+        
+        private void OnAppLauncherFalse() {
+            uiManager.ShowUI = false;
+            Logger.LogDebug("UI closed via Application Launcher");
+        }
+        
+        private Texture2D CreateIconTexture() {
+            // Créer une texture 24x24 pixels
+            Texture2D texture = new Texture2D(24, 24);
+            Color[] pixels = new Color[24 * 24];
+            
+            // Couleur de fond (transparente)
+            Color backgroundColor = new Color(0, 0, 0, 0);
+            // Couleur de l'icône (blanc)
+            Color iconColor = Color.white;
+            
+            // Remplir avec la couleur de fond
+            for (int i = 0; i < pixels.Length; i++) {
+                pixels[i] = backgroundColor;
+            }
+            
+            // Dessiner un cercle simple
+            Vector2 center = new Vector2(12, 12);
+            float radius = 8f;
+            
+            for (int x = 0; x < 24; x++) {
+                for (int y = 0; y < 24; y++) {
+                    Vector2 pos = new Vector2(x, y);
+                    float distance = Vector2.Distance(pos, center);
+                    
+                    if (distance <= radius && distance >= radius - 2) {
+                        pixels[y * 24 + x] = iconColor;
+                    }
+                }
+            }
+            
+            // Ajouter quelques points pour représenter des repères
+            pixels[6 * 24 + 12] = iconColor;  // Point central vertical
+            pixels[12 * 24 + 6] = iconColor;  // Point central horizontal
+            pixels[12 * 24 + 18] = iconColor; // Point central horizontal
+            pixels[18 * 24 + 12] = iconColor; // Point central vertical
+            
+            texture.SetPixels(pixels);
+            texture.Apply();
+            
+            return texture;
+        }
+        
+        public void OnGUI() {
+            uiManager?.DrawUI();
+        }
+        
+        public void OnRenderObject() {
+            markerRenderer?.DrawMarkers(configManager.Markers);
+        }
+    }
+    
+    public enum MarkerType {
+        CrossLines,
+        Circle
+    }
+    
+    [Serializable]
+    public class VisualMarker {
+        public string name = "Marker";
+        public MarkerType type = MarkerType.CrossLines;
+        public float positionX = 50f; // % de la largeur
+        public float positionY = 50f; // % de la hauteur
+        public float radius = 10f; // % de la largeur (pour les cercles)
+        public bool showGraduations = false;
+        public float mainGraduationAngle = 0f; // degrés
+        public Color color = Color.white;
+        public bool visible = true;
+        
+        public VisualMarker() {
+        }
+        
+        public VisualMarker(VisualMarker other) {
+            this.name = other.name;
+            this.type = other.type;
+            this.positionX = other.positionX;
+            this.positionY = other.positionY;
+            this.radius = other.radius;
+            this.showGraduations = other.showGraduations;
+            this.mainGraduationAngle = other.mainGraduationAngle;
+            this.color = other.color;
+            this.visible = other.visible;
         }
     }
 }

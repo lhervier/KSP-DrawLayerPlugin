@@ -1,7 +1,7 @@
 using System.Reflection;
 
-[assembly: AssemblyTitle("EvaCMGroundMod")]
-[assembly: AssemblyDescription("Mod disabling the positionning of parts in the ground when in EVA construction mode")]
+[assembly: AssemblyTitle("DrawLayerMod")]
+[assembly: AssemblyDescription("Mod for drawing static visual markers on screen")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
