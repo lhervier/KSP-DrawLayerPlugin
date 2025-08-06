@@ -61,9 +61,8 @@ namespace com.github.lhervier.ksp {
                     previewMarker.positionX = newMarker.positionX;
                     previewMarker.positionY = newMarker.positionY;
                     previewMarker.radius = newMarker.radius;
-                    previewMarker.showGraduations = newMarker.showGraduations;
-                    previewMarker.mainGraduationAngle = newMarker.mainGraduationAngle;
-                    previewMarker.mainGraduationDivisions = newMarker.mainGraduationDivisions;
+                                         previewMarker.showGraduations = newMarker.showGraduations;
+                     previewMarker.mainGraduationDivisions = newMarker.mainGraduationDivisions;
                     previewMarker.subGraduationDivisions = newMarker.subGraduationDivisions;
                     previewMarker.color = newMarker.color;
                     previewMarker.visible = true;
@@ -164,14 +163,10 @@ namespace com.github.lhervier.ksp {
                     currentIndex = (int)GUILayout.HorizontalSlider(currentIndex, 0, divisions.Length - 1);
                     marker.mainGraduationDivisions = divisions[currentIndex];
                     
-                    // Afficher les degrés correspondants
-                    float degrees = marker.mainGraduationDivisions > 1 ? 360f / marker.mainGraduationDivisions : 0f;
-                    string divisionText = marker.mainGraduationDivisions == 1 ? "No graduations" : $"{marker.mainGraduationDivisions} divisions ({degrees:F0}°)";
-                    GUILayout.Label($"Divisions: {divisionText}");
-                    
-                    GUILayout.Label("Main graduation angle (degrees):");
-                    marker.mainGraduationAngle = GUILayout.HorizontalSlider(marker.mainGraduationAngle, 0f, 360f);
-                    GUILayout.Label($"Angle: {marker.mainGraduationAngle:F1}°");
+                                         // Afficher les degrés correspondants
+                     float degrees = marker.mainGraduationDivisions > 1 ? 360f / marker.mainGraduationDivisions : 0f;
+                     string divisionText = marker.mainGraduationDivisions == 1 ? "No graduations" : $"{marker.mainGraduationDivisions} divisions ({degrees:F0}°)";
+                     GUILayout.Label($"Divisions: {divisionText}");
                 }
             }
             
