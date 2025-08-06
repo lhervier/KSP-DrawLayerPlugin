@@ -12,7 +12,7 @@ namespace com.github.lhervier.ksp {
         
         // Interface utilisateur - Fenêtre d'édition
         private bool showEditorWindow = false;
-        private Rect editorWindowRect = new Rect(400, 50, 400, 700);
+        private Rect editorWindowRect = new Rect(400, 50, 400, 600);
         
         // État de l'interface
         private int selectedMarkerIndex = -1;
@@ -243,14 +243,12 @@ namespace com.github.lhervier.ksp {
                 if (GUILayout.Button("Apply")) {
                     configManager.UpdateMarker(selectedMarkerIndex, marker);
                 }
+                if (GUILayout.Button("Cancel")) {
+                    showEditorWindow = false;
+                    previewMarker = null; // Nettoyer l'aperçu
+                }
             }
             GUILayout.EndHorizontal();
-            
-            // Bouton Close pour fermer la fenêtre d'édition
-            if (GUILayout.Button("Close")) {
-                showEditorWindow = false;
-                previewMarker = null; // Nettoyer l'aperçu
-            }
             
             GUILayout.EndVertical();
         }
