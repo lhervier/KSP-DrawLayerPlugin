@@ -8,18 +8,18 @@ namespace com.github.lhervier.ksp {
         private readonly Color color;
         private readonly bool showGraduations;
         private readonly float mainGraduationAngle;
-        private readonly float mainGraduationSize;
+        private readonly int mainGraduationDivisions;
         private readonly int subGraduationDivisions;
         private readonly int segments;
         
         public CircleMarker(Vector2 center, float radius, Color color, bool showGraduations, 
-                           float mainGraduationAngle, float mainGraduationSize, int subGraduationDivisions) {
+                           float mainGraduationAngle, int mainGraduationDivisions, int subGraduationDivisions) {
             this.center = center;
             this.radius = radius;
             this.color = color;
             this.showGraduations = showGraduations;
             this.mainGraduationAngle = mainGraduationAngle;
-            this.mainGraduationSize = mainGraduationSize;
+            this.mainGraduationDivisions = mainGraduationDivisions;
             this.subGraduationDivisions = subGraduationDivisions;
             this.segments = 64;
         }
@@ -71,11 +71,13 @@ namespace com.github.lhervier.ksp {
         }
         
         private void DrawRadialLines() {
-            // Calculer le nombre total de graduations principales
-            int totalMainGraduations = Mathf.RoundToInt(360f / mainGraduationSize);
+            // Ne dessiner les rayons que s'il y a des divisions
+            if (mainGraduationDivisions <= 1) return;
+            
+            float mainGraduationSize = 360f / mainGraduationDivisions;
             
             // Dessiner les rayons en pointillés pour chaque graduation principale
-            for (int i = 0; i < totalMainGraduations; i++) {
+            for (int i = 0; i < mainGraduationDivisions; i++) {
                 float angle = i * mainGraduationSize * Mathf.Deg2Rad;
                 
                 Vector2 outerPoint = center + new Vector2(
@@ -88,11 +90,13 @@ namespace com.github.lhervier.ksp {
         }
         
         private void DrawGraduations() {
-            // Calculer le nombre total de graduations principales
-            int totalMainGraduations = Mathf.RoundToInt(360f / mainGraduationSize);
+            // Ne dessiner les graduations que s'il y a des divisions
+            if (mainGraduationDivisions <= 1) return;
+            
+            float mainGraduationSize = 360f / mainGraduationDivisions;
             
             // Dessiner toutes les graduations principales
-            for (int i = 0; i < totalMainGraduations; i++) {
+            for (int i = 0; i < mainGraduationDivisions; i++) {
                 float angle = i * mainGraduationSize * Mathf.Deg2Rad;
                 
                 // Vérifier si c'est la graduation principale marquée

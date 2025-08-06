@@ -63,7 +63,7 @@ namespace com.github.lhervier.ksp {
                     previewMarker.radius = newMarker.radius;
                     previewMarker.showGraduations = newMarker.showGraduations;
                     previewMarker.mainGraduationAngle = newMarker.mainGraduationAngle;
-                    previewMarker.mainGraduationSize = newMarker.mainGraduationSize;
+                    previewMarker.mainGraduationDivisions = newMarker.mainGraduationDivisions;
                     previewMarker.subGraduationDivisions = newMarker.subGraduationDivisions;
                     previewMarker.color = newMarker.color;
                     previewMarker.visible = true;
@@ -155,6 +155,20 @@ namespace com.github.lhervier.ksp {
                 marker.showGraduations = GUILayout.Toggle(marker.showGraduations, "Show graduations");
                 
                 if (marker.showGraduations) {
+                    GUILayout.Label("Main graduation divisions:");
+                    // Slider pour les divisions prédéfinies (1, 2, 3, 4, 6, 8, 12, 36)
+                    int[] divisions = { 1, 2, 3, 4, 6, 8, 12, 36 };
+                    int currentIndex = System.Array.IndexOf(divisions, marker.mainGraduationDivisions);
+                    if (currentIndex == -1) currentIndex = 2; // Valeur par défaut (4 divisions)
+                    
+                    currentIndex = (int)GUILayout.HorizontalSlider(currentIndex, 0, divisions.Length - 1);
+                    marker.mainGraduationDivisions = divisions[currentIndex];
+                    
+                    // Afficher les degrés correspondants
+                    float degrees = marker.mainGraduationDivisions > 1 ? 360f / marker.mainGraduationDivisions : 0f;
+                    string divisionText = marker.mainGraduationDivisions == 1 ? "No graduations" : $"{marker.mainGraduationDivisions} divisions ({degrees:F0}°)";
+                    GUILayout.Label($"Divisions: {divisionText}");
+                    
                     GUILayout.Label("Main graduation angle (degrees):");
                     marker.mainGraduationAngle = GUILayout.HorizontalSlider(marker.mainGraduationAngle, 0f, 360f);
                     GUILayout.Label($"Angle: {marker.mainGraduationAngle:F1}°");
