@@ -241,7 +241,9 @@ namespace com.github.lhervier.ksp {
                 }
             } else {
                 if (GUILayout.Button("Apply")) {
-                    configManager.UpdateMarker(selectedMarkerIndex, marker);
+                    // Créer une copie du marqueur modifié pour la sauvegarde
+                    VisualMarker updatedMarker = new VisualMarker(marker);
+                    configManager.UpdateMarker(selectedMarkerIndex, updatedMarker);
                 }
                 if (GUILayout.Button("Cancel")) {
                     showEditorWindow = false;

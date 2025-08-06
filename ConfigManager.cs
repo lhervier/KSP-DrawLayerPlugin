@@ -82,6 +82,9 @@ namespace com.github.lhervier.ksp {
         
         public void SaveMarkers() {
             try {
+                Logger.LogInfo($"Starting SaveMarkers. Markers count: {markers.Count}");
+                Logger.LogInfo($"Config file path: {configFilePath}");
+                
                 // Créer le nœud de configuration principal
                 ConfigNode configNode = new ConfigNode();
                 
@@ -95,6 +98,8 @@ namespace com.github.lhervier.ksp {
                 
                 for (int i = 0; i < markers.Count; i++) {
                     var marker = markers[i];
+                    Logger.LogInfo($"Saving marker {i}: {marker.name}, type: {marker.type}, pos: ({marker.positionX}, {marker.positionY}), color: {marker.color}");
+                    
                     ConfigNode markerNode = new ConfigNode($"MARKER_{i}");
                     
                     markerNode.SetValue("name", marker.name);
@@ -202,6 +207,7 @@ namespace com.github.lhervier.ksp {
         }
         
         public void AddMarker(VisualMarker marker) {
+            Logger.LogInfo($"Adding marker: {marker.name}, type: {marker.type}, pos: ({marker.positionX}, {marker.positionY})");
             markers.Add(marker);
             SaveMarkers();
         }
