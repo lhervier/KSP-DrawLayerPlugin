@@ -22,7 +22,7 @@ namespace com.github.lhervier.ksp {
             }
         }
         
-        public void DrawMarkers(List<VisualMarker> markers) {
+        public void DrawMarkers(List<VisualMarker> markers, VisualMarker previewMarker = null) {
             if (lineMaterial == null || markers == null) return;
             
             lineMaterial.SetPass(0);
@@ -33,6 +33,11 @@ namespace com.github.lhervier.ksp {
                 if (!marker.visible) continue;
                 
                 DrawMarker(marker);
+            }
+            
+            // Dessiner le marqueur d'aperçu s'il existe
+            if (previewMarker != null && previewMarker.visible) {
+                DrawMarker(previewMarker);
             }
             
             GL.PopMatrix();
@@ -49,7 +54,8 @@ namespace com.github.lhervier.ksp {
                 crossLinesMarker.Draw();
             } else if (marker.type == MarkerType.Circle) {
                 float radius = Screen.width * marker.radius / 100f;
-                var circleMarker = new CircleMarker(screenPos, radius, marker.color, marker.showGraduations, marker.mainGraduationAngle);
+                var circleMarker = new CircleMarker(screenPos, radius, marker.color, marker.showGraduations, 
+                                                   marker.mainGraduationAngle, marker.mainGraduationSize, marker.subGraduationDivisions);
                 circleMarker.Draw();
             }
         }

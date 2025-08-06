@@ -156,7 +156,7 @@ namespace com.github.lhervier.ksp {
         }
         
         public void OnRenderObject() {
-            markerRenderer?.DrawMarkers(configManager.Markers);
+            markerRenderer?.DrawMarkers(configManager.Markers, uiManager?.PreviewMarker);
         }
     }
     
@@ -174,6 +174,8 @@ namespace com.github.lhervier.ksp {
         public float radius = 10f; // % de la largeur (pour les cercles)
         public bool showGraduations = false;
         public float mainGraduationAngle = 0f; // degrés
+        public float mainGraduationSize = 30f; // taille de la graduation principale en degrés
+        public int subGraduationDivisions = 3; // nombre de divisions pour les sous-graduations
         public Color color = Color.white;
         public bool visible = true;
         
@@ -188,6 +190,8 @@ namespace com.github.lhervier.ksp {
             this.radius = other.radius;
             this.showGraduations = other.showGraduations;
             this.mainGraduationAngle = other.mainGraduationAngle;
+            this.mainGraduationSize = other.mainGraduationSize;
+            this.subGraduationDivisions = other.subGraduationDivisions;
             this.color = other.color;
             this.visible = other.visible;
         }

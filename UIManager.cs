@@ -15,11 +15,14 @@ namespace com.github.lhervier.ksp {
         private int selectedMarkerIndex = -1;
         private VisualMarker newMarker = new VisualMarker();
         private bool isCreatingNewMarker = false;
+        private VisualMarker previewMarker = null; // Marqueur temporaire pour l'aperçu
         
         public bool ShowUI {
             get => showUI;
             set => showUI = value;
         }
+        
+        public VisualMarker PreviewMarker => previewMarker;
         
         public UIManager(ConfigManager configManager) {
             this.configManager = configManager;
@@ -42,6 +45,8 @@ namespace com.github.lhervier.ksp {
                 isCreatingNewMarker = true;
                 newMarker = new VisualMarker();
                 newMarker.name = "New Marker";
+                // Créer un marqueur temporaire pour l'aperçu
+                previewMarker = new VisualMarker(newMarker);
             }
             
             GUILayout.Space(10);
@@ -49,6 +54,20 @@ namespace com.github.lhervier.ksp {
             // Interface de création/édition
             if (isCreatingNewMarker) {
                 DrawMarkerEditor(newMarker, true);
+                // Mettre à jour le marqueur d'aperçu en temps réel
+                if (previewMarker != null) {
+                    previewMarker.name = newMarker.name;
+                    previewMarker.type = newMarker.type;
+                    previewMarker.positionX = newMarker.positionX;
+                    previewMarker.positionY = newMarker.positionY;
+                    previewMarker.radius = newMarker.radius;
+                    previewMarker.showGraduations = newMarker.showGraduations;
+                    previewMarker.mainGraduationAngle = newMarker.mainGraduationAngle;
+                    previewMarker.mainGraduationSize = newMarker.mainGraduationSize;
+                    previewMarker.subGraduationDivisions = newMarker.subGraduationDivisions;
+                    previewMarker.color = newMarker.color;
+                    previewMarker.visible = true;
+                }
             }
             
             // Liste des repères existants
@@ -84,6 +103,11 @@ namespace com.github.lhervier.ksp {
                 DrawMarkerEditor(markers[selectedMarkerIndex], false);
             }
             
+            // Nettoyer le marqueur d'aperçu si on n'est plus en mode création
+            if (!isCreatingNewMarker && previewMarker != null) {
+                previewMarker = null;
+            }
+            
             GUILayout.EndScrollView();
             
             // Bouton pour fermer l'interface
@@ -111,6 +135,14 @@ namespace com.github.lhervier.ksp {
             marker.positionY = GUILayout.HorizontalSlider(marker.positionY, 0f, 100f);
             GUILayout.EndHorizontal();
             GUILayout.Label($"X: {marker.positionX:F1}%, Y: {marker.positionY:F1}%");
+            
+            // Bouton de réinitialisation de la position pour les lignes croisées
+            if (marker.type == MarkerType.CrossLines) {
+                if (GUILayout.Button("Reset Position to Center (50%, 50%)")) {
+                    marker.positionX = 50f;
+                    marker.positionY = 50f;
+                }
+            }
             
             // Paramètres spécifiques au type
             if (marker.type == MarkerType.CrossLines) {
@@ -149,9 +181,11 @@ namespace com.github.lhervier.ksp {
                 if (GUILayout.Button("Create")) {
                     configManager.AddMarker(new VisualMarker(marker));
                     isCreatingNewMarker = false;
+                    previewMarker = null; // Nettoyer l'aperçu
                 }
                 if (GUILayout.Button("Cancel")) {
                     isCreatingNewMarker = false;
+                    previewMarker = null; // Nettoyer l'aperçu
                 }
             } else {
                 if (GUILayout.Button("Apply")) {
