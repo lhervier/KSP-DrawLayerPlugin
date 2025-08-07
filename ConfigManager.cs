@@ -74,10 +74,9 @@ namespace com.github.lhervier.ksp {
         
         private VisualMarker ParseMarkerConfig(ConfigNode markerNode) {
             try {
-                VisualMarker marker = new VisualMarker();
-                
-                // Propriétés de base
-                marker.name = markerNode.GetValue("name") ?? "Marker";
+                VisualMarker marker = new VisualMarker() {
+                    name = markerNode.GetValue("name") ?? "New Marker"
+                };
                 
                 string typeStr = markerNode.GetValue("type");
                 if (!string.IsNullOrEmpty(typeStr) && Enum.TryParse<MarkerType>(typeStr, out MarkerType type)) {
