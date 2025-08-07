@@ -73,85 +73,79 @@ namespace com.github.lhervier.ksp {
         }
         
         private VisualMarker ParseMarkerConfig(ConfigNode markerNode) {
-            try {
-                VisualMarker marker = new VisualMarker() {
-                    name = markerNode.GetValue("name") ?? "New Marker"
-                };
-                
-                // =========================
-                // Common properties
-                // =========================
+            VisualMarker marker = new VisualMarker() {
+                name = markerNode.GetValue("name") ?? "New Marker"
+            };
+            
+            // =========================
+            // Common properties
+            // =========================
 
-                // Position
-                string posXStr = markerNode.GetValue("positionX");
-                if (!string.IsNullOrEmpty(posXStr) && float.TryParse(posXStr, out float posX)) {
-                    marker.positionX = posX;
-                }
-                string posYStr = markerNode.GetValue("positionY");
-                if (!string.IsNullOrEmpty(posYStr) && float.TryParse(posYStr, out float posY)) {
-                    marker.positionY = posY;
-                }
-
-                // Color
-                string colorRStr = markerNode.GetValue("colorR");
-                if (!string.IsNullOrEmpty(colorRStr) && float.TryParse(colorRStr, out float r)) {
-                    marker.color.r = r;
-                }
-                string colorGStr = markerNode.GetValue("colorG");
-                if (!string.IsNullOrEmpty(colorGStr) && float.TryParse(colorGStr, out float g)) {
-                    marker.color.g = g;
-                }
-                string colorBStr = markerNode.GetValue("colorB");
-                if (!string.IsNullOrEmpty(colorBStr) && float.TryParse(colorBStr, out float b)) {
-                    marker.color.b = b;
-                }
-                
-                // Visibility
-                string visibleStr = markerNode.GetValue("visible");
-                if (!string.IsNullOrEmpty(visibleStr)) {
-                    marker.visible = visibleStr.ToLower() == "true";
-                }
-                
-                // Type
-                string typeStr = markerNode.GetValue("type");
-                if (!string.IsNullOrEmpty(typeStr) && Enum.TryParse<MarkerType>(typeStr, out MarkerType type)) {
-                    marker.type = type;
-                }
-
-                // =========================
-                // Circle properties
-                // =========================
-                
-                // Radius
-                string radiusStr = markerNode.GetValue("radius");
-                if (!string.IsNullOrEmpty(radiusStr) && float.TryParse(radiusStr, out float radius)) {
-                    marker.radius = radius;
-                }
-                
-                // Graduations
-                string graduationsStr = markerNode.GetValue("showGraduations");
-                if (!string.IsNullOrEmpty(graduationsStr)) {
-                    marker.showGraduations = graduationsStr.ToLower() == "true";
-                }
-                
-                // Main graduation divisions
-                string mainGraduationDivisionsStr = markerNode.GetValue("mainGraduationDivisions");
-                if (!string.IsNullOrEmpty(mainGraduationDivisionsStr) && int.TryParse(mainGraduationDivisionsStr, out int mainGraduationDivisions)) {
-                    marker.mainGraduationDivisions = mainGraduationDivisions;
-                }
-                
-                // Sub graduation divisions
-                string subGraduationDivisionsStr = markerNode.GetValue("subGraduationDivisions");
-                if (!string.IsNullOrEmpty(subGraduationDivisionsStr) && int.TryParse(subGraduationDivisionsStr, out int subGraduationDivisions)) {
-                    marker.subGraduationDivisions = subGraduationDivisions;
-                }
-                
-                return marker;
+            // Position
+            string posXStr = markerNode.GetValue("positionX");
+            if (!string.IsNullOrEmpty(posXStr) && float.TryParse(posXStr, out float posX)) {
+                marker.positionX = posX;
             }
-            catch (Exception ex) {
-                Logger.LogError($"Error parsing marker from config node: {ex.Message}");
-                return null;
+            string posYStr = markerNode.GetValue("positionY");
+            if (!string.IsNullOrEmpty(posYStr) && float.TryParse(posYStr, out float posY)) {
+                marker.positionY = posY;
             }
+
+            // Color
+            string colorRStr = markerNode.GetValue("colorR");
+            if (!string.IsNullOrEmpty(colorRStr) && float.TryParse(colorRStr, out float r)) {
+                marker.color.r = r;
+            }
+            string colorGStr = markerNode.GetValue("colorG");
+            if (!string.IsNullOrEmpty(colorGStr) && float.TryParse(colorGStr, out float g)) {
+                marker.color.g = g;
+            }
+            string colorBStr = markerNode.GetValue("colorB");
+            if (!string.IsNullOrEmpty(colorBStr) && float.TryParse(colorBStr, out float b)) {
+                marker.color.b = b;
+            }
+            
+            // Visibility
+            string visibleStr = markerNode.GetValue("visible");
+            if (!string.IsNullOrEmpty(visibleStr)) {
+                marker.visible = visibleStr.ToLower() == "true";
+            }
+            
+            // Type
+            string typeStr = markerNode.GetValue("type");
+            if (!string.IsNullOrEmpty(typeStr) && Enum.TryParse<MarkerType>(typeStr, out MarkerType type)) {
+                marker.type = type;
+            }
+
+            // =========================
+            // Circle properties
+            // =========================
+            
+            // Radius
+            string radiusStr = markerNode.GetValue("radius");
+            if (!string.IsNullOrEmpty(radiusStr) && float.TryParse(radiusStr, out float radius)) {
+                marker.radius = radius;
+            }
+            
+            // Graduations
+            string graduationsStr = markerNode.GetValue("showGraduations");
+            if (!string.IsNullOrEmpty(graduationsStr)) {
+                marker.showGraduations = graduationsStr.ToLower() == "true";
+            }
+            
+            // Main graduation divisions
+            string mainGraduationDivisionsStr = markerNode.GetValue("mainGraduationDivisions");
+            if (!string.IsNullOrEmpty(mainGraduationDivisionsStr) && int.TryParse(mainGraduationDivisionsStr, out int mainGraduationDivisions)) {
+                marker.mainGraduationDivisions = mainGraduationDivisions;
+            }
+            
+            // Sub graduation divisions
+            string subGraduationDivisionsStr = markerNode.GetValue("subGraduationDivisions");
+            if (!string.IsNullOrEmpty(subGraduationDivisionsStr) && int.TryParse(subGraduationDivisionsStr, out int subGraduationDivisions)) {
+                marker.subGraduationDivisions = subGraduationDivisions;
+            }
+            
+            return marker;
         }
         
         public void SaveConfig() {
