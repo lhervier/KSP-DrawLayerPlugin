@@ -43,7 +43,7 @@ namespace com.github.lhervier.ksp {
                     Mathf.Sin(angle2) * radius
                 );
                 
-                DrawLine(point1, point2, color, 2);
+                DrawLine(point1, point2, color);
             }
         }
         
@@ -59,26 +59,24 @@ namespace com.github.lhervier.ksp {
                     Mathf.Sin(angle) * radius
                 );
                 
-                DrawDottedLine(center, outerPoint, color, 1);
+                DrawDottedLine(center, outerPoint, color);
             }
         }
         
-        private void DrawLine(Vector2 start, Vector2 end, Color color, int thickness) {
+        private void DrawLine(Vector2 start, Vector2 end, Color color) {
             GL.Begin(GL.LINES);
             GL.Color(color);
             
-            for (int i = 0; i < thickness; i++) {
-                GL.Vertex3(start.x + i, start.y, 0);
-                GL.Vertex3(end.x + i, end.y, 0);
-            }
+            GL.Vertex3(start.x, start.y, 0);
+            GL.Vertex3(end.x, end.y, 0);
             
             GL.End();
         }
         
-        private void DrawDottedLine(Vector2 start, Vector2 end, Color color, int thickness) {
-            // Paramètres pour les pointillés
-            float dashLength = 4f; // Longueur de chaque tiret
-            float gapLength = 4f;  // Espace entre les tirets
+        private void DrawDottedLine(Vector2 start, Vector2 end, Color color) {
+            // Parameters for the dotted lines
+            float dashLength = 4f; // Length of each dash
+            float gapLength = 4f;  // Space between the dashes
             
             Vector2 direction = (end - start).normalized;
             float totalLength = Vector2.Distance(start, end);
@@ -100,10 +98,8 @@ namespace com.github.lhervier.ksp {
                     Vector2 segmentStart = start + direction * currentLength;
                     Vector2 segmentEnd = start + direction * (currentLength + segmentLength);
                     
-                    for (int i = 0; i < thickness; i++) {
-                        GL.Vertex3(segmentStart.x + i, segmentStart.y, 0);
-                        GL.Vertex3(segmentEnd.x + i, segmentEnd.y, 0);
-                    }
+                    GL.Vertex3(segmentStart.x, segmentStart.y, 0);
+                    GL.Vertex3(segmentEnd.x, segmentEnd.y, 0);
                 }
                 
                 currentLength += segmentLength;
