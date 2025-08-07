@@ -13,7 +13,6 @@ namespace com.github.lhervier.ksp {
         public float positionX = 50f; // % of the width
         public float positionY = 50f; // % of the height
         public float radius = 10f; // % of the width (for circles)
-        public bool showGraduations = false;
         public int mainGraduationDivisions = 12; // main graduation divisions (2, 4, 8, 12, 36)
         public int subGraduationDivisions = 3; // sub graduation divisions
         public Color color = Color.white;
@@ -28,7 +27,6 @@ namespace com.github.lhervier.ksp {
             this.positionX = other.positionX;
             this.positionY = other.positionY;
             this.radius = other.radius;
-            this.showGraduations = other.showGraduations;
             this.mainGraduationDivisions = other.mainGraduationDivisions;
             this.subGraduationDivisions = other.subGraduationDivisions;
             this.color = other.color;

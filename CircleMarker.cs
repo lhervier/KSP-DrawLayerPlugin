@@ -6,17 +6,20 @@ namespace com.github.lhervier.ksp {
         private readonly Vector2 center;
         private readonly float radius;
         private readonly Color color;
-        private readonly bool showGraduations;
         private readonly int mainGraduationDivisions;
         private readonly int subGraduationDivisions;
         private readonly int segments;
         
-        public CircleMarker(Vector2 center, float radius, Color color, bool showGraduations, 
-                           int mainGraduationDivisions, int subGraduationDivisions) {
+        public CircleMarker(
+            Vector2 center, 
+            float radius, 
+            Color color, 
+            int mainGraduationDivisions, 
+            int subGraduationDivisions
+        ) {
             this.center = center;
             this.radius = radius;
             this.color = color;
-            this.showGraduations = showGraduations;
             this.mainGraduationDivisions = mainGraduationDivisions;
             this.subGraduationDivisions = subGraduationDivisions;
             this.segments = 64;
@@ -26,10 +29,8 @@ namespace com.github.lhervier.ksp {
             DrawCircle();
             DrawCenter();
             
-            if (showGraduations) {
-                DrawGraduations();
-                DrawRadialLines();
-            }
+            DrawGraduations();
+            DrawRadialLines();
         }
         
         private void DrawCircle() {

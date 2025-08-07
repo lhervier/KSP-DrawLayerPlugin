@@ -54,8 +54,13 @@ namespace com.github.lhervier.ksp {
                 crossLinesMarker.Draw();
             } else if (marker.type == MarkerType.Circle) {
                 float radius = Screen.width * marker.radius / 100f;
-                var circleMarker = new CircleMarker(screenPos, radius, marker.color, marker.showGraduations, 
-                                                   marker.mainGraduationDivisions, marker.subGraduationDivisions);
+                var circleMarker = new CircleMarker(
+                    screenPos, 
+                    radius, 
+                    marker.color, 
+                    marker.mainGraduationDivisions, 
+                    marker.subGraduationDivisions
+                );
                 circleMarker.Draw();
             }
         }
