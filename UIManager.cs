@@ -63,7 +63,7 @@ namespace com.github.lhervier.ksp {
                 
                 markers[i].visible = GUILayout.Toggle(markers[i].visible, "");
                 
-                if (GUILayout.Button(markers[i].name, GUILayout.ExpandWidth(true))) {
+                if (GUILayout.Button($"Edit {markers[i].name}", GUILayout.ExpandWidth(true))) {
                     selectedMarkerIndex = i;
                     isCreatingNewMarker = false;
                     editingMarker = new VisualMarker(markers[i]);
