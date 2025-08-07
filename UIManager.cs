@@ -32,12 +32,11 @@ namespace com.github.lhervier.ksp {
         }
         
         public void DrawUI() {
-            if (showUI) {
-                mainWindowRect = GUI.Window(12345, mainWindowRect, DrawMainWindow, "DrawLayer - Visual Markers");
-                
-                if (showEditorWindow) {
-                    editorWindowRect = GUI.Window(12346, editorWindowRect, DrawEditorWindow, "Marker Editor");
-                }
+            if (!showUI) return;
+            mainWindowRect = GUI.Window(12345, mainWindowRect, DrawMainWindow, "DrawLayer - Visual Markers");
+            
+            if (showEditorWindow) {
+                editorWindowRect = GUI.Window(12346, editorWindowRect, DrawEditorWindow, "Marker Editor");
             }
         }
         
