@@ -21,7 +21,7 @@ namespace com.github.lhervier.ksp {
             try {
                 // Utiliser le ConfigManager pour lire la configuration
                 if (configManager != null) {
-                    bool debugMode = configManager.GetDebugMode();
+                    bool debugMode = configManager.DebugMode;
                     Logger.SetDebugMode(debugMode);
                     Logger.LogInfo($"Debug mode initialized: {debugMode}");
                 } else {

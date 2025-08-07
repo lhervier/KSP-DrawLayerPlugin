@@ -13,6 +13,7 @@ namespace com.github.lhervier.ksp {
         private bool debugMode = false;
         
         public List<VisualMarker> Markers => markers;
+        public bool DebugMode => debugMode;
         
         public ConfigManager() {
             string dllPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -25,10 +26,6 @@ namespace com.github.lhervier.ksp {
         private void ResetConfig() {
             markers.Clear();
             debugMode = false;
-        }
-        
-        public bool GetDebugMode() {
-            return debugMode;
         }
         
         public void LoadConfig() {
