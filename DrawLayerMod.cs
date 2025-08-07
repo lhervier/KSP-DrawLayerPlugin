@@ -159,8 +159,15 @@ namespace com.github.lhervier.ksp {
         public void OnRenderObject() {
             if( markerRenderer == null ) return;
             if( uiManager == null ) return;
+            
+            // Get a copy of the list of markers, excluding the edited one
+            List<VisualMarker> markers = new List<VisualMarker>(configManager.Markers);
+            if( uiManager.EditingMarkerIndex >= 0 ) {
+                markers.RemoveAt(uiManager.EditingMarkerIndex);
+            }
+            
             markerRenderer.DrawMarkers(
-                configManager.Markers, 
+                markers, 
                 uiManager.EditingMarker
             );
         }

@@ -15,7 +15,7 @@ namespace com.github.lhervier.ksp {
         private Rect editorWindowRect = new Rect(400, 50, 400, 700);
         
         // UI - State
-        private int selectedMarkerIndex = -1;
+        private int editingMarkerIndex = -1;
         private VisualMarker editingMarker = null;
         private bool isCreatingNewMarker = false;
         
@@ -25,6 +25,7 @@ namespace com.github.lhervier.ksp {
         }
 
         public VisualMarker EditingMarker => editingMarker;
+        public int EditingMarkerIndex => editingMarkerIndex;
         
         public UIManager(ConfigManager configManager) {
             this.configManager = configManager;
@@ -46,7 +47,7 @@ namespace com.github.lhervier.ksp {
             // Button to create a new marker
             if (GUILayout.Button("Create Marker")) {
                 isCreatingNewMarker = true;
-                selectedMarkerIndex = -1;
+                editingMarkerIndex = -1;
                 editingMarker = new VisualMarker();
                 showEditorWindow = true;
             }
@@ -62,7 +63,7 @@ namespace com.github.lhervier.ksp {
                 markers[i].visible = GUILayout.Toggle(markers[i].visible, "");
                 
                 if (GUILayout.Button($"Edit {markers[i].name}", GUILayout.ExpandWidth(true))) {
-                    selectedMarkerIndex = i;
+                    editingMarkerIndex = i;
                     isCreatingNewMarker = false;
                     editingMarker = new VisualMarker(markers[i]);
                     showEditorWindow = true;
@@ -70,12 +71,12 @@ namespace com.github.lhervier.ksp {
                 
                 if (GUILayout.Button("Del", GUILayout.Width(50))) {
                     configManager.RemoveMarker(i);
-                    if (selectedMarkerIndex == i) {
-                        selectedMarkerIndex = -1;
+                    if (editingMarkerIndex == i) {
+                        editingMarkerIndex = -1;
                         editingMarker = null;
                         showEditorWindow = false;
-                    } else if (selectedMarkerIndex > i) {
-                        selectedMarkerIndex--;
+                    } else if (editingMarkerIndex > i) {
+                        editingMarkerIndex--;
                     }
                     break;
                 }
@@ -206,27 +207,27 @@ namespace com.github.lhervier.ksp {
                     editingMarker = null;
                     isCreatingNewMarker = false;
                     showEditorWindow = false;
-                    selectedMarkerIndex = -1;
+                    editingMarkerIndex = -1;
                 }
                 if (GUILayout.Button("Cancel")) {
                     editingMarker = null;
                     isCreatingNewMarker = false;
                     showEditorWindow = false;
-                    selectedMarkerIndex = -1;
+                    editingMarkerIndex = -1;
                 }
             } else {
                 if (GUILayout.Button("Update")) {
-                    configManager.UpdateMarker(selectedMarkerIndex, editingMarker);
+                    configManager.UpdateMarker(editingMarkerIndex, editingMarker);
                     editingMarker = null;
                     isCreatingNewMarker = false;
                     showEditorWindow = false;
-                    selectedMarkerIndex = -1;
+                    editingMarkerIndex = -1;
                 }
                 if (GUILayout.Button("Cancel")) {
                     editingMarker = null;
                     isCreatingNewMarker = false;
                     showEditorWindow = false;
-                    selectedMarkerIndex = -1;
+                    editingMarkerIndex = -1;
                 }
             }
             GUILayout.EndHorizontal();
