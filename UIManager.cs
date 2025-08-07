@@ -6,19 +6,19 @@ namespace com.github.lhervier.ksp {
     public class UIManager {
         private readonly ConfigManager configManager;
         
-        // Interface utilisateur - Fenêtre principale
+        // UI - Main window
         private bool showUI = false;
         private Rect mainWindowRect = new Rect(50, 50, 300, 200);
         
-        // Interface utilisateur - Fenêtre d'édition
+        // UI - Editor window
         private bool showEditorWindow = false;
         private Rect editorWindowRect = new Rect(400, 50, 400, 700);
         
-        // État de l'interface
+        // UI - State
         private int selectedMarkerIndex = -1;
         private VisualMarker editingMarker = new VisualMarker();
         private bool isCreatingNewMarker = false;
-        private VisualMarker previewMarker = null; // Marqueur temporaire pour l'aperçu
+        private VisualMarker previewMarker = null; // Temporary marker for preview
         
         public bool ShowUI {
             get => showUI;
@@ -45,19 +45,19 @@ namespace com.github.lhervier.ksp {
             GUILayout.Label("Visual Markers", GUI.skin.box);
             GUILayout.Space(10);
             
-            // Bouton pour créer un nouveau repère
+            // Button to create a new marker
             if (GUILayout.Button("New Marker")) {
                 isCreatingNewMarker = true;
                 editingMarker = new VisualMarker();
                 editingMarker.name = "New Marker";
                 showEditorWindow = true;
-                // Créer un marqueur temporaire pour l'aperçu
+                // Create a temporary marker for preview
                 previewMarker = new VisualMarker(editingMarker);
             }
             
             GUILayout.Space(10);
             
-            // Liste des repères existants
+            // List of existing markers
             GUILayout.Label("Existing markers:", GUI.skin.box);
             var markers = configManager.Markers;
             for (int i = 0; i < markers.Count; i++) {
@@ -90,7 +90,7 @@ namespace com.github.lhervier.ksp {
         }
         
         private void DrawEditorWindow(int windowID) {
-            // Mettre à jour le marqueur d'aperçu en temps réel
+            // Update the preview marker in real time
             if (previewMarker != null) {
                 previewMarker.name = editingMarker.name;
                 previewMarker.type = editingMarker.type;
@@ -110,7 +110,7 @@ namespace com.github.lhervier.ksp {
         private void DrawMarkerEditor(VisualMarker marker, bool isNew) {
             GUILayout.BeginVertical(GUI.skin.box);
             
-            // ===== PROPRIÉTÉS COMMUNES =====
+            // ===== COMMON PROPERTIES =====
             GUILayout.Label("Common Properties:", GUI.skin.box);
             
             // Nom
@@ -125,16 +125,16 @@ namespace com.github.lhervier.ksp {
             GUILayout.EndHorizontal();
             GUILayout.Label($"X: {marker.positionX:F1}%, Y: {marker.positionY:F1}%");
             
-            // Bouton de réinitialisation de la position (commun aux deux types)
+            // Button to reset the position (common to both types)
             if (GUILayout.Button("Reset Position to Center (50%, 50%)")) {
                 marker.positionX = 50f;
                 marker.positionY = 50f;
             }
             
-            // Couleur
+            // Color
             GUILayout.Label("Color:");
             
-            // Palette de couleurs prédéfinies
+            // Predefined color palette
             Color[] predefinedColors = {
                 Color.red,           // Rouge
                 Color.green,         // Vert
@@ -160,7 +160,7 @@ namespace com.github.lhervier.ksp {
                 "Lime", "Light Blue", "Light Pink", "Gray"
             };
             
-            // Sélection de couleur par boutons
+            // Color selection by buttons
             int selectedColorIndex = -1;
             for (int i = 0; i < predefinedColors.Length; i++) {
                 if (IsColorSimilar(marker.color, predefinedColors[i])) {
@@ -169,13 +169,13 @@ namespace com.github.lhervier.ksp {
                 }
             }
             
-            // Grille de boutons de couleurs (4 colonnes)
+            // Color grid of buttons (4 columns)
             int newSelectedIndex = GUILayout.SelectionGrid(selectedColorIndex, colorNames, 4);
             if (newSelectedIndex != selectedColorIndex && newSelectedIndex >= 0) {
                 marker.color = predefinedColors[newSelectedIndex];
             }
             
-            // Aperçu de la couleur actuelle
+            // Current color preview
             GUILayout.BeginHorizontal();
             GUILayout.Label("Current color:");
             Color originalColor = GUI.color;
@@ -186,14 +186,14 @@ namespace com.github.lhervier.ksp {
             
             GUILayout.Space(10);
             
-            // ===== TYPE DE MARQUEUR =====
+            // ===== MARKER TYPE =====
             GUILayout.Label("Marker Type:", GUI.skin.box);
             marker.type = (MarkerType)GUILayout.SelectionGrid((int)marker.type, 
                 new string[] { "Cross Lines", "Circle" }, 2);
             
             GUILayout.Space(10);
             
-            // ===== PROPRIÉTÉS SPÉCIFIQUES AU TYPE =====
+            // ===== SPECIFIC PROPERTIES FOR TYPE =====
             if (marker.type == MarkerType.CrossLines) {
                 GUILayout.Label("Cross Lines Properties:", GUI.skin.box);
                 GUILayout.Label("No additional properties for cross lines.");
@@ -205,43 +205,43 @@ namespace com.github.lhervier.ksp {
                 GUILayout.Label($"Radius: {marker.radius:F1}%");
                 
                 GUILayout.Label("Main graduation divisions:");
-                // Slider pour les divisions prédéfinies (1, 2, 3, 4, 6, 8, 12, 36)
+                // Slider for predefined divisions (1, 2, 3, 4, 6, 8, 12, 36)
                 int[] divisions = { 1, 2, 3, 4, 6, 8, 12, 36 };
                 int currentIndex = System.Array.IndexOf(divisions, marker.divisions);
-                if (currentIndex == -1) currentIndex = 2; // Valeur par défaut (4 divisions)
+                if (currentIndex == -1) currentIndex = 2; // Default value (4 divisions)
                 
                 currentIndex = (int)GUILayout.HorizontalSlider(currentIndex, 0, divisions.Length - 1);
                 marker.divisions = divisions[currentIndex];
                 
-                // Afficher les degrés correspondants
+                // Display the corresponding degrees
                 float degrees = marker.divisions > 1 ? 360f / marker.divisions : 0f;
                 string divisionText = marker.divisions == 1 ? "No graduations" : $"{marker.divisions} divisions ({degrees:F0}°)";
                 GUILayout.Label($"Divisions: {divisionText}");
             }
             
-            // Boutons d'action
+            // Action buttons
             GUILayout.BeginHorizontal();
             if (isNew) {
                 if (GUILayout.Button("Create")) {
                     configManager.AddMarker(new VisualMarker(marker));
                     isCreatingNewMarker = false;
                     showEditorWindow = false;
-                    previewMarker = null; // Nettoyer l'aperçu
+                    previewMarker = null; // Clean the preview
                 }
                 if (GUILayout.Button("Cancel")) {
                     isCreatingNewMarker = false;
                     showEditorWindow = false;
-                    previewMarker = null; // Nettoyer l'aperçu
+                    previewMarker = null; // Clean the preview
                 }
             } else {
                 if (GUILayout.Button("Apply")) {
-                    // Créer une copie du marqueur modifié pour la sauvegarde
+                    // Create a copy of the modified marker for saving
                     VisualMarker updatedMarker = new VisualMarker(marker);
                     configManager.UpdateMarker(selectedMarkerIndex, updatedMarker);
                 }
                 if (GUILayout.Button("Cancel")) {
                     showEditorWindow = false;
-                    previewMarker = null; // Nettoyer l'aperçu
+                    previewMarker = null; // Clean the preview
                 }
             }
             GUILayout.EndHorizontal();
@@ -251,9 +251,9 @@ namespace com.github.lhervier.ksp {
         
 
         
-        // Méthode pour détecter si deux couleurs sont similaires
+        // Method to detect if two colors are similar
         private bool IsColorSimilar(Color color1, Color color2) {
-            float tolerance = 0.1f; // Tolérance pour la comparaison
+            float tolerance = 0.1f; // Tolerance for comparison
             return Mathf.Abs(color1.r - color2.r) < tolerance &&
                    Mathf.Abs(color1.g - color2.g) < tolerance &&
                    Mathf.Abs(color1.b - color2.b) < tolerance;
