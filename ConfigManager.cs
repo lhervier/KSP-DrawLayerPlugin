@@ -49,11 +49,10 @@ namespace com.github.lhervier.ksp {
             }
             ConfigNode[] markerNodes = markersNode.GetNodes();
             foreach (ConfigNode markerNode in markerNodes) {
-                if (markerNode.name.StartsWith("MARKER_")) {
-                    VisualMarker marker = ParseMarkerFromConfigNode(markerNode);
-                    if (marker != null) {
-                        markers.Add(marker);
-                    }
+                if (!markerNode.name.StartsWith("MARKER_")) continue;
+                VisualMarker marker = ParseMarkerFromConfigNode(markerNode);
+                if (marker != null) {
+                    markers.Add(marker);
                 }
             }
             
