@@ -16,16 +16,15 @@ namespace com.github.lhervier.ksp {
         
         // UI - State
         private int selectedMarkerIndex = -1;
-        private VisualMarker editingMarker = new VisualMarker();
+        private VisualMarker editingMarker = null;
         private bool isCreatingNewMarker = false;
-        private VisualMarker previewMarker = null; // Temporary marker for preview
         
         public bool ShowUI {
             get => showUI;
             set => showUI = value;
         }
-        
-        public VisualMarker PreviewMarker => previewMarker;
+
+        public VisualMarker EditingMarker => editingMarker;
         
         public UIManager(ConfigManager configManager) {
             this.configManager = configManager;
@@ -47,10 +46,9 @@ namespace com.github.lhervier.ksp {
             // Button to create a new marker
             if (GUILayout.Button("Create Marker")) {
                 isCreatingNewMarker = true;
+                selectedMarkerIndex = -1;
                 editingMarker = new VisualMarker();
                 showEditorWindow = true;
-                // Create a temporary marker for preview
-                previewMarker = new VisualMarker(editingMarker);
             }
             
             GUILayout.Space(10);
@@ -74,6 +72,7 @@ namespace com.github.lhervier.ksp {
                     configManager.RemoveMarker(i);
                     if (selectedMarkerIndex == i) {
                         selectedMarkerIndex = -1;
+                        editingMarker = null;
                         showEditorWindow = false;
                     } else if (selectedMarkerIndex > i) {
                         selectedMarkerIndex--;
@@ -88,24 +87,6 @@ namespace com.github.lhervier.ksp {
         }
         
         private void DrawEditorWindow(int windowID) {
-            // Update the preview marker in real time
-            if (previewMarker != null) {
-                previewMarker.name = editingMarker.name;
-                previewMarker.type = editingMarker.type;
-                previewMarker.positionX = editingMarker.positionX;
-                previewMarker.positionY = editingMarker.positionY;
-                previewMarker.radius = editingMarker.radius;
-                previewMarker.divisions = editingMarker.divisions;
-                previewMarker.color = editingMarker.color;
-                previewMarker.visible = true;
-            }
-            
-            DrawMarkerEditor(editingMarker, isCreatingNewMarker);
-            
-            GUI.DragWindow();
-        }
-        
-        private void DrawMarkerEditor(VisualMarker marker, bool isNew) {
             GUILayout.BeginVertical(GUI.skin.box);
             
             // ===== COMMON PROPERTIES =====
@@ -113,20 +94,20 @@ namespace com.github.lhervier.ksp {
             
             // Nom
             GUILayout.Label("Name:");
-            marker.name = GUILayout.TextField(marker.name, GUILayout.Width(200));
+            editingMarker.name = GUILayout.TextField(editingMarker.name, GUILayout.Width(200));
             
             // Position
             GUILayout.Label("Position (% width, % height):");
             GUILayout.BeginHorizontal();
-            marker.positionX = GUILayout.HorizontalSlider(marker.positionX, 0f, 100f);
-            marker.positionY = GUILayout.HorizontalSlider(marker.positionY, 0f, 100f);
+            editingMarker.positionX = GUILayout.HorizontalSlider(editingMarker.positionX, 0f, 100f);
+            editingMarker.positionY = GUILayout.HorizontalSlider(editingMarker.positionY, 0f, 100f);
             GUILayout.EndHorizontal();
-            GUILayout.Label($"X: {marker.positionX:F1}%, Y: {marker.positionY:F1}%");
+            GUILayout.Label($"X: {editingMarker.positionX:F1}%, Y: {editingMarker.positionY:F1}%");
             
             // Button to reset the position (common to both types)
             if (GUILayout.Button("Reset Position to Center (50%, 50%)")) {
-                marker.positionX = 50f;
-                marker.positionY = 50f;
+                editingMarker.positionX = 50f;
+                editingMarker.positionY = 50f;
             }
             
             // Color
@@ -161,7 +142,7 @@ namespace com.github.lhervier.ksp {
             // Color selection by buttons
             int selectedColorIndex = -1;
             for (int i = 0; i < predefinedColors.Length; i++) {
-                if (IsColorSimilar(marker.color, predefinedColors[i])) {
+                if (IsColorSimilar(editingMarker.color, predefinedColors[i])) {
                     selectedColorIndex = i;
                     break;
                 }
@@ -170,14 +151,14 @@ namespace com.github.lhervier.ksp {
             // Color grid of buttons (4 columns)
             int newSelectedIndex = GUILayout.SelectionGrid(selectedColorIndex, colorNames, 4);
             if (newSelectedIndex != selectedColorIndex && newSelectedIndex >= 0) {
-                marker.color = predefinedColors[newSelectedIndex];
+                editingMarker.color = predefinedColors[newSelectedIndex];
             }
             
             // Current color preview
             GUILayout.BeginHorizontal();
             GUILayout.Label("Current color:");
             Color originalColor = GUI.color;
-            GUI.color = marker.color;
+            GUI.color = editingMarker.color;
             GUILayout.Box("", GUILayout.Height(20), GUILayout.Width(100));
             GUI.color = originalColor;
             GUILayout.EndHorizontal();
@@ -186,65 +167,73 @@ namespace com.github.lhervier.ksp {
             
             // ===== MARKER TYPE =====
             GUILayout.Label("Marker Type:", GUI.skin.box);
-            marker.type = (MarkerType)GUILayout.SelectionGrid((int)marker.type, 
+            editingMarker.type = (MarkerType)GUILayout.SelectionGrid((int)editingMarker.type, 
                 new string[] { "Cross Lines", "Circle" }, 2);
             
             GUILayout.Space(10);
             
             // ===== SPECIFIC PROPERTIES FOR TYPE =====
-            if (marker.type == MarkerType.CrossLines) {
+            if (editingMarker.type == MarkerType.CrossLines) {
                 GUILayout.Label("Cross Lines Properties:", GUI.skin.box);
                 GUILayout.Label("No additional properties for cross lines.");
-            } else if (marker.type == MarkerType.Circle) {
+            } else if (editingMarker.type == MarkerType.Circle) {
                 GUILayout.Label("Circle Properties:", GUI.skin.box);
                 
                 GUILayout.Label("Radius (% width):");
-                marker.radius = GUILayout.HorizontalSlider(marker.radius, 1f, 50f);
-                GUILayout.Label($"Radius: {marker.radius:F1}%");
+                editingMarker.radius = GUILayout.HorizontalSlider(editingMarker.radius, 1f, 50f);
+                GUILayout.Label($"Radius: {editingMarker.radius:F1}%");
                 
                 GUILayout.Label("Main graduation divisions:");
                 // Slider for predefined divisions (1, 2, 3, 4, 6, 8, 12, 36)
                 int[] divisions = { 1, 2, 3, 4, 6, 8, 12, 36 };
-                int currentIndex = System.Array.IndexOf(divisions, marker.divisions);
+                int currentIndex = System.Array.IndexOf(divisions, editingMarker.divisions);
                 if (currentIndex == -1) currentIndex = 2; // Default value (4 divisions)
                 
                 currentIndex = (int)GUILayout.HorizontalSlider(currentIndex, 0, divisions.Length - 1);
-                marker.divisions = divisions[currentIndex];
+                editingMarker.divisions = divisions[currentIndex];
                 
                 // Display the corresponding degrees
-                float degrees = marker.divisions > 1 ? 360f / marker.divisions : 0f;
-                string divisionText = marker.divisions == 1 ? "No graduations" : $"{marker.divisions} divisions ({degrees:F0}°)";
+                float degrees = editingMarker.divisions > 1 ? 360f / editingMarker.divisions : 0f;
+                string divisionText = editingMarker.divisions == 1 ? "No graduations" : $"{editingMarker.divisions} divisions ({degrees:F0}°)";
                 GUILayout.Label($"Divisions: {divisionText}");
             }
             
             // Action buttons
             GUILayout.BeginHorizontal();
-            if (isNew) {
+            if (isCreatingNewMarker) {
                 if (GUILayout.Button("Create")) {
-                    configManager.AddMarker(new VisualMarker(marker));
+                    configManager.AddMarker(editingMarker);
+                    editingMarker = null;
                     isCreatingNewMarker = false;
                     showEditorWindow = false;
-                    previewMarker = null; // Clean the preview
+                    selectedMarkerIndex = -1;
                 }
                 if (GUILayout.Button("Cancel")) {
+                    editingMarker = null;
                     isCreatingNewMarker = false;
                     showEditorWindow = false;
-                    previewMarker = null; // Clean the preview
+                    selectedMarkerIndex = -1;
                 }
             } else {
-                if (GUILayout.Button("Apply")) {
-                    // Create a copy of the modified marker for saving
-                    VisualMarker updatedMarker = new VisualMarker(marker);
-                    configManager.UpdateMarker(selectedMarkerIndex, updatedMarker);
+                if (GUILayout.Button("Update")) {
+                    configManager.UpdateMarker(selectedMarkerIndex, editingMarker);
+                    editingMarker = null;
+                    isCreatingNewMarker = false;
+                    showEditorWindow = false;
+                    selectedMarkerIndex = -1;
                 }
                 if (GUILayout.Button("Cancel")) {
+                    editingMarker = null;
+                    isCreatingNewMarker = false;
                     showEditorWindow = false;
-                    previewMarker = null; // Clean the preview
+                    selectedMarkerIndex = -1;
                 }
             }
             GUILayout.EndHorizontal();
             
             GUILayout.EndVertical();
+
+            GUI.DragWindow();
         }
         
 

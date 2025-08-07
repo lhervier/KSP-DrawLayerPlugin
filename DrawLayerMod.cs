@@ -156,7 +156,11 @@ namespace com.github.lhervier.ksp {
         }
         
         public void OnRenderObject() {
-            markerRenderer?.DrawMarkers(configManager.Markers, uiManager?.PreviewMarker);
+            if( markerRenderer == null ) return;
+            markerRenderer.DrawMarkers(
+                configManager.Markers, 
+                uiManager?.EditingMarker
+            );
         }
     }
 }
