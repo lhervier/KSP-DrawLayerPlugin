@@ -14,7 +14,7 @@ namespace com.github.lhervier.ksp {
         }
         
         public static void LogInfo(string message) {
-            LogInternal("INFO", message);
+            LogInternal("INFO ", message);
         }
         
         public static void LogDebug(string message) {
@@ -29,7 +29,7 @@ namespace com.github.lhervier.ksp {
         }
         
         public static void LogWarning(string message) {
-            LogInternal("WARNING", message);
+            LogInternal("WARN ", message);
         }
     }
 } 
