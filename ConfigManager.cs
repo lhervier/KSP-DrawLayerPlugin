@@ -66,11 +66,10 @@ namespace com.github.lhervier.ksp {
         
         private void ParseGeneralConfig(ConfigNode configNode) {
             ConfigNode generalNode = configNode.GetNode("GENERAL");
-            if (generalNode != null) {
-                string debugValue = generalNode.GetValue("debug");
-                if (!string.IsNullOrEmpty(debugValue)) {
-                    debugMode = (debugValue.ToLower() == "true" || debugValue == "1" || debugValue == "yes");
-                }
+            if (generalNode == null) return;
+            string debugValue = generalNode.GetValue("debug");
+            if (!string.IsNullOrEmpty(debugValue)) {
+                debugMode = (debugValue.ToLower() == "true" || debugValue == "1" || debugValue == "yes");
             }
         }
         
