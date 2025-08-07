@@ -35,7 +35,7 @@ namespace com.github.lhervier.ksp {
                 Logger.LogWarning("Invalid configuration file, starting with empty list");
                 return;
             }
-            
+
             markers.Clear();
             
             // Charger la configuration générale
@@ -43,15 +43,16 @@ namespace com.github.lhervier.ksp {
             
             // Charger les marqueurs
             ConfigNode markersNode = configNode.GetNode("MARKERS");
-            if (markersNode != null) {
-                ConfigNode[] markerNodes = markersNode.GetNodes();
-                
-                foreach (ConfigNode markerNode in markerNodes) {
-                    if (markerNode.name.StartsWith("MARKER_")) {
-                        VisualMarker marker = ParseMarkerFromConfigNode(markerNode);
-                        if (marker != null) {
-                            markers.Add(marker);
-                        }
+            if (markersNode == null) {
+                Logger.LogInfo("No markers found in configuration file, starting with empty list");
+                return;
+            }
+            ConfigNode[] markerNodes = markersNode.GetNodes();
+            foreach (ConfigNode markerNode in markerNodes) {
+                if (markerNode.name.StartsWith("MARKER_")) {
+                    VisualMarker marker = ParseMarkerFromConfigNode(markerNode);
+                    if (marker != null) {
+                        markers.Add(marker);
                     }
                 }
             }
