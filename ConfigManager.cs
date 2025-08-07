@@ -96,17 +96,9 @@ namespace com.github.lhervier.ksp {
             }
 
             // Color
-            string colorRStr = markerNode.GetValue("colorR");
-            if (!string.IsNullOrEmpty(colorRStr) && float.TryParse(colorRStr, out float r)) {
-                marker.color.r = r;
-            }
-            string colorGStr = markerNode.GetValue("colorG");
-            if (!string.IsNullOrEmpty(colorGStr) && float.TryParse(colorGStr, out float g)) {
-                marker.color.g = g;
-            }
-            string colorBStr = markerNode.GetValue("colorB");
-            if (!string.IsNullOrEmpty(colorBStr) && float.TryParse(colorBStr, out float b)) {
-                marker.color.b = b;
+            string colorStr = markerNode.GetValue("color");
+            if (!string.IsNullOrEmpty(colorStr) && Enum.TryParse<PredefinedColors>(colorStr, out PredefinedColors color)) {
+                marker.color = color;
             }
             
             // Visibility
@@ -194,9 +186,7 @@ namespace com.github.lhervier.ksp {
             markerNode.SetValue("positionY", marker.positionY.ToString());
             markerNode.SetValue("radius", marker.radius.ToString());
             markerNode.SetValue("divisions", marker.divisions.ToString());
-            markerNode.SetValue("colorR", marker.color.r.ToString());
-            markerNode.SetValue("colorG", marker.color.g.ToString());
-            markerNode.SetValue("colorB", marker.color.b.ToString());
+            markerNode.SetValue("color", marker.color.GetName());
             markerNode.SetValue("visible", marker.visible.ToString().ToLower());
 
             return markerNode;

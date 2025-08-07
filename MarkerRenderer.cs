@@ -53,14 +53,14 @@ namespace com.github.lhervier.ksp {
             );
             
             if (marker.type == MarkerType.CrossLines) {
-                var crossLinesMarker = new CrossLinesMarker(screenPos, marker.color);
+                var crossLinesMarker = new CrossLinesMarker(screenPos, marker.color.ToColor());
                 crossLinesMarker.Draw();
             } else if (marker.type == MarkerType.Circle) {
                 float radius = Screen.width * marker.radius / 100f;
                 var circleMarker = new CircleMarker(
                     screenPos, 
                     radius, 
-                    marker.color, 
+                    marker.color.ToColor(), 
                     marker.divisions
                 );
                 circleMarker.Draw();

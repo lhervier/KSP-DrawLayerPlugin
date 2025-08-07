@@ -14,7 +14,7 @@ namespace com.github.lhervier.ksp {
         public float positionY = 50f; // % of the height
         public float radius = 10f; // % of the width (for circles)
         public int divisions = 12; // main graduation divisions (2, 4, 8, 12, 36)
-        public Color color = Color.white;
+        public PredefinedColors color = PredefinedColors.White;
         public bool visible = true;
         
         public VisualMarker() {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -114,52 +115,23 @@ namespace com.github.lhervier.ksp {
             // Color
             GUILayout.Label("Color:");
             
-            // Predefined color palette
-            Color[] predefinedColors = {
-                Color.red,           // Rouge
-                Color.green,         // Vert
-                Color.blue,          // Bleu
-                Color.yellow,        // Jaune
-                Color.cyan,          // Cyan
-                Color.magenta,       // Magenta
-                Color.white,         // Blanc
-                Color.black,         // Noir
-                new Color(1f, 0.5f, 0f),    // Orange
-                new Color(0.5f, 0f, 1f),    // Violet
-                new Color(0f, 1f, 0.5f),    // Vert-bleu
-                new Color(1f, 0f, 0.5f),    // Rose
-                new Color(0.5f, 1f, 0f),    // Vert clair
-                new Color(0f, 0.5f, 1f),    // Bleu clair
-                new Color(1f, 0.5f, 0.5f),  // Rose clair
-                new Color(0.5f, 0.5f, 0.5f) // Gris
-            };
-            
-            string[] colorNames = {
-                "Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", 
-                "White", "Black", "Orange", "Purple", "Teal", "Pink",
-                "Lime", "Light Blue", "Light Pink", "Gray"
-            };
-            
             // Color selection by buttons
-            int selectedColorIndex = -1;
-            for (int i = 0; i < predefinedColors.Length; i++) {
-                if (IsColorSimilar(editingMarker.color, predefinedColors[i])) {
-                    selectedColorIndex = i;
-                    break;
-                }
-            }
-            
-            // Color grid of buttons (4 columns)
-            int newSelectedIndex = GUILayout.SelectionGrid(selectedColorIndex, colorNames, 4);
-            if (newSelectedIndex != selectedColorIndex && newSelectedIndex >= 0) {
-                editingMarker.color = predefinedColors[newSelectedIndex];
+            string[] colorNames = Enum.GetNames(typeof(PredefinedColors));
+            int colorIndex = (int) editingMarker.color;
+            int newColorIndex = GUILayout.SelectionGrid(
+                colorIndex, 
+                colorNames, 
+                4
+            );
+            if (newColorIndex != colorIndex && newColorIndex >= 0) {
+                editingMarker.color = (PredefinedColors) newColorIndex;
             }
             
             // Current color preview
             GUILayout.BeginHorizontal();
             GUILayout.Label("Current color:");
             Color originalColor = GUI.color;
-            GUI.color = editingMarker.color;
+            GUI.color = editingMarker.color.ToColor();
             GUILayout.Box("", GUILayout.Height(20), GUILayout.Width(100));
             GUI.color = originalColor;
             GUILayout.EndHorizontal();
