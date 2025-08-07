@@ -61,7 +61,11 @@ namespace com.github.lhervier.ksp {
             for (int i = 0; i < markers.Count; i++) {
                 GUILayout.BeginHorizontal();
                 
-                markers[i].visible = GUILayout.Toggle(markers[i].visible, "");
+                bool visible = GUILayout.Toggle(markers[i].visible, "");
+                if (visible != markers[i].visible) {
+                    markers[i].visible = visible;
+                    configManager.UpdateMarker(i, markers[i]);
+                }
                 
                 if (GUILayout.Button($"Edit {markers[i].name}", GUILayout.ExpandWidth(true))) {
                     editingMarkerIndex = i;
