@@ -48,12 +48,9 @@ namespace com.github.lhervier.ksp {
         }
         
         private void DrawRadialLines() {
-            // Ne dessiner les rayons que s'il y a des divisions
-            if (divisions <= 1) return;
-            
             float mainGraduationSize = 360f / divisions;
             
-            // Dessiner les rayons en pointillés pour chaque graduation principale
+            // Draw the radial lines in dotted for each main graduation
             for (int i = 0; i < divisions; i++) {
                 float angle = i * mainGraduationSize * Mathf.Deg2Rad;
                 
