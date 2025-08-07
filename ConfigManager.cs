@@ -36,12 +36,11 @@ namespace com.github.lhervier.ksp {
                 return;
             }
 
-            markers.Clear();
-            
-            // Charger la configuration générale
+            // Load general config
             LoadGeneralConfig(configNode);
             
-            // Charger les marqueurs
+            // Load markers
+            markers.Clear();
             ConfigNode markersNode = configNode.GetNode("MARKERS");
             if (markersNode == null) {
                 Logger.LogInfo("No markers found in configuration file, starting with empty list");
