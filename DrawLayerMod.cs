@@ -49,7 +49,7 @@ namespace com.github.lhervier.ksp {
 
         public void Start() {
             Logger.LogInfo("Plugin started");
-            configManager.LoadMarkers();
+            configManager.LoadConfig();
             
             // Ajouter le bouton à l'Application Launcher
             GameEvents.onGUIApplicationLauncherReady.Add(OnGUIApplicationLauncherReady);
@@ -58,7 +58,7 @@ namespace com.github.lhervier.ksp {
 
         public void OnDestroy() {
             Logger.LogInfo("Plugin stopped");
-            configManager.SaveMarkers();
+            configManager.SaveConfig();
             
             // Nettoyer les composants
             markerRenderer?.Dispose();

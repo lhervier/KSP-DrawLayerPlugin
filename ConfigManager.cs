@@ -25,7 +25,7 @@ namespace com.github.lhervier.ksp {
             return debugMode;
         }
         
-        public void LoadMarkers() {
+        public void LoadConfig() {
             if (!File.Exists(configFilePath)) {
                 Logger.LogInfo("No configuration file found, starting with empty list");
                 return;
@@ -74,9 +74,9 @@ namespace com.github.lhervier.ksp {
             }
         }
         
-        public void SaveMarkers() {
+        public void SaveConfig() {
             try {
-                Logger.LogInfo($"Starting SaveMarkers. Markers count: {markers.Count}");
+                Logger.LogInfo($"Saving configuration. Markers count: {markers.Count}");
                 Logger.LogInfo($"Config file path: {configFilePath}");
                 
                 // Créer le nœud de configuration principal
@@ -203,20 +203,20 @@ namespace com.github.lhervier.ksp {
         public void AddMarker(VisualMarker marker) {
             Logger.LogInfo($"Adding marker: {marker.name}, type: {marker.type}, pos: ({marker.positionX}, {marker.positionY})");
             markers.Add(marker);
-            SaveMarkers();
+            SaveConfig();
         }
         
         public void RemoveMarker(int index) {
             if (index >= 0 && index < markers.Count) {
                 markers.RemoveAt(index);
-                SaveMarkers();
+                SaveConfig();
             }
         }
         
         public void UpdateMarker(int index, VisualMarker marker) {
             if (index >= 0 && index < markers.Count) {
                 markers[index] = marker;
-                SaveMarkers();
+                SaveConfig();
             }
         }
     }
