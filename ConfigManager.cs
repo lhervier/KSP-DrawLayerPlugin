@@ -14,13 +14,9 @@ namespace com.github.lhervier.ksp {
         public List<VisualMarker> Markers => markers;
         
         public ConfigManager() {
-            configFilePath = GetConfigPath();
-        }
-        
-        private string GetConfigPath() {
             string dllPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string modDirectory = Path.GetDirectoryName(dllPath);
-            return Path.Combine(modDirectory, CONFIG_FILE);
+            configFilePath = Path.Combine(modDirectory, CONFIG_FILE);
         }
         
         public bool GetDebugMode() {
