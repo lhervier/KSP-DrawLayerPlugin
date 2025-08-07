@@ -28,6 +28,8 @@ namespace com.github.lhervier.ksp {
             debugMode = false;
         }
         
+        // =====================================================================
+
         public void LoadConfig() {
             // Reset the configuration to default values
             ResetConfig();
@@ -156,6 +158,8 @@ namespace com.github.lhervier.ksp {
 
             return marker;
         }
+
+        // =====================================================================
         
         public void SaveConfig() {
             Logger.LogInfo($"Saving configuration. Markers count: {markers.Count}");
