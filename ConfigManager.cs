@@ -55,7 +55,7 @@ namespace com.github.lhervier.ksp {
             ConfigNode[] markerNodes = markersNode.GetNodes();
             foreach (ConfigNode markerNode in markerNodes) {
                 if (!markerNode.name.StartsWith("MARKER_")) continue;
-                VisualMarker marker = ParseMarkerFromConfigNode(markerNode);
+                VisualMarker marker = ParseMarkerConfig(markerNode);
                 if (marker != null) {
                     markers.Add(marker);
                 }
@@ -128,7 +128,7 @@ namespace com.github.lhervier.ksp {
             }
         }
         
-        private VisualMarker ParseMarkerFromConfigNode(ConfigNode markerNode) {
+        private VisualMarker ParseMarkerConfig(ConfigNode markerNode) {
             try {
                 VisualMarker marker = new VisualMarker();
                 
