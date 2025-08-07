@@ -31,31 +31,32 @@ namespace com.github.lhervier.ksp {
                 return;
             }
             ConfigNode configNode = ConfigNode.Load(configFilePath);
-            if (configNode != null) {
-                markers.Clear();
+            if (configNode == null) {
+                Logger.LogWarning("Invalid configuration file, starting with empty list");
+                return;
+            }
+            
+            markers.Clear();
+            
+            // Charger la configuration générale
+            LoadGeneralConfig(configNode);
+            
+            // Charger les marqueurs
+            ConfigNode markersNode = configNode.GetNode("MARKERS");
+            if (markersNode != null) {
+                ConfigNode[] markerNodes = markersNode.GetNodes();
                 
-                // Charger la configuration générale
-                LoadGeneralConfig(configNode);
-                
-                // Charger les marqueurs
-                ConfigNode markersNode = configNode.GetNode("MARKERS");
-                if (markersNode != null) {
-                    ConfigNode[] markerNodes = markersNode.GetNodes();
-                    
-                    foreach (ConfigNode markerNode in markerNodes) {
-                        if (markerNode.name.StartsWith("MARKER_")) {
-                            VisualMarker marker = ParseMarkerFromConfigNode(markerNode);
-                            if (marker != null) {
-                                markers.Add(marker);
-                            }
+                foreach (ConfigNode markerNode in markerNodes) {
+                    if (markerNode.name.StartsWith("MARKER_")) {
+                        VisualMarker marker = ParseMarkerFromConfigNode(markerNode);
+                        if (marker != null) {
+                            markers.Add(marker);
                         }
                     }
                 }
-                
-                Logger.LogInfo($"Loaded {markers.Count} markers from {configFilePath}");
-            } else {
-                Logger.LogWarning("Invalid configuration file, starting with empty list");
             }
+            
+            Logger.LogInfo($"Loaded {markers.Count} markers from {configFilePath}");
         }
         
         private void LoadGeneralConfig(ConfigNode configNode) {
