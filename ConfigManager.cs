@@ -118,33 +118,42 @@ namespace com.github.lhervier.ksp {
             }
 
             // =========================
+            // Line properties
+            // =========================
+            if(marker.type == MarkerType.CrossLines) {
+                // No additional properties
+            }
+            
+            // =========================
             // Circle properties
             // =========================
+            if(marker.type == MarkerType.Circle) {
             
-            // Radius
-            string radiusStr = markerNode.GetValue("radius");
-            if (!string.IsNullOrEmpty(radiusStr) && float.TryParse(radiusStr, out float radius)) {
-                marker.radius = radius;
+                // Radius
+                string radiusStr = markerNode.GetValue("radius");
+                if (!string.IsNullOrEmpty(radiusStr) && float.TryParse(radiusStr, out float radius)) {
+                    marker.radius = radius;
+                }
+                
+                // Graduations
+                string graduationsStr = markerNode.GetValue("showGraduations");
+                if (!string.IsNullOrEmpty(graduationsStr)) {
+                    marker.showGraduations = graduationsStr.ToLower() == "true";
+                }
+                
+                // Main graduation divisions
+                string mainGraduationDivisionsStr = markerNode.GetValue("mainGraduationDivisions");
+                if (!string.IsNullOrEmpty(mainGraduationDivisionsStr) && int.TryParse(mainGraduationDivisionsStr, out int mainGraduationDivisions)) {
+                    marker.mainGraduationDivisions = mainGraduationDivisions;
+                }
+                
+                // Sub graduation divisions
+                string subGraduationDivisionsStr = markerNode.GetValue("subGraduationDivisions");
+                if (!string.IsNullOrEmpty(subGraduationDivisionsStr) && int.TryParse(subGraduationDivisionsStr, out int subGraduationDivisions)) {
+                    marker.subGraduationDivisions = subGraduationDivisions;
+                }
             }
-            
-            // Graduations
-            string graduationsStr = markerNode.GetValue("showGraduations");
-            if (!string.IsNullOrEmpty(graduationsStr)) {
-                marker.showGraduations = graduationsStr.ToLower() == "true";
-            }
-            
-            // Main graduation divisions
-            string mainGraduationDivisionsStr = markerNode.GetValue("mainGraduationDivisions");
-            if (!string.IsNullOrEmpty(mainGraduationDivisionsStr) && int.TryParse(mainGraduationDivisionsStr, out int mainGraduationDivisions)) {
-                marker.mainGraduationDivisions = mainGraduationDivisions;
-            }
-            
-            // Sub graduation divisions
-            string subGraduationDivisionsStr = markerNode.GetValue("subGraduationDivisions");
-            if (!string.IsNullOrEmpty(subGraduationDivisionsStr) && int.TryParse(subGraduationDivisionsStr, out int subGraduationDivisions)) {
-                marker.subGraduationDivisions = subGraduationDivisions;
-            }
-            
+
             return marker;
         }
         
