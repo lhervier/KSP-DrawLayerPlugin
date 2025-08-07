@@ -10,12 +10,12 @@ namespace com.github.lhervier.ksp {
     public class VisualMarker {
         public string name = "Marker";
         public MarkerType type = MarkerType.CrossLines;
-        public float positionX = 50f; // % de la largeur
-        public float positionY = 50f; // % de la hauteur
-        public float radius = 10f; // % de la largeur (pour les cercles)
+        public float positionX = 50f; // % of the width
+        public float positionY = 50f; // % of the height
+        public float radius = 10f; // % of the width (for circles)
         public bool showGraduations = false;
-        public int mainGraduationDivisions = 12; // nombre de divisions principales (2, 4, 8, 12, 36)
-        public int subGraduationDivisions = 3; // nombre de divisions pour les sous-graduations
+        public int mainGraduationDivisions = 12; // main graduation divisions (2, 4, 8, 12, 36)
+        public int subGraduationDivisions = 3; // sub graduation divisions
         public Color color = Color.white;
         public bool visible = true;
         
