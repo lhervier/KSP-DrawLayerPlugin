@@ -97,7 +97,7 @@ namespace com.github.lhervier.ksp {
                 previewMarker.positionX = editingMarker.positionX;
                 previewMarker.positionY = editingMarker.positionY;
                 previewMarker.radius = editingMarker.radius;
-                previewMarker.mainGraduationDivisions = editingMarker.mainGraduationDivisions;
+                previewMarker.divisions = editingMarker.divisions;
                 previewMarker.color = editingMarker.color;
                 previewMarker.visible = true;
             }
@@ -207,15 +207,15 @@ namespace com.github.lhervier.ksp {
                 GUILayout.Label("Main graduation divisions:");
                 // Slider pour les divisions prédéfinies (1, 2, 3, 4, 6, 8, 12, 36)
                 int[] divisions = { 1, 2, 3, 4, 6, 8, 12, 36 };
-                int currentIndex = System.Array.IndexOf(divisions, marker.mainGraduationDivisions);
+                int currentIndex = System.Array.IndexOf(divisions, marker.divisions);
                 if (currentIndex == -1) currentIndex = 2; // Valeur par défaut (4 divisions)
                 
                 currentIndex = (int)GUILayout.HorizontalSlider(currentIndex, 0, divisions.Length - 1);
-                marker.mainGraduationDivisions = divisions[currentIndex];
+                marker.divisions = divisions[currentIndex];
                 
                 // Afficher les degrés correspondants
-                float degrees = marker.mainGraduationDivisions > 1 ? 360f / marker.mainGraduationDivisions : 0f;
-                string divisionText = marker.mainGraduationDivisions == 1 ? "No graduations" : $"{marker.mainGraduationDivisions} divisions ({degrees:F0}°)";
+                float degrees = marker.divisions > 1 ? 360f / marker.divisions : 0f;
+                string divisionText = marker.divisions == 1 ? "No graduations" : $"{marker.divisions} divisions ({degrees:F0}°)";
                 GUILayout.Label($"Divisions: {divisionText}");
             }
             

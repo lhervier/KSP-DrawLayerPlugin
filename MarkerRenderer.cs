@@ -58,7 +58,7 @@ namespace com.github.lhervier.ksp {
                     screenPos, 
                     radius, 
                     marker.color, 
-                    marker.mainGraduationDivisions
+                    marker.divisions
                 );
                 circleMarker.Draw();
             }

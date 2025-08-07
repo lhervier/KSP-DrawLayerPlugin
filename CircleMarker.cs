@@ -3,23 +3,22 @@ using UnityEngine;
 namespace com.github.lhervier.ksp {
     
     public class CircleMarker {
+        private static readonly int SEGMENTS = 64;
         private readonly Vector2 center;
         private readonly float radius;
         private readonly Color color;
-        private readonly int mainGraduationDivisions;
-        private readonly int segments;
+        private readonly int divisions;
         
         public CircleMarker(
             Vector2 center, 
             float radius, 
             Color color, 
-            int mainGraduationDivisions
+            int divisions
         ) {
             this.center = center;
             this.radius = radius;
             this.color = color;
-            this.mainGraduationDivisions = mainGraduationDivisions;
-            this.segments = 64;
+            this.divisions = divisions;
         }
         
         public void Draw() {
@@ -28,10 +27,10 @@ namespace com.github.lhervier.ksp {
         }
         
         private void DrawCircle() {
-            float angleStep = 360f / segments;
+            float angleStep = 360f / SEGMENTS;
             
-            // Dessiner le cercle
-            for (int i = 0; i < segments; i++) {
+            // Draw the circle
+            for (int i = 0; i < SEGMENTS; i++) {
                 float angle1 = i * angleStep * Mathf.Deg2Rad;
                 float angle2 = (i + 1) * angleStep * Mathf.Deg2Rad;
                 
@@ -50,12 +49,12 @@ namespace com.github.lhervier.ksp {
         
         private void DrawRadialLines() {
             // Ne dessiner les rayons que s'il y a des divisions
-            if (mainGraduationDivisions <= 1) return;
+            if (divisions <= 1) return;
             
-            float mainGraduationSize = 360f / mainGraduationDivisions;
+            float mainGraduationSize = 360f / divisions;
             
             // Dessiner les rayons en pointillés pour chaque graduation principale
-            for (int i = 0; i < mainGraduationDivisions; i++) {
+            for (int i = 0; i < divisions; i++) {
                 float angle = i * mainGraduationSize * Mathf.Deg2Rad;
                 
                 Vector2 outerPoint = center + new Vector2(
