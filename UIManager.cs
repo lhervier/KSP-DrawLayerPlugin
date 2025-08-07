@@ -47,8 +47,9 @@ namespace com.github.lhervier.ksp {
             // Button to create a new marker
             if (GUILayout.Button("New Marker")) {
                 isCreatingNewMarker = true;
-                editingMarker = new VisualMarker();
-                editingMarker.name = "New Marker";
+                editingMarker = new VisualMarker() {
+                    name = "New Marker"
+                };
                 showEditorWindow = true;
                 // Create a temporary marker for preview
                 previewMarker = new VisualMarker(editingMarker);
