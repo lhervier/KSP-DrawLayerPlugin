@@ -19,6 +19,12 @@ namespace com.github.lhervier.ksp {
             string modDirectory = Path.GetDirectoryName(dllPath);
             configFilePath = Path.Combine(modDirectory, CONFIG_FILE);
             markers = new List<VisualMarker>();
+            ResetConfig();
+        }
+
+        private void ResetConfig() {
+            markers.Clear();
+            debugMode = false;
         }
         
         public bool GetDebugMode() {
@@ -26,6 +32,10 @@ namespace com.github.lhervier.ksp {
         }
         
         public void LoadConfig() {
+            // Reset the configuration to default values
+            ResetConfig();
+            
+            // Load the configuration file
             if (!File.Exists(configFilePath)) {
                 Logger.LogInfo("No configuration file found, starting with empty list");
                 return;
@@ -37,10 +47,9 @@ namespace com.github.lhervier.ksp {
             }
 
             // Load general config
-            LoadGeneralConfig(configNode);
+            ParseGeneralConfig(configNode);
             
             // Load markers
-            markers.Clear();
             ConfigNode markersNode = configNode.GetNode("MARKERS");
             if (markersNode == null) {
                 Logger.LogInfo("No markers found in configuration file, starting with empty list");
@@ -58,7 +67,7 @@ namespace com.github.lhervier.ksp {
             Logger.LogInfo($"Loaded {markers.Count} markers from {configFilePath}");
         }
         
-        private void LoadGeneralConfig(ConfigNode configNode) {
+        private void ParseGeneralConfig(ConfigNode configNode) {
             try {
                 ConfigNode generalNode = configNode.GetNode("GENERAL");
                 if (generalNode != null) {
