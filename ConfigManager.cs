@@ -158,52 +158,47 @@ namespace com.github.lhervier.ksp {
         }
         
         public void SaveConfig() {
-            try {
-                Logger.LogInfo($"Saving configuration. Markers count: {markers.Count}");
-                Logger.LogInfo($"Config file path: {configFilePath}");
+            Logger.LogInfo($"Saving configuration. Markers count: {markers.Count}");
+            Logger.LogInfo($"Config file path: {configFilePath}");
+            
+            // Créer le nœud de configuration principal
+            ConfigNode configNode = new ConfigNode();
+            
+            // Section configuration générale
+            ConfigNode generalNode = new ConfigNode("GENERAL");
+            generalNode.SetValue("debug", debugMode.ToString().ToLower());
+            configNode.AddNode(generalNode);
+            
+            // Section des repères
+            ConfigNode markersNode = new ConfigNode("MARKERS");
+            
+            for (int i = 0; i < markers.Count; i++) {
+                var marker = markers[i];
+                Logger.LogInfo($"Saving marker {i}: {marker.name}, type: {marker.type}, pos: ({marker.positionX}, {marker.positionY}), color: {marker.color}");
                 
-                // Créer le nœud de configuration principal
-                ConfigNode configNode = new ConfigNode();
+                ConfigNode markerNode = new ConfigNode($"MARKER_{i}");
                 
-                // Section configuration générale
-                ConfigNode generalNode = new ConfigNode("GENERAL");
-                generalNode.SetValue("debug", debugMode.ToString().ToLower());
-                configNode.AddNode(generalNode);
+                markerNode.SetValue("name", marker.name);
+                markerNode.SetValue("type", marker.type.ToString());
+                markerNode.SetValue("positionX", marker.positionX.ToString());
+                markerNode.SetValue("positionY", marker.positionY.ToString());
+                markerNode.SetValue("radius", marker.radius.ToString());
+                markerNode.SetValue("showGraduations", marker.showGraduations.ToString().ToLower());
+                markerNode.SetValue("mainGraduationDivisions", marker.mainGraduationDivisions.ToString());
+                markerNode.SetValue("subGraduationDivisions", marker.subGraduationDivisions.ToString());
+                markerNode.SetValue("colorR", marker.color.r.ToString());
+                markerNode.SetValue("colorG", marker.color.g.ToString());
+                markerNode.SetValue("colorB", marker.color.b.ToString());
+                markerNode.SetValue("visible", marker.visible.ToString().ToLower());
                 
-                // Section des repères
-                ConfigNode markersNode = new ConfigNode("MARKERS");
-                
-                for (int i = 0; i < markers.Count; i++) {
-                    var marker = markers[i];
-                    Logger.LogInfo($"Saving marker {i}: {marker.name}, type: {marker.type}, pos: ({marker.positionX}, {marker.positionY}), color: {marker.color}");
-                    
-                    ConfigNode markerNode = new ConfigNode($"MARKER_{i}");
-                    
-                    markerNode.SetValue("name", marker.name);
-                    markerNode.SetValue("type", marker.type.ToString());
-                    markerNode.SetValue("positionX", marker.positionX.ToString());
-                    markerNode.SetValue("positionY", marker.positionY.ToString());
-                    markerNode.SetValue("radius", marker.radius.ToString());
-                    markerNode.SetValue("showGraduations", marker.showGraduations.ToString().ToLower());
-                    markerNode.SetValue("mainGraduationDivisions", marker.mainGraduationDivisions.ToString());
-                    markerNode.SetValue("subGraduationDivisions", marker.subGraduationDivisions.ToString());
-                    markerNode.SetValue("colorR", marker.color.r.ToString());
-                    markerNode.SetValue("colorG", marker.color.g.ToString());
-                    markerNode.SetValue("colorB", marker.color.b.ToString());
-                    markerNode.SetValue("visible", marker.visible.ToString().ToLower());
-                    
-                    markersNode.AddNode(markerNode);
-                }
-                
-                configNode.AddNode(markersNode);
-                
-                // Sauvegarder le fichier
-                configNode.Save(configFilePath);
-                Logger.LogInfo($"Configuration saved to {configFilePath}");
+                markersNode.AddNode(markerNode);
             }
-            catch (Exception ex) {
-                Logger.LogError($"Error saving configuration: {ex.Message}");
-            }
+            
+            configNode.AddNode(markersNode);
+            
+            // Sauvegarder le fichier
+            configNode.Save(configFilePath);
+            Logger.LogInfo($"Configuration saved to {configFilePath}");
         }
         
         public void AddMarker(VisualMarker marker) {
