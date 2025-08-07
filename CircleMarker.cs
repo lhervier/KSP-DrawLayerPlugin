@@ -24,9 +24,6 @@ namespace com.github.lhervier.ksp {
         
         public void Draw() {
             DrawCircle();
-            DrawCenter();
-            
-            DrawGraduations();
             DrawRadialLines();
         }
         
@@ -51,21 +48,6 @@ namespace com.github.lhervier.ksp {
             }
         }
         
-        private void DrawCenter() {
-            // Taille de la croix du centre (en pixels)
-            float crossSize = 8f;
-            
-            // Ligne horizontale de la croix
-            Vector2 leftPoint = center + new Vector2(-crossSize, 0);
-            Vector2 rightPoint = center + new Vector2(crossSize, 0);
-            DrawLine(leftPoint, rightPoint, color, 2);
-            
-            // Ligne verticale de la croix
-            Vector2 topPoint = center + new Vector2(0, crossSize);
-            Vector2 bottomPoint = center + new Vector2(0, -crossSize);
-            DrawLine(topPoint, bottomPoint, color, 2);
-        }
-        
         private void DrawRadialLines() {
             // Ne dessiner les rayons que s'il y a des divisions
             if (mainGraduationDivisions <= 1) return;
@@ -82,33 +64,6 @@ namespace com.github.lhervier.ksp {
                 );
                 
                 DrawDottedLine(center, outerPoint, color, 1);
-            }
-        }
-        
-        private void DrawGraduations() {
-            // Ne dessiner les graduations que s'il y a des divisions
-            if (mainGraduationDivisions <= 1) return;
-            
-            float mainGraduationSize = 360f / mainGraduationDivisions;
-            
-            // Dessiner toutes les graduations principales
-            for (int i = 0; i < mainGraduationDivisions; i++) {
-                float angle = i * mainGraduationSize * Mathf.Deg2Rad;
-                
-                // Taille de la graduation (toutes les graduations principales ont la même taille)
-                float graduationLength = 20f;
-                int thickness = 2;
-                
-                Vector2 outerPoint = center + new Vector2(
-                    Mathf.Cos(angle) * radius,
-                    Mathf.Sin(angle) * radius
-                );
-                Vector2 innerPoint = center + new Vector2(
-                    Mathf.Cos(angle) * (radius - graduationLength),
-                    Mathf.Sin(angle) * (radius - graduationLength)
-                );
-                
-                DrawLine(outerPoint, innerPoint, color, thickness);
             }
         }
         
