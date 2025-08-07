@@ -167,40 +167,26 @@ namespace com.github.lhervier.ksp {
             Logger.LogInfo($"Saving configuration. Markers count: {markers.Count}");
             Logger.LogInfo($"Config file path: {configFilePath}");
             
-            // Créer le nœud de configuration principal
+            // Create the main configuration node
             ConfigNode configNode = new ConfigNode();
             
-            // Section configuration générale
+            // General section
             configNode.AddNode(GenerateGeneralNode());
             
-            // Section des repères
+            // Markers section
             ConfigNode markersNode = new ConfigNode(MARKERS_NODE);
             
             for (int i = 0; i < markers.Count; i++) {
                 var marker = markers[i];
-                Logger.LogInfo($"Saving marker {i}: {marker.name}, type: {marker.type}, pos: ({marker.positionX}, {marker.positionY}), color: {marker.color}");
-                
-                ConfigNode markerNode = new ConfigNode($"MARKER_{i}");
-                
-                markerNode.SetValue("name", marker.name);
-                markerNode.SetValue("type", marker.type.ToString());
-                markerNode.SetValue("positionX", marker.positionX.ToString());
-                markerNode.SetValue("positionY", marker.positionY.ToString());
-                markerNode.SetValue("radius", marker.radius.ToString());
-                markerNode.SetValue("showGraduations", marker.showGraduations.ToString().ToLower());
-                markerNode.SetValue("mainGraduationDivisions", marker.mainGraduationDivisions.ToString());
-                markerNode.SetValue("subGraduationDivisions", marker.subGraduationDivisions.ToString());
-                markerNode.SetValue("colorR", marker.color.r.ToString());
-                markerNode.SetValue("colorG", marker.color.g.ToString());
-                markerNode.SetValue("colorB", marker.color.b.ToString());
-                markerNode.SetValue("visible", marker.visible.ToString().ToLower());
-                
-                markersNode.AddNode(markerNode);
+                Logger.LogInfo($"Saving marker {i}: {marker.name}, type: {marker.type}");
+                markersNode.AddNode(
+                    GenerateMarkerNode(marker, i)
+                );
             }
             
             configNode.AddNode(markersNode);
             
-            // Sauvegarder le fichier
+            // Save the configuration file
             configNode.Save(configFilePath);
             Logger.LogInfo($"Configuration saved to {configFilePath}");
         }
@@ -210,6 +196,27 @@ namespace com.github.lhervier.ksp {
             generalNode.SetValue("debug", debugMode.ToString().ToLower());
             return generalNode;
         }
+
+        private ConfigNode GenerateMarkerNode(VisualMarker marker, int index) {
+            ConfigNode markerNode = new ConfigNode($"MARKER_{index}");
+            
+            markerNode.SetValue("name", marker.name);
+            markerNode.SetValue("type", marker.type.ToString());
+            markerNode.SetValue("positionX", marker.positionX.ToString());
+            markerNode.SetValue("positionY", marker.positionY.ToString());
+            markerNode.SetValue("radius", marker.radius.ToString());
+            markerNode.SetValue("showGraduations", marker.showGraduations.ToString().ToLower());
+            markerNode.SetValue("mainGraduationDivisions", marker.mainGraduationDivisions.ToString());
+            markerNode.SetValue("subGraduationDivisions", marker.subGraduationDivisions.ToString());
+            markerNode.SetValue("colorR", marker.color.r.ToString());
+            markerNode.SetValue("colorG", marker.color.g.ToString());
+            markerNode.SetValue("colorB", marker.color.b.ToString());
+            markerNode.SetValue("visible", marker.visible.ToString().ToLower());
+
+            return markerNode;
+        }
+
+        // =====================================================================
         
         public void AddMarker(VisualMarker marker) {
             Logger.LogInfo($"Adding marker: {marker.name}, type: {marker.type}, pos: ({marker.positionX}, {marker.positionY})");
