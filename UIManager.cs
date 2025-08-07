@@ -98,7 +98,6 @@ namespace com.github.lhervier.ksp {
                 previewMarker.positionY = editingMarker.positionY;
                 previewMarker.radius = editingMarker.radius;
                 previewMarker.mainGraduationDivisions = editingMarker.mainGraduationDivisions;
-                previewMarker.subGraduationDivisions = editingMarker.subGraduationDivisions;
                 previewMarker.color = editingMarker.color;
                 previewMarker.visible = true;
             }

@@ -144,12 +144,6 @@ namespace com.github.lhervier.ksp {
                 if (!string.IsNullOrEmpty(mainGraduationDivisionsStr) && int.TryParse(mainGraduationDivisionsStr, out int mainGraduationDivisions)) {
                     marker.mainGraduationDivisions = mainGraduationDivisions;
                 }
-                
-                // Sub graduation divisions
-                string subGraduationDivisionsStr = markerNode.GetValue("subGraduationDivisions");
-                if (!string.IsNullOrEmpty(subGraduationDivisionsStr) && int.TryParse(subGraduationDivisionsStr, out int subGraduationDivisions)) {
-                    marker.subGraduationDivisions = subGraduationDivisions;
-                }
             }
 
             return marker;
@@ -200,7 +194,6 @@ namespace com.github.lhervier.ksp {
             markerNode.SetValue("positionY", marker.positionY.ToString());
             markerNode.SetValue("radius", marker.radius.ToString());
             markerNode.SetValue("mainGraduationDivisions", marker.mainGraduationDivisions.ToString());
-            markerNode.SetValue("subGraduationDivisions", marker.subGraduationDivisions.ToString());
             markerNode.SetValue("colorR", marker.color.r.ToString());
             markerNode.SetValue("colorG", marker.color.g.ToString());
             markerNode.SetValue("colorB", marker.color.b.ToString());

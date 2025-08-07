@@ -7,21 +7,18 @@ namespace com.github.lhervier.ksp {
         private readonly float radius;
         private readonly Color color;
         private readonly int mainGraduationDivisions;
-        private readonly int subGraduationDivisions;
         private readonly int segments;
         
         public CircleMarker(
             Vector2 center, 
             float radius, 
             Color color, 
-            int mainGraduationDivisions, 
-            int subGraduationDivisions
+            int mainGraduationDivisions
         ) {
             this.center = center;
             this.radius = radius;
             this.color = color;
             this.mainGraduationDivisions = mainGraduationDivisions;
-            this.subGraduationDivisions = subGraduationDivisions;
             this.segments = 64;
         }
         
@@ -112,26 +109,6 @@ namespace com.github.lhervier.ksp {
                 );
                 
                 DrawLine(outerPoint, innerPoint, color, thickness);
-                
-                // Dessiner les sous-graduations entre les graduations principales
-                if (subGraduationDivisions > 1) {
-                    float subGraduationSize = mainGraduationSize / subGraduationDivisions;
-                    
-                    for (int j = 1; j < subGraduationDivisions; j++) {
-                        float subAngle = angle + (j * subGraduationSize * Mathf.Deg2Rad);
-                        
-                        Vector2 subOuterPoint = center + new Vector2(
-                            Mathf.Cos(subAngle) * radius,
-                            Mathf.Sin(subAngle) * radius
-                        );
-                        Vector2 subInnerPoint = center + new Vector2(
-                            Mathf.Cos(subAngle) * (radius - 10f),
-                            Mathf.Sin(subAngle) * (radius - 10f)
-                        );
-                        
-                        DrawLine(subOuterPoint, subInnerPoint, color, 1);
-                    }
-                }
             }
         }
         
