@@ -219,23 +219,23 @@ namespace com.github.lhervier.ksp {
         // =====================================================================
         
         public void AddMarker(VisualMarker marker) {
-            Logger.LogInfo($"Adding marker: {marker.name}, type: {marker.type}, pos: ({marker.positionX}, {marker.positionY})");
+            Logger.LogInfo($"Adding marker: {marker.name}, type: {marker.type}");
             markers.Add(marker);
             SaveConfig();
         }
         
         public void RemoveMarker(int index) {
-            if (index >= 0 && index < markers.Count) {
-                markers.RemoveAt(index);
-                SaveConfig();
-            }
+            if (index < 0 ) return;
+            if( index >= markers.Count) return;
+            markers.RemoveAt(index);
+            SaveConfig();
         }
         
         public void UpdateMarker(int index, VisualMarker marker) {
-            if (index >= 0 && index < markers.Count) {
-                markers[index] = marker;
-                SaveConfig();
-            }
+            if (index < 0 ) return;
+            if( index >= markers.Count ) return;
+            markers[index] = marker;
+            SaveConfig();
         }
     }
 } 
