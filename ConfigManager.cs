@@ -68,9 +68,8 @@ namespace com.github.lhervier.ksp {
             ConfigNode generalNode = configNode.GetNode("GENERAL");
             if (generalNode == null) return;
             string debugValue = generalNode.GetValue("debug");
-            if (!string.IsNullOrEmpty(debugValue)) {
-                debugMode = (debugValue.ToLower() == "true" || debugValue == "1" || debugValue == "yes");
-            }
+            if (string.IsNullOrEmpty(debugValue)) return;
+            debugMode = (debugValue.ToLower() == "true" || debugValue == "1" || debugValue == "yes");
         }
         
         public void SaveConfig() {
