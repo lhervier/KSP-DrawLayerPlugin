@@ -152,14 +152,16 @@ namespace com.github.lhervier.ksp {
         }
         
         public void OnGUI() {
-            uiManager?.DrawUI();
+            if( uiManager == null ) return;
+            uiManager.DrawUI();
         }
         
         public void OnRenderObject() {
             if( markerRenderer == null ) return;
+            if( uiManager == null ) return;
             markerRenderer.DrawMarkers(
                 configManager.Markers, 
-                uiManager?.EditingMarker
+                uiManager.EditingMarker
             );
         }
     }
