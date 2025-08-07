@@ -7,6 +7,8 @@ namespace com.github.lhervier.ksp {
     
     public class ConfigManager {
         private static readonly string CONFIG_FILE = "draw_layer.cfg";
+        private static readonly string GENERAL_NODE = "GENERAL";
+        private static readonly string MARKERS_NODE = "MARKERS";
         
         private readonly string configFilePath;
         private readonly List<VisualMarker> markers;
@@ -49,7 +51,7 @@ namespace com.github.lhervier.ksp {
             ParseGeneralConfig(configNode);
             
             // Load markers
-            ConfigNode markersNode = configNode.GetNode("MARKERS");
+            ConfigNode markersNode = configNode.GetNode(MARKERS_NODE);
             if (markersNode == null) {
                 Logger.LogInfo("No markers found in configuration file, starting with empty list");
                 return;
@@ -67,7 +69,7 @@ namespace com.github.lhervier.ksp {
         }
         
         private void ParseGeneralConfig(ConfigNode configNode) {
-            ConfigNode generalNode = configNode.GetNode("GENERAL");
+            ConfigNode generalNode = configNode.GetNode(GENERAL_NODE);
             if (generalNode == null) return;
             string debugValue = generalNode.GetValue("debug");
             if (string.IsNullOrEmpty(debugValue)) return;
@@ -169,12 +171,10 @@ namespace com.github.lhervier.ksp {
             ConfigNode configNode = new ConfigNode();
             
             // Section configuration générale
-            ConfigNode generalNode = new ConfigNode("GENERAL");
-            generalNode.SetValue("debug", debugMode.ToString().ToLower());
-            configNode.AddNode(generalNode);
+            configNode.AddNode(GenerateGeneralNode());
             
             // Section des repères
-            ConfigNode markersNode = new ConfigNode("MARKERS");
+            ConfigNode markersNode = new ConfigNode(MARKERS_NODE);
             
             for (int i = 0; i < markers.Count; i++) {
                 var marker = markers[i];
@@ -203,6 +203,12 @@ namespace com.github.lhervier.ksp {
             // Sauvegarder le fichier
             configNode.Save(configFilePath);
             Logger.LogInfo($"Configuration saved to {configFilePath}");
+        }
+
+        private ConfigNode GenerateGeneralNode() {
+            ConfigNode generalNode = new ConfigNode(GENERAL_NODE);
+            generalNode.SetValue("debug", debugMode.ToString().ToLower());
+            return generalNode;
         }
         
         public void AddMarker(VisualMarker marker) {
