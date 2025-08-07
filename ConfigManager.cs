@@ -24,40 +24,35 @@ namespace com.github.lhervier.ksp {
         }
         
         public void LoadMarkers() {
-            try {
-                if (File.Exists(configFilePath)) {
-                    ConfigNode configNode = ConfigNode.Load(configFilePath);
-                    if (configNode != null) {
-                        markers.Clear();
+            if (File.Exists(configFilePath)) {
+                ConfigNode configNode = ConfigNode.Load(configFilePath);
+                if (configNode != null) {
+                    markers.Clear();
+                    
+                    // Charger la configuration générale
+                    LoadGeneralConfig(configNode);
+                    
+                    // Charger les marqueurs
+                    ConfigNode markersNode = configNode.GetNode("MARKERS");
+                    if (markersNode != null) {
+                        ConfigNode[] markerNodes = markersNode.GetNodes();
                         
-                        // Charger la configuration générale
-                        LoadGeneralConfig(configNode);
-                        
-                        // Charger les marqueurs
-                        ConfigNode markersNode = configNode.GetNode("MARKERS");
-                        if (markersNode != null) {
-                            ConfigNode[] markerNodes = markersNode.GetNodes();
-                            
-                            foreach (ConfigNode markerNode in markerNodes) {
-                                if (markerNode.name.StartsWith("MARKER_")) {
-                                    VisualMarker marker = ParseMarkerFromConfigNode(markerNode);
-                                    if (marker != null) {
-                                        markers.Add(marker);
-                                    }
+                        foreach (ConfigNode markerNode in markerNodes) {
+                            if (markerNode.name.StartsWith("MARKER_")) {
+                                VisualMarker marker = ParseMarkerFromConfigNode(markerNode);
+                                if (marker != null) {
+                                    markers.Add(marker);
                                 }
                             }
                         }
-                        
-                        Logger.LogInfo($"Loaded {markers.Count} markers from {configFilePath}");
-                    } else {
-                        Logger.LogWarning("Invalid configuration file, starting with empty list");
                     }
+                    
+                    Logger.LogInfo($"Loaded {markers.Count} markers from {configFilePath}");
                 } else {
-                    Logger.LogInfo("No configuration file found, starting with empty list");
+                    Logger.LogWarning("Invalid configuration file, starting with empty list");
                 }
-            }
-            catch (Exception ex) {
-                Logger.LogError($"Error loading configuration: {ex.Message}");
+            } else {
+                Logger.LogInfo("No configuration file found, starting with empty list");
             }
         }
         
