@@ -8,7 +8,7 @@ namespace com.github.lhervier.ksp {
     
     [Serializable]
     public class VisualMarker {
-        public string name = "Marker";
+        public string name = "New Marker";
         public MarkerType type = MarkerType.CrossLines;
         public float positionX = 50f; // % of the width
         public float positionY = 50f; // % of the height
