@@ -7,8 +7,9 @@ namespace com.github.lhervier.ksp {
     
     public class ConfigManager {
         private static readonly string CONFIG_FILE = "draw_layer.cfg";
+        
         private readonly string configFilePath;
-        private List<VisualMarker> markers = new List<VisualMarker>();
+        private readonly List<VisualMarker> markers;
         private bool debugMode = false;
         
         public List<VisualMarker> Markers => markers;
@@ -17,6 +18,7 @@ namespace com.github.lhervier.ksp {
             string dllPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string modDirectory = Path.GetDirectoryName(dllPath);
             configFilePath = Path.Combine(modDirectory, CONFIG_FILE);
+            markers = new List<VisualMarker>();
         }
         
         public bool GetDebugMode() {
