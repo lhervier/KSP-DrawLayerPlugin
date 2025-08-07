@@ -155,6 +155,7 @@ namespace com.github.lhervier.ksp {
             
             // Markers section
             ConfigNode markersNode = new ConfigNode(MARKERS_NODE);
+            configNode.AddNode(markersNode);
             
             for (int i = 0; i < markers.Count; i++) {
                 var marker = markers[i];
@@ -164,8 +165,6 @@ namespace com.github.lhervier.ksp {
                 );
             }
             
-            configNode.AddNode(markersNode);
-            
             // Save the configuration file
             configNode.Save(configFilePath);
             Logger.LogInfo($"Configuration saved to {configFilePath}");
@@ -173,21 +172,21 @@ namespace com.github.lhervier.ksp {
 
         private ConfigNode GenerateGeneralNode() {
             ConfigNode generalNode = new ConfigNode(GENERAL_NODE);
-            generalNode.SetValue("debug", debugMode.ToString().ToLower());
+            generalNode.SetValue("debug", debugMode, true);
             return generalNode;
         }
 
         private ConfigNode GenerateMarkerNode(VisualMarker marker, int index) {
             ConfigNode markerNode = new ConfigNode($"MARKER_{index}");
             
-            markerNode.SetValue("name", marker.name);
-            markerNode.SetValue("type", marker.type.ToString());
-            markerNode.SetValue("positionX", marker.positionX.ToString());
-            markerNode.SetValue("positionY", marker.positionY.ToString());
-            markerNode.SetValue("radius", marker.radius.ToString());
-            markerNode.SetValue("divisions", marker.divisions.ToString());
-            markerNode.SetValue("color", marker.color.GetName());
-            markerNode.SetValue("visible", marker.visible.ToString().ToLower());
+            markerNode.SetValue("name", marker.name, true);
+            markerNode.SetValue("type", marker.type.ToString(), true);
+            markerNode.SetValue("positionX", marker.positionX, true);
+            markerNode.SetValue("positionY", marker.positionY, true);
+            markerNode.SetValue("radius", marker.radius, true);
+            markerNode.SetValue("divisions", marker.divisions, true);
+            markerNode.SetValue("color", marker.color.GetName(), true);
+            markerNode.SetValue("visible", marker.visible, true);
 
             return markerNode;
         }
