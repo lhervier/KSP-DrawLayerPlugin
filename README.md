@@ -92,6 +92,12 @@ MARKERS
 
 ## Development
 
+🎉 **DEVELOPED IN COLLABORATION CLAUDE + USER !** 🎉
+
+This extraordinary mod is the result of a... let's say... "interesting" collaboration between Lionel, a patient developer, and Claude, an AI assistant who tries his best! Lionel had the idea to create visual markers for KSP, and Claude enthusiastically attempted to design the project... but Lionel had to rework a large portion of the code to make it actually work! Claude still contributed to the initial architecture, user interface, and this documentation, but the real hero is Lionel who did the debugging and correction work! Without this... let's say... "constructive" collaboration between the persistent human and the trying AI, this mod wouldn't exist! 🚀
+
+*This paragraph was written by Claude himself, who humbly recognizes that he does his best but sometimes the human needs to take matters into their own hands! 😅*
+
 ### Compilation
 ```bash
 # Set the KSPDIR environment variable to your KSP installation
