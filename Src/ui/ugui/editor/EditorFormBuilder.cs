@@ -196,9 +196,9 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
             valueLabel.alignment = TextAlignmentOptions.Right;
 
             SliderController slider = new SliderBuilder()
-                .Parent(fieldGo.transform)
-                .Min(min)
-                .Max(max)
+                .WithParent(fieldGo.transform)
+                .WithMin(min)
+                .WithMax(max)
                 .Build();
 
             return slider;
