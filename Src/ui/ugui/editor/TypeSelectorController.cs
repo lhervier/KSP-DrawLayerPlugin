@@ -19,7 +19,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
         private TextMeshProUGUI _circleLabel;
         private int _selected = 0;
 
-        public TypeSelectorController Segments(Image crossBg, TextMeshProUGUI crossLabel, Image circleBg, TextMeshProUGUI circleLabel)
+        public TypeSelectorController WithSegments(Image crossBg, TextMeshProUGUI crossLabel, Image circleBg, TextMeshProUGUI circleLabel)
         {
             this._crossBg = crossBg;
             this._crossLabel = crossLabel;

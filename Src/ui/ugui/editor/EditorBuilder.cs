@@ -17,7 +17,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
     public class EditorBuilder : IUGUIBuilder<EditorController>
     {
         private DrawLayerViewModel _viewModel;
-        public EditorBuilder ViewModel(DrawLayerViewModel viewModel)
+        public EditorBuilder WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -41,8 +41,8 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
 
             // Scrollable form — fills the height between header and footer
             ScrollableViewController scroll = new ScrollableViewBuilder<EditorFormController>()
-                .ObjectName("EditorScroll")
-                .ContentBuilder(new EditorFormBuilder().ViewModel(_viewModel))
+                .WithObjectName("EditorScroll")
+                .WithContentBuilder(new EditorFormBuilder().WithViewModel(_viewModel))
                 .Build();
             scroll.transform.SetParent(rootGo.transform, false);
             var scrollLe = scroll.gameObject.AddComponent<LayoutElement>();
@@ -56,9 +56,9 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
 
             return rootGo
                 .AddComponent<EditorController>()
-                .ViewModel(_viewModel)
-                .Header(titleLabel)
-                .Buttons(backButton, cancelButton, saveButton);
+                .WithViewModel(_viewModel)
+                .WithHeaderComponent(titleLabel)
+                .WithButtonControllers(backButton, cancelButton, saveButton);
         }
 
         private static void BuildFooter(Transform parent, out ButtonController cancelButton, out ButtonController saveButton)
@@ -99,13 +99,13 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
         private static ButtonController NewFooterButton(string objectName, string label, Color textColor, Color bgColor, Color hoverColor)
         {
             ButtonController button = new ButtonBuilder()
-                .ObjectName(objectName)
-                .Label(label)
-                .Size(DrawLayerPalette.FooterButtonHeight)
-                .FontSize(DrawLayerPalette.FooterButtonFontSize)
-                .TextColor(textColor)
-                .BackgroundColor(bgColor)
-                .HoverColor(hoverColor)
+                .WithObjectName(objectName)
+                .WithLabel(label)
+                .WithSize(DrawLayerPalette.FooterButtonHeight)
+                .WithFontSize(DrawLayerPalette.FooterButtonFontSize)
+                .WithTextColor(textColor)
+                .WithBackgroundColor(bgColor)
+                .WithHoverColor(hoverColor)
                 .Build();
 
             var le = button.GetComponent<LayoutElement>();

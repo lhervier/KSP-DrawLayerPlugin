@@ -48,7 +48,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
 
             TypeSelectorController controller = rootGo
                 .AddComponent<TypeSelectorController>()
-                .Segments(crossBg, crossLabel, circleBg, circleLabel);
+                .WithSegments(crossBg, crossLabel, circleBg, circleLabel);
 
             crossPointer.OnClick = () => controller.Select(0);
             circlePointer.OnClick = () => controller.Select(1);

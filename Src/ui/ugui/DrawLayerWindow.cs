@@ -27,10 +27,10 @@ namespace com.github.lhervier.ksp.ui.ugui
             // destroyed controller compares null here, which triggers a fresh spawn.
             if (_popup == null)
             {
-                var builder = new ModPopupBuilder().ViewModel(_viewModel);
+                var builder = new ModPopupBuilder().WithViewModel(_viewModel);
                 if (_savedPosition.HasValue)
                 {
-                    builder = builder.Position(_savedPosition.Value);
+                    builder = builder.WithPosition(_savedPosition.Value);
                 }
                 _popup = builder.Build();
                 if (_popup == null) return;   // KSP spawn failed

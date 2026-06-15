@@ -59,7 +59,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
 
             ColorGridController controller = rootGo
                 .AddComponent<ColorGridController>()
-                .Cells(cells, nameLabel);
+                .WithCells(cells, nameLabel);
 
             for (int i = 0; i < pointers.Length; i++)
             {

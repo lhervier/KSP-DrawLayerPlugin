@@ -18,7 +18,7 @@ namespace com.github.lhervier.ksp.ui.ugui.list
         private readonly List<MarkerRowController> _rows = new List<MarkerRowController>();
 
         private DrawLayerViewModel _viewModel;
-        public ListController ViewModel(DrawLayerViewModel viewModel)
+        public ListController WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -59,9 +59,9 @@ namespace com.github.lhervier.ksp.ui.ugui.list
             for (int i = 0; i < markers.Count; i++)
             {
                 MarkerRowController row = new MarkerRowBuilder()
-                    .ViewModel(_viewModel)
-                    .Marker(markers[i])
-                    .Index(i)
+                    .WithViewModel(_viewModel)
+                    .WithVisualMarker(markers[i])
+                    .WithIndex(i)
                     .Build();
                 row.transform.SetParent(transform, false);
                 _rows.Add(row);

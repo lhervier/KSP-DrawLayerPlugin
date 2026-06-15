@@ -24,7 +24,7 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
         // ====================================
 
         private DrawLayerViewModel _viewModel;
-        public TitleBarBuilder ViewModel(DrawLayerViewModel viewModel)
+        public TitleBarBuilder WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -66,8 +66,8 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
 
             return rightColumnGo
                 .AddComponent<TitleBarController>()
-                .ViewModel(_viewModel)
-                .CountLabel(countLabel);
+                .WithViewModel(_viewModel)
+                .WithCountLabelComponent(countLabel);
         }
 
         // Square title-bar button matching the shared ✕ close button (same size and colors), so the
@@ -75,11 +75,11 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
         private static ButtonController NewButton(string objectName, string glyph)
         {
             return new ButtonBuilder()
-                .ObjectName(objectName)
-                .Label(glyph)
-                .Interactable(true)
-                .BackgroundColor(PopupPalette.TitleBarButtonColor)
-                .HoverColor(PopupPalette.TitleBarButtonHoverColor)
+                .WithObjectName(objectName)
+                .WithLabel(glyph)
+                .WithInteractableState(true)
+                .WithBackgroundColor(PopupPalette.TitleBarButtonColor)
+                .WithHoverColor(PopupPalette.TitleBarButtonHoverColor)
                 .Build();
         }
 

@@ -16,7 +16,7 @@ namespace com.github.lhervier.ksp.ui.ugui
     public class ContentBuilder : IUGUIBuilder<ContentController>
     {
         private DrawLayerViewModel _viewModel;
-        public ContentBuilder ViewModel(DrawLayerViewModel viewModel)
+        public ContentBuilder WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -28,22 +28,22 @@ namespace com.github.lhervier.ksp.ui.ugui
 
             // Scrollable marker list
             ScrollableViewController list = new ScrollableViewBuilder<ListController>()
-                .ObjectName("DrawLayer.ListView")
-                .ContentBuilder(new ListBuilder().ViewModel(_viewModel))
+                .WithObjectName("DrawLayer.ListView")
+                .WithContentBuilder(new ListBuilder().WithViewModel(_viewModel))
                 .Build();
             Fill(list.gameObject, go.transform);
 
             // Editor form
-            EditorController editor = new EditorBuilder().ViewModel(_viewModel).Build();
+            EditorController editor = new EditorBuilder().WithViewModel(_viewModel).Build();
             Fill(editor.gameObject, go.transform);
 
             // Settings
-            SettingsController settings = new SettingsBuilder().ViewModel(_viewModel).Build();
+            SettingsController settings = new SettingsBuilder().WithViewModel(_viewModel).Build();
             Fill(settings.gameObject, go.transform);
 
             return go
                 .AddComponent<ContentController>()
-                .ViewModel(_viewModel)
+                .WithViewModel(_viewModel)
                 .Views(list.gameObject, editor.gameObject, settings.gameObject);
         }
 

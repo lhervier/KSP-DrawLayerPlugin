@@ -11,7 +11,7 @@ namespace com.github.lhervier.ksp.ui.ugui.settings
     public class SettingsController : MonoBehaviour
     {
         private DrawLayerViewModel _viewModel;
-        public SettingsController ViewModel(DrawLayerViewModel viewModel)
+        public SettingsController WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -19,7 +19,7 @@ namespace com.github.lhervier.ksp.ui.ugui.settings
 
         private ButtonController _backButton;
         private CheckboxController _debugCheckbox;
-        public SettingsController Controls(ButtonController backButton, CheckboxController debugCheckbox)
+        public SettingsController WithControls(ButtonController backButton, CheckboxController debugCheckbox)
         {
             this._backButton = backButton;
             this._debugCheckbox = debugCheckbox;

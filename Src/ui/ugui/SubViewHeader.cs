@@ -48,10 +48,10 @@ namespace com.github.lhervier.ksp.ui.ugui
             layout.childForceExpandHeight = false;
 
             backButton = new ButtonBuilder()
-                .ObjectName("Back")
-                .Label(BackGlyph)
-                .BackgroundColor(PopupPalette.TitleBarButtonColor)
-                .HoverColor(PopupPalette.TitleBarButtonHoverColor)
+                .WithObjectName("Back")
+                .WithLabel(BackGlyph)
+                .WithBackgroundColor(PopupPalette.TitleBarButtonColor)
+                .WithHoverColor(PopupPalette.TitleBarButtonHoverColor)
                 .Build();
             backButton.transform.SetParent(headerGo.transform, false);
 

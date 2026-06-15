@@ -11,7 +11,7 @@ namespace com.github.lhervier.ksp.ui.ugui.list
     public class ListBuilder : IUGUIBuilder<ListController>
     {
         private DrawLayerViewModel _viewModel;
-        public ListBuilder ViewModel(DrawLayerViewModel viewModel)
+        public ListBuilder WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -32,7 +32,7 @@ namespace com.github.lhervier.ksp.ui.ugui.list
 
             return go
                 .AddComponent<ListController>()
-                .ViewModel(_viewModel);
+                .WithViewModel(_viewModel);
         }
     }
 }

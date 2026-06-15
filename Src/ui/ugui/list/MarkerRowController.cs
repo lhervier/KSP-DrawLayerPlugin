@@ -13,49 +13,49 @@ namespace com.github.lhervier.ksp.ui.ugui.list
     public class MarkerRowController : MonoBehaviour
     {
         private DrawLayerViewModel _viewModel;
-        public MarkerRowController ViewModel(DrawLayerViewModel viewModel)
+        public MarkerRowController WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
         }
 
         private int _index;
-        public MarkerRowController Index(int index)
+        public MarkerRowController WithIndex(int index)
         {
             this._index = index;
             return this;
         }
 
         private UnityEngine.UI.Image _bg;
-        public MarkerRowController Background(UnityEngine.UI.Image bg)
+        public MarkerRowController WithBackground(UnityEngine.UI.Image bg)
         {
             this._bg = bg;
             return this;
         }
 
         private CanvasGroup _buttonsGroup;
-        public MarkerRowController ButtonsGroup(CanvasGroup buttonsGroup)
+        public MarkerRowController WithButtonsGroup(CanvasGroup buttonsGroup)
         {
             this._buttonsGroup = buttonsGroup;
             return this;
         }
 
         private PointerHandler _pointerHandler;
-        public MarkerRowController PointerHandler(PointerHandler pointerHandler)
+        public MarkerRowController WithPointerHandler(PointerHandler pointerHandler)
         {
             this._pointerHandler = pointerHandler;
             return this;
         }
 
         private CheckboxController _checkbox;
-        public MarkerRowController Checkbox(CheckboxController checkbox)
+        public MarkerRowController WithCheckboxController(CheckboxController checkbox)
         {
             this._checkbox = checkbox;
             return this;
         }
 
         private ButtonController _removeButton;
-        public MarkerRowController RemoveButtonController(ButtonController removeButton)
+        public MarkerRowController WithRemoveButtonController(ButtonController removeButton)
         {
             this._removeButton = removeButton;
             return this;

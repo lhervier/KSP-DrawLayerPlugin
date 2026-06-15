@@ -21,7 +21,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
         private TextMeshProUGUI _nameLabel;
         private int _selected = 0;
 
-        public ColorGridController Cells(Image[] cells, TextMeshProUGUI nameLabel)
+        public ColorGridController WithCells(Image[] cells, TextMeshProUGUI nameLabel)
         {
             this._cells = cells;
             this._nameLabel = nameLabel;

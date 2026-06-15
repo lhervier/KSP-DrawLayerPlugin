@@ -6,14 +6,14 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
     public class TitleBarController : MonoBehaviour
     {
         private DrawLayerViewModel _viewModel;
-        public TitleBarController ViewModel(DrawLayerViewModel viewModel)
+        public TitleBarController WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
         }
 
         private TextMeshProUGUI _countLabel;
-        public TitleBarController CountLabel(TextMeshProUGUI label)
+        public TitleBarController WithCountLabelComponent(TextMeshProUGUI label)
         {
             this._countLabel = label;
             return this;

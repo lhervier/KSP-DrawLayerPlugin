@@ -24,7 +24,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
         public static readonly string[] DivisionOptions = { "1", "2", "3", "4", "6", "8", "12", "36" };
 
         private DrawLayerViewModel _viewModel;
-        public EditorFormBuilder ViewModel(DrawLayerViewModel viewModel)
+        public EditorFormBuilder WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -47,7 +47,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
 
             BuildFieldLabel(propsSection.transform, "fieldName");
             TextFieldController name = new TextFieldBuilder()
-                .Parent(propsSection.transform)
+                .WithParent(propsSection.transform)
                 .Build();
 
             BuildFieldLabel(propsSection.transform, "fieldType");
@@ -58,11 +58,11 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
             SliderController ySlider = BuildSliderField(propsSection.transform, "fieldPositionY", 0f, 100f, out TextMeshProUGUI yValue);
 
             ButtonController recenter = new ButtonBuilder()
-                .ObjectName("Recenter")
-                .Label(ModLocalization.GetString("buttonRecenter"))
-                .AutoWidth(10f)
-                .BackgroundColor(DrawLayerPalette.RowButtonBgColor)
-                .HoverColor(DrawLayerPalette.RowButtonHoverColor)
+                .WithObjectName("Recenter")
+                .WithLabel(ModLocalization.GetString("buttonRecenter"))
+                .WithAutoWidth(10f)
+                .WithBackgroundColor(DrawLayerPalette.RowButtonBgColor)
+                .WithHoverColor(DrawLayerPalette.RowButtonHoverColor)
                 .Build();
             recenter.transform.SetParent(propsSection.transform, false);
 
@@ -75,8 +75,8 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
 
             BuildFieldLabel(circleSection.transform, "fieldDivisions");
             ComboController divisions = new ComboBuilder()
-                .Parent(circleSection.transform)
-                .LabelFor(DivisionLabel)
+                .WithParent(circleSection.transform)
+                .WithLabelFor(DivisionLabel)
                 .Build();
 
             BuildSeparator(rootGo.transform);
@@ -88,8 +88,8 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
 
             return rootGo
                 .AddComponent<EditorFormController>()
-                .ViewModel(_viewModel)
-                .Controls(name, type, xSlider, xValue, ySlider, yValue, recenter, circleSection, rSlider, rValue, divisions, colorGrid);
+                .WithViewModel(_viewModel)
+                .WithControls(name, type, xSlider, xValue, ySlider, yValue, recenter, circleSection, rSlider, rValue, divisions, colorGrid);
         }
 
         // Localized label for a division count: "No graduation" for 1, "N divisions (X°)" otherwise.

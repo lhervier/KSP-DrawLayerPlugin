@@ -9,7 +9,7 @@ namespace com.github.lhervier.ksp.ui.ugui
     public class ContentController : MonoBehaviour
     {
         private DrawLayerViewModel _viewModel;
-        public ContentController ViewModel(DrawLayerViewModel viewModel)
+        public ContentController WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;

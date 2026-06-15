@@ -27,21 +27,21 @@ namespace com.github.lhervier.ksp.ui.ugui.list
         // ===========================================
 
         private DrawLayerViewModel _viewModel;
-        public MarkerRowBuilder ViewModel(DrawLayerViewModel viewModel)
+        public MarkerRowBuilder WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
         }
 
         private VisualMarker _marker;
-        public MarkerRowBuilder Marker(VisualMarker marker)
+        public MarkerRowBuilder WithVisualMarker(VisualMarker marker)
         {
             this._marker = marker;
             return this;
         }
 
         private int _index;
-        public MarkerRowBuilder Index(int index)
+        public MarkerRowBuilder WithIndex(int index)
         {
             this._index = index;
             return this;
@@ -82,7 +82,7 @@ namespace com.github.lhervier.ksp.ui.ugui.list
 
             // Visibility checkbox (shared component)
             CheckboxController checkbox = new CheckboxBuilder()
-                .Checked(visible)
+                .WithCheckedState(visible)
                 .Build();
             checkbox.transform.SetParent(rowGo.transform, false);
             Tooltips.Attach(checkbox.gameObject, ModLocalization.GetString("tooltipVisible"));
@@ -120,13 +120,13 @@ namespace com.github.lhervier.ksp.ui.ugui.list
 
             return rowGo
                 .AddComponent<MarkerRowController>()
-                .ViewModel(_viewModel)
-                .Index(_index)
-                .Background(bg)
-                .ButtonsGroup(buttonsGroup)
-                .PointerHandler(pointer)
-                .Checkbox(checkbox)
-                .RemoveButtonController(removeButton);
+                .WithViewModel(_viewModel)
+                .WithIndex(_index)
+                .WithBackground(bg)
+                .WithButtonsGroup(buttonsGroup)
+                .WithPointerHandler(pointer)
+                .WithCheckboxController(checkbox)
+                .WithRemoveButtonController(removeButton);
         }
 
         // ----------------------------------------------------------------
@@ -255,12 +255,12 @@ namespace com.github.lhervier.ksp.ui.ugui.list
             group.interactable = false;
 
             removeButton = new ButtonBuilder()
-                .ObjectName("Remove")
-                .Label(RemoveLabel)
-                .Size(DrawLayerPalette.RowButtonSize)
-                .FontSize(DrawLayerPalette.RowButtonFontSize)
-                .BackgroundColor(DrawLayerPalette.RowButtonBgColor)
-                .HoverColor(DrawLayerPalette.RowButtonDangerHoverColor)
+                .WithObjectName("Remove")
+                .WithLabel(RemoveLabel)
+                .WithSize(DrawLayerPalette.RowButtonSize)
+                .WithFontSize(DrawLayerPalette.RowButtonFontSize)
+                .WithBackgroundColor(DrawLayerPalette.RowButtonBgColor)
+                .WithHoverColor(DrawLayerPalette.RowButtonDangerHoverColor)
                 .Build();
             removeButton.transform.SetParent(groupGo.transform, false);
             Tooltips.Attach(removeButton.gameObject, ModLocalization.GetString("tooltipRemove"));

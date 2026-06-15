@@ -22,7 +22,7 @@ namespace com.github.lhervier.ksp.ui.ugui
         // =============================================
 
         private DrawLayerViewModel _viewModel;
-        public ModPopupBuilder ViewModel(DrawLayerViewModel viewModel)
+        public ModPopupBuilder WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -30,7 +30,7 @@ namespace com.github.lhervier.ksp.ui.ugui
 
         private Vector2 _position;
         private bool _hasPosition;
-        public ModPopupBuilder Position(Vector2 position)
+        public ModPopupBuilder WithPosition(Vector2 position)
         {
             this._position = position;
             this._hasPosition = true;
@@ -44,18 +44,18 @@ namespace com.github.lhervier.ksp.ui.ugui
         public PopupController Build()
         {
             var popupBuilder = new PopupBuilder<TitleBarController, ContentController>()
-                .PopupID(DIALOG_ID)
-                .Title(ModLocalization.GetString("windowTitle"))
-                .TitleBarBuilder(
-                    new TitleBarBuilder().ViewModel(_viewModel)
+                .WithPopupID(DIALOG_ID)
+                .WithTitle(ModLocalization.GetString("windowTitle"))
+                .WithTitleBarBuilder(
+                    new TitleBarBuilder().WithViewModel(_viewModel)
                 )
-                .ContentBuilder(
-                    new ContentBuilder().ViewModel(_viewModel)
+                .WithContentBuilder(
+                    new ContentBuilder().WithViewModel(_viewModel)
                 )
-                .Size(new Vector2(DrawLayerPalette.WindowWidth, DrawLayerPalette.WindowHeight));
+                .WithSize(new Vector2(DrawLayerPalette.WindowWidth, DrawLayerPalette.WindowHeight));
             if (this._hasPosition)
             {
-                popupBuilder = popupBuilder.Position(this._position);
+                popupBuilder = popupBuilder.WithPosition(this._position);
             }
             return popupBuilder.Build();
         }

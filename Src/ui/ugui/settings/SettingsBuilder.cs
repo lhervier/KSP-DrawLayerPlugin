@@ -17,7 +17,7 @@ namespace com.github.lhervier.ksp.ui.ugui.settings
     public class SettingsBuilder : IUGUIBuilder<SettingsController>
     {
         private DrawLayerViewModel _viewModel;
-        public SettingsBuilder ViewModel(DrawLayerViewModel viewModel)
+        public SettingsBuilder WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -65,9 +65,9 @@ namespace com.github.lhervier.ksp.ui.ugui.settings
 
             // Debug checkbox (whole row clickable)
             CheckboxController debugCheckbox = new CheckboxBuilder()
-                .Label(ModLocalization.GetString("settingsDebug"))
-                .Greedy(true)
-                .Checked(_viewModel.DebugMode)
+                .WithLabel(ModLocalization.GetString("settingsDebug"))
+                .WithGreedyState(true)
+                .WithCheckedState(_viewModel.DebugMode)
                 .Build();
             debugCheckbox.transform.SetParent(sectionGo.transform, false);
 
@@ -76,8 +76,8 @@ namespace com.github.lhervier.ksp.ui.ugui.settings
 
             return rootGo
                 .AddComponent<SettingsController>()
-                .ViewModel(_viewModel)
-                .Controls(backButton, debugCheckbox);
+                .WithViewModel(_viewModel)
+                .WithControls(backButton, debugCheckbox);
         }
 
         private static void BuildHint(Transform parent, string text)

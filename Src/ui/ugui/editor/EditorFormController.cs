@@ -17,7 +17,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
     public class EditorFormController : MonoBehaviour
     {
         private DrawLayerViewModel _viewModel;
-        public EditorFormController ViewModel(DrawLayerViewModel viewModel)
+        public EditorFormController WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
@@ -36,7 +36,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
         private ComboController _divisions;
         private ColorGridController _colorGrid;
 
-        public EditorFormController Controls(
+        public EditorFormController WithControls(
             TextFieldController name,
             TypeSelectorController type,
             SliderController xSlider, TextMeshProUGUI xValue,

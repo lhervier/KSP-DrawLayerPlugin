@@ -13,14 +13,14 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
     public class EditorController : MonoBehaviour
     {
         private DrawLayerViewModel _viewModel;
-        public EditorController ViewModel(DrawLayerViewModel viewModel)
+        public EditorController WithViewModel(DrawLayerViewModel viewModel)
         {
             this._viewModel = viewModel;
             return this;
         }
 
         private TextMeshProUGUI _titleLabel;
-        public EditorController Header(TextMeshProUGUI titleLabel)
+        public EditorController WithHeaderComponent(TextMeshProUGUI titleLabel)
         {
             this._titleLabel = titleLabel;
             return this;
@@ -29,7 +29,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
         private ButtonController _backButton;
         private ButtonController _cancelButton;
         private ButtonController _saveButton;
-        public EditorController Buttons(ButtonController backButton, ButtonController cancelButton, ButtonController saveButton)
+        public EditorController WithButtonControllers(ButtonController backButton, ButtonController cancelButton, ButtonController saveButton)
         {
             this._backButton = backButton;
             this._cancelButton = cancelButton;
