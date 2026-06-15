@@ -1,15 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
+using com.github.lhervier.ksp.shared;
 
 namespace com.github.lhervier.ksp {
-    
+
     public class MarkerRenderer {
+        private static readonly ModLogger LOGGER = new ModLogger("MarkerRenderer");
+
         private Material lineMaterial;
-        
+
         public MarkerRenderer() {
             Shader shader = Shader.Find("Hidden/Internal-Colored");
             if( shader == null ) {
-                Logger.LogError("Shader 'Hidden/Internal-Colored' not found");
+                LOGGER.LogError("Shader 'Hidden/Internal-Colored' not found");
                 return;
             }
 

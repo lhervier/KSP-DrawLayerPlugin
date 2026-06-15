@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using com.github.lhervier.ksp.shared;
 
 namespace com.github.lhervier.ksp {
-    
+
     public class ConfigManager {
+        private static readonly ModLogger LOGGER = new ModLogger("ConfigManager");
+
         private static readonly string CONFIG_FILE = "draw_layer.cfg";
         private static readonly string GENERAL_NODE = "GENERAL";
         private static readonly string MARKERS_NODE = "MARKERS";
@@ -38,12 +41,12 @@ namespace com.github.lhervier.ksp {
             
             // Load the configuration file
             if (!File.Exists(configFilePath)) {
-                Logger.LogInfo("No configuration file found, starting with empty list");
+                LOGGER.LogInfo("No configuration file found, starting with empty list");
                 return;
             }
             ConfigNode configNode = ConfigNode.Load(configFilePath);
             if (configNode == null) {
-                Logger.LogWarning("Invalid configuration file, starting with empty list");
+                LOGGER.LogWarning("Invalid configuration file, starting with empty list");
                 return;
             }
 
@@ -53,7 +56,7 @@ namespace com.github.lhervier.ksp {
             // Load markers
             ConfigNode markersNode = configNode.GetNode(MARKERS_NODE);
             if (markersNode == null) {
-                Logger.LogInfo("No markers found in configuration file, starting with empty list");
+                LOGGER.LogInfo("No markers found in configuration file, starting with empty list");
                 return;
             }
             ConfigNode[] markerNodes = markersNode.GetNodes();
@@ -65,7 +68,7 @@ namespace com.github.lhervier.ksp {
                 }
             }
             
-            Logger.LogInfo($"Loaded {markers.Count} markers from {configFilePath}");
+            LOGGER.LogInfo($"Loaded {markers.Count} markers from {configFilePath}");
         }
         
         private void ParseGeneralConfig(ConfigNode configNode) {
@@ -144,8 +147,8 @@ namespace com.github.lhervier.ksp {
         // =====================================================================
         
         public void SaveConfig() {
-            Logger.LogInfo($"Saving configuration. Markers count: {markers.Count}");
-            Logger.LogInfo($"Config file path: {configFilePath}");
+            LOGGER.LogInfo($"Saving configuration. Markers count: {markers.Count}");
+            LOGGER.LogInfo($"Config file path: {configFilePath}");
             
             // Create the main configuration node
             ConfigNode configNode = new ConfigNode();
@@ -159,7 +162,7 @@ namespace com.github.lhervier.ksp {
             
             for (int i = 0; i < markers.Count; i++) {
                 var marker = markers[i];
-                Logger.LogInfo($"Saving marker {i}: {marker.name}, type: {marker.type}");
+                LOGGER.LogInfo($"Saving marker {i}: {marker.name}, type: {marker.type}");
                 markersNode.AddNode(
                     GenerateMarkerNode(marker, i)
                 );
@@ -167,7 +170,7 @@ namespace com.github.lhervier.ksp {
             
             // Save the configuration file
             configNode.Save(configFilePath);
-            Logger.LogInfo($"Configuration saved to {configFilePath}");
+            LOGGER.LogInfo($"Configuration saved to {configFilePath}");
         }
 
         private ConfigNode GenerateGeneralNode() {
@@ -194,7 +197,7 @@ namespace com.github.lhervier.ksp {
         // =====================================================================
         
         public void AddMarker(VisualMarker marker) {
-            Logger.LogInfo($"Adding marker: {marker.name}, type: {marker.type}");
+            LOGGER.LogInfo($"Adding marker: {marker.name}, type: {marker.type}");
             markers.Add(marker);
             SaveConfig();
         }
@@ -216,7 +219,7 @@ namespace com.github.lhervier.ksp {
         public void SetDebugMode(bool value) {
             if( debugMode == value ) return;
             debugMode = value;
-            Logger.SetDebugMode(value);
+            ModLogger.SetLogLevel(value ? LogLevel.Debug : LogLevel.Info);
             SaveConfig();
         }
     }

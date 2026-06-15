@@ -2,6 +2,7 @@ using KSP.UI.Screens;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.ui;
 using com.github.lhervier.ksp.ui.ugui;
 
@@ -9,6 +10,8 @@ namespace com.github.lhervier.ksp {
 
     [KSPAddon(KSPAddon.Startup.PSystemSpawn, true)]
     public class DrawLayerMod : MonoBehaviour {
+
+        private static readonly ModLogger LOGGER = new ModLogger("DrawLayerMod");
 
         // Mod components
         private ConfigManager configManager;
@@ -23,20 +26,20 @@ namespace com.github.lhervier.ksp {
             try {
                 if (configManager != null) {
                     bool debugMode = configManager.DebugMode;
-                    Logger.SetDebugMode(debugMode);
-                    Logger.LogInfo($"Debug mode initialized: {debugMode}");
+                    ModLogger.SetLogLevel(debugMode ? LogLevel.Debug : LogLevel.Info);
+                    LOGGER.LogInfo($"Debug mode initialized: {debugMode}");
                 } else {
-                    Logger.LogError("ConfigManager not available for debug mode initialization");
+                    LOGGER.LogError("ConfigManager not available for debug mode initialization");
                 }
             }
             catch (Exception ex) {
-                Logger.LogError($"Error initializing debug mode: {ex.Message}");
+                LOGGER.LogError($"Error initializing debug mode: {ex.Message}");
             }
         }
 
         protected void Awake()
         {
-            Logger.LogInfo("Awaked");
+            LOGGER.LogInfo("Awaked");
             DontDestroyOnLoad(this);
 
             configManager = new ConfigManager();
@@ -49,7 +52,7 @@ namespace com.github.lhervier.ksp {
         }
 
         public void Start() {
-            Logger.LogInfo("Plugin started");
+            LOGGER.LogInfo("Plugin started");
             configManager.LoadConfig();
             InitDebugMode();
 
@@ -64,7 +67,7 @@ namespace com.github.lhervier.ksp {
         }
 
         public void OnDestroy() {
-            Logger.LogInfo("Plugin stopped");
+            LOGGER.LogInfo("Plugin stopped");
             configManager.SaveConfig();
 
             markerRenderer?.Dispose();
@@ -120,7 +123,7 @@ namespace com.github.lhervier.ksp {
                     ApplicationLauncher.AppScenes.ALWAYS,
                     iconTexture
                 );
-                Logger.LogInfo("Application Launcher button added");
+                LOGGER.LogInfo("Application Launcher button added");
             }
         }
 
@@ -132,18 +135,18 @@ namespace com.github.lhervier.ksp {
             if (appLauncherButton != null) {
                 ApplicationLauncher.Instance.RemoveModApplication(appLauncherButton);
                 appLauncherButton = null;
-                Logger.LogInfo("Application Launcher button removed");
+                LOGGER.LogInfo("Application Launcher button removed");
             }
         }
 
         private void OnAppLauncherTrue() {
             viewModel.WindowVisible = true;
-            Logger.LogDebug("UI opened via Application Launcher");
+            LOGGER.LogDebug("UI opened via Application Launcher");
         }
 
         private void OnAppLauncherFalse() {
             viewModel.WindowVisible = false;
-            Logger.LogDebug("UI closed via Application Launcher");
+            LOGGER.LogDebug("UI closed via Application Launcher");
         }
 
         private Texture2D CreateIconTexture() {
