@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DrawLayer — Maquette UI</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Titillium+Web:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;display:flex;justify-content:center;align-items:flex-start;gap:40px;padding:40px 20px;min-height:100vh;flex-wrap:wrap}
+
+/* ====== Fenetre ====== */
+.dw{font-family:'Titillium Web',sans-serif;font-size:13px;background:#141414;border:1px solid #555;border-radius:3px;color:#ccc;width:360px;position:relative}
+
+/* ====== Title bar ====== */
+.dtb{background:#2e2e2e;border-bottom:1px solid #444;padding:5px 8px;display:flex;align-items:center;gap:6px}
+.dtitle{font-weight:600;font-size:12px;color:#e8e8e8;letter-spacing:.04em;text-transform:uppercase;flex:1;display:flex;align-items:center;gap:6px}
+.dbadge{font-size:10px;color:#8dbe45;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border:1px solid #4a6e20;padding:1px 6px;border-radius:2px;background:rgba(141,190,69,.1)}
+.dbtn{background:#383838;border:1px solid #555;border-bottom:2px solid #333;color:#bbb;font-size:14px;width:22px;height:22px;border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Share Tech Mono',monospace;line-height:1}
+.dbtn:hover{background:#484848;color:#fff}
+.dbtn.accent{color:#8dbe45}
+.dbtn.accent:hover{color:#aadd5c}
+
+/* ====== Menu deroulant ⋯ ====== */
+.dmenu-wrap{position:relative}
+.dmenu{position:absolute;top:26px;right:0;background:#1e1e1e;border:1px solid #555;border-radius:3px;min-width:200px;z-index:100;padding:4px 0;display:none}
+.dmenu.open{display:block}
+.dmenu-action{display:flex;align-items:center;gap:7px;padding:6px 10px;cursor:pointer;user-select:none;font-size:12px;color:#bbb}
+.dmenu-action:hover{background:#2a2a2a;color:#e8e8e8}
+.dmenu-action .dma-ico{font-size:13px;width:13px;text-align:center;flex-shrink:0;color:#888}
+.dmenu-action:hover .dma-ico{color:#8dbe45}
+.dmenu-action .dma-arrow{margin-left:auto;color:#555;font-size:13px}
+
+/* ====== Corps : liste des reperes ====== */
+.dbody{max-height:420px;overflow-y:auto}
+.dbody::-webkit-scrollbar{width:8px}
+.dbody::-webkit-scrollbar-thumb{background:#888;border-radius:4px}
+
+.drow{display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:1px solid #1c1c1c;position:relative}
+.drow:hover{background:rgba(255,255,255,.03)}
+.drow .accbar{position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent}
+.drow.hidden-row .dname,.drow.hidden-row .dmeta{opacity:.4}
+
+/* checkbox visibilite */
+.dcheck{width:15px;height:15px;border:1px solid #555;border-radius:2px;background:#1a1a1a;cursor:pointer;flex-shrink:0;position:relative}
+.dcheck.on{background:rgba(141,190,69,.15);border-color:#4a6e20}
+.dcheck.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#8dbe45;font-size:11px;font-weight:700}
+
+/* icone type + pastille couleur */
+.dtype{width:22px;height:22px;border:1px solid #444;border-radius:2px;background:#1f1f1f;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-family:'Share Tech Mono',monospace}
+
+.dinfo{flex:1;min-width:0}
+.dname{font-size:13px;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dmeta{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.04em;margin-top:1px;display:flex;align-items:center;gap:6px}
+.dswatch{width:9px;height:9px;border-radius:50%;border:1px solid rgba(255,255,255,.25);flex-shrink:0}
+
+/* boutons reveles au survol */
+.dactions{display:flex;gap:3px;opacity:0;transition:opacity .1s}
+.drow:hover .dactions{opacity:1}
+.dabtn{width:18px;height:18px;background:#2a2a2a;border:1px solid #444;color:#999;font-size:11px;border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace}
+.dabtn:hover{background:#383838;color:#e8e8e8}
+.dabtn.danger:hover{background:#5a241d;color:#ff8a7a;border-color:#6e2a20}
+
+/* etat vide */
+.dempty{padding:26px 18px;text-align:center;color:#777;font-size:12px;line-height:1.6}
+.dempty .demph{color:#8dbe45;font-weight:600}
+.dempty .ttl{display:block;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+
+/* ====== Sous-vue : entete avec retour ====== */
+.dhead{display:flex;align-items:center;gap:7px;padding:6px 8px;background:#1a1a1a;border-bottom:1px solid #222}
+.dback{background:#383838;border:1px solid #555;border-bottom:2px solid #333;color:#bbb;font-size:16px;line-height:1;width:22px;height:22px;border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Share Tech Mono',monospace;padding-bottom:2px}
+.dback:hover{background:#484848;color:#fff}
+.dhtitle{font-weight:600;font-size:11px;color:#ddd;text-transform:uppercase;letter-spacing:.05em;flex:1}
+
+/* ====== Editeur ====== */
+.dsection{padding:11px 11px 13px}
+.dlabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#8dbe45;margin-bottom:8px}
+.dsep{border-top:1px solid #222}
+
+.dfield{margin-bottom:11px}
+.dfield:last-child{margin-bottom:0}
+.dflabel{font-size:11px;color:#999;margin-bottom:4px;display:flex;justify-content:space-between;align-items:baseline}
+.dfval{font-family:'Share Tech Mono',monospace;font-size:11px;color:#8dbe45}
+
+.dinput{width:100%;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:2px;color:#e8e8e8;font-family:'Titillium Web',sans-serif;font-size:13px;padding:5px 8px}
+.dinput:focus{outline:none;border-color:#4a6e20}
+
+/* slider */
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:#2a2a2a;border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#8dbe45;border:1px solid #4a6e20;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#8dbe45;border:1px solid #4a6e20;cursor:pointer}
+
+/* segmented control (type de repere) */
+.dseg{display:flex;gap:0;border:1px solid #555;border-radius:2px;overflow:hidden}
+.dseg button{flex:1;background:#1f1f1f;border:none;color:#999;font-family:'Titillium Web',sans-serif;font-size:12px;padding:6px 4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;border-right:1px solid #333}
+.dseg button:last-child{border-right:none}
+.dseg button.sel{background:rgba(141,190,69,.12);color:#8dbe45;font-weight:600}
+.dseg button:hover:not(.sel){background:#2a2a2a;color:#ccc}
+.dseg .si{font-family:'Share Tech Mono',monospace;font-size:14px}
+
+/* grille de couleurs */
+.dcolors{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.dcolor{aspect-ratio:1;border-radius:2px;border:1px solid rgba(255,255,255,.15);cursor:pointer;position:relative}
+.dcolor:hover{transform:scale(1.12)}
+.dcolor.sel{border:2px solid #fff;box-shadow:0 0 0 1px #8dbe45}
+.dcolorname{font-size:10px;color:#888;margin-top:6px;text-align:center;font-family:'Share Tech Mono',monospace}
+
+/* combo divisions */
+.dcombo{position:relative}
+.dcombo-btn{width:100%;display:flex;align-items:center;gap:6px;background:#2a2a2a;border:1px solid #555;border-radius:2px;color:#e8e8e8;font-family:'Titillium Web',sans-serif;font-size:12px;padding:5px 8px;cursor:pointer;text-align:left}
+.dcombo-btn:hover{background:#333}
+.dcombo-btn .lbl{flex:1}
+.dcombo-caret{color:#888;font-size:10px}
+.dcombo-list{position:absolute;top:30px;left:0;right:0;background:#1e1e1e;border:1px solid #555;border-radius:3px;z-index:100;padding:3px 0;display:none;max-height:180px;overflow-y:auto}
+.dcombo-list.open{display:block}
+.dcombo-item{padding:5px 9px;cursor:pointer;font-size:12px;color:#ddd}
+.dcombo-item:hover{background:#2a2a2a}
+.dcombo-item.sel{background:rgba(141,190,69,.08);color:#8dbe45}
+
+/* mini apercu ecran */
+.dpreview{margin-top:4px}
+.dscreen{position:relative;width:100%;aspect-ratio:16/9;background:radial-gradient(circle at 50% 120%,#1a2433,#0c0c0c);border:1px solid #2a2a2a;border-radius:2px;overflow:hidden}
+.dscreen .horizon{position:absolute;left:0;right:0;bottom:22%;height:1px;background:rgba(141,190,69,.15)}
+.pmark{position:absolute;transform:translate(-50%,-50%);pointer-events:none}
+
+/* footer editeur */
+.dfoot{display:flex;gap:8px;padding:9px 11px;background:#2e2e2e;border-top:1px solid #444}
+.dfbtn{flex:1;height:30px;border-radius:2px;font-family:'Titillium Web',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:1px solid;text-transform:uppercase;letter-spacing:.04em}
+.dfbtn.ok{color:#8dbe45;border-color:#4a6e20;background:rgba(141,190,69,.12)}
+.dfbtn.ok:hover{background:rgba(141,190,69,.22)}
+.dfbtn.cancel{color:#bbb;border-color:#555;background:#383838}
+.dfbtn.cancel:hover{background:#484848;color:#fff}
+
+/* ====== Settings ====== */
+.dkv{display:flex;align-items:center;padding:6px 0}
+.dkvk{flex:1;font-size:12px;color:#bbb}
+.dtoggle{width:38px;height:20px;border-radius:10px;background:#2a2a2a;border:1px solid #444;position:relative;cursor:pointer;flex-shrink:0;transition:.15s}
+.dtoggle.on{background:rgba(141,190,69,.25);border-color:#4a6e20}
+.dtoggle::after{content:'';position:absolute;top:1px;left:1px;width:16px;height:16px;border-radius:50%;background:#888;transition:.15s}
+.dtoggle.on::after{left:19px;background:#8dbe45}
+.dhint{margin-top:9px;font-size:11px;line-height:1.55;color:#999;background:#181818;border:1px solid #2a2a2a;border-left:2px solid #4a6e20;border-radius:2px;padding:7px 9px}
+.dhint code{font-family:'Share Tech Mono',monospace;color:#8dbe45;font-size:11px}
+.dkbd{font-family:'Share Tech Mono',monospace;font-size:10px;color:#e8e8e8;background:#2a2a2a;border:1px solid #555;border-bottom:2px solid #444;border-radius:2px;padding:0 4px}
+
+.caption{width:360px;color:#666;font-size:11px;line-height:1.6;font-family:'Titillium Web',sans-serif}
+.caption b{color:#8dbe45}
+</style>
+</head>
+<body>
+
+<div class="dw">
+  <!-- ===== Title bar ===== -->
+  <div class="dtb">
+    <span class="dtitle">◎ DrawLayer</span>
+    <span class="dbadge" id="count">0 repères</span>
+    <button class="dbtn accent" onclick="newMarker()" title="Nouveau repère">＋</button>
+    <div class="dmenu-wrap">
+      <button class="dbtn" onclick="toggleMenu()" title="Menu">⋯</button>
+      <div class="dmenu" id="dmenu">
+        <div class="dmenu-action" onclick="openSettings()"><span class="dma-ico">⚙</span><span>Paramètres</span><span class="dma-arrow">›</span></div>
+        <div class="dmenu-action" onclick="toggleAll()"><span class="dma-ico">👁</span><span>Tout afficher / masquer</span></div>
+      </div>
+    </div>
+    <button class="dbtn" title="Fermer">✕</button>
+  </div>
+
+  <!-- ===== Vue Liste ===== -->
+  <div id="view-list">
+    <div class="dbody" id="list"></div>
+  </div>
+
+  <!-- ===== Vue Editeur ===== -->
+  <div id="view-editor" style="display:none">
+    <div class="dhead">
+      <button class="dback" onclick="closeEditor()" title="Retour">‹</button>
+      <span class="dhtitle" id="editor-title">Nouveau repère</span>
+    </div>
+    <div class="dbody">
+      <!-- proprietes communes -->
+      <div class="dsection">
+        <div class="dlabel">Propriétés</div>
+
+        <div class="dfield">
+          <div class="dflabel">Nom</div>
+          <input class="dinput" id="f-name" oninput="onName(this.value)">
+        </div>
+
+        <div class="dfield">
+          <div class="dflabel">Type de repère</div>
+          <div class="dseg">
+            <button id="seg-cross" onclick="setType(0)"><span class="si">✛</span> Croix</button>
+            <button id="seg-circle" onclick="setType(1)"><span class="si">◎</span> Cercle</button>
+          </div>
+        </div>
+
+        <div class="dfield">
+          <div class="dflabel"><span>Position horizontale</span><span class="dfval" id="v-x">50 %</span></div>
+          <input type="range" id="f-x" min="0" max="100" step="0.5" oninput="onX(this.value)">
+        </div>
+        <div class="dfield">
+          <div class="dflabel"><span>Position verticale</span><span class="dfval" id="v-y">50 %</span></div>
+          <input type="range" id="f-y" min="0" max="100" step="0.5" oninput="onY(this.value)">
+          <div style="margin-top:7px"><button class="dabtn" style="width:auto;padding:3px 8px;font-family:'Titillium Web',sans-serif" onclick="center()">↺ Recentrer (50 %, 50 %)</button></div>
+        </div>
+      </div>
+
+      <div class="dsep"></div>
+
+      <!-- proprietes specifiques au cercle -->
+      <div class="dsection" id="circle-props">
+        <div class="dlabel">Cercle</div>
+        <div class="dfield">
+          <div class="dflabel"><span>Rayon</span><span class="dfval" id="v-r">10 %</span></div>
+          <input type="range" id="f-r" min="1" max="50" step="0.5" oninput="onR(this.value)">
+        </div>
+        <div class="dfield">
+          <div class="dflabel">Graduations</div>
+          <div class="dcombo">
+            <button class="dcombo-btn" onclick="toggleDiv()"><span class="lbl" id="div-label">12 divisions (30°)</span><span class="dcombo-caret">▾</span></button>
+            <div class="dcombo-list" id="div-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dsep"></div>
+
+      <!-- couleur -->
+      <div class="dsection">
+        <div class="dlabel">Couleur</div>
+        <div class="dcolors" id="colors"></div>
+        <div class="dcolorname" id="colorname">White</div>
+      </div>
+
+    </div>
+    <div class="dfoot">
+      <button class="dfbtn cancel" onclick="closeEditor()">Annuler</button>
+      <button class="dfbtn ok" id="save-btn" onclick="saveMarker()">Créer</button>
+    </div>
+  </div>
+
+  <!-- ===== Vue Settings ===== -->
+  <div id="view-settings" style="display:none">
+    <div class="dhead">
+      <button class="dback" onclick="closeSettings()" title="Retour">‹</button>
+      <span class="dhtitle">Paramètres</span>
+    </div>
+    <div class="dsection">
+      <div class="dlabel">Affichage</div>
+      <div class="dkv"><span class="dkvk">Mode debug (journalisation détaillée)</span><div class="dtoggle" id="debug-toggle" onclick="toggleDebug()"></div></div>
+      <div class="dhint">💡 Les repères sont enregistrés automatiquement dans <code>draw_layer.cfg</code>. En mode debug, ouvrez la console KSP (<span class="dkbd">ALT</span>+<span class="dkbd">F12</span>) pour suivre les traces.</div>
+    </div>
+  </div>
+</div>
+
+<div class="caption">
+  Maquette interactive du futur écran de configuration de <b>DrawLayer</b>, calquée sur le thème des mods frères
+  (UGUI sombre, accent vert <b>#8dbe45</b>). La liste, l'éditeur et les paramètres sont des sous-vues d'une seule
+  fenêtre. Cliquez <b>＋</b> pour créer un repère, survolez une ligne pour révéler éditer / supprimer,
+  cliquez la pastille de visibilité pour afficher/masquer.
+</div>
+
+<script>
+// ===== Donnees =====
+const COLORS = [
+  ['Red','#ff0000'],['Green','#00ff00'],['Blue','#0000ff'],['Yellow','#ffff00'],
+  ['Cyan','#00ffff'],['Magenta','#ff00ff'],['White','#ffffff'],['Black','#000000'],
+  ['Orange','#ff8000'],['Purple','#8000ff'],['Teal','#00ff80'],['Pink','#ff0080'],
+  ['Lime','#80ff00'],['LightBlue','#0080ff'],['LightPink','#ff8080'],['Gray','#808080']
+];
+const DIVISIONS = [1,2,3,4,6,8,12,36];
+const TYPE_ICON = ['✛','◎'];
+const TYPE_NAME = ['Croix','Cercle'];
+
+let markers = [
+  {name:'Transfert Duna', type:1, x:50, y:50, r:18, divisions:12, color:8, visible:true},
+  {name:'Alignement docking', type:0, x:50, y:45, r:10, divisions:4, color:4, visible:true},
+  {name:'Repère bas-gauche', type:1, x:25, y:70, r:8, divisions:2, color:0, visible:false},
+];
+let debug = false;
+let editIndex = -1;            // -1 => creation
+let draft = null;             // marqueur en cours d'edition
+
+// ===== Liste =====
+function renderList(){
+  const c = document.getElementById('list');
+  document.getElementById('count').textContent = markers.length + (markers.length>1?' repères':' repère');
+  if(!markers.length){
+    c.innerHTML = `<div class="dempty"><span class="ttl">Aucun repère</span>Cliquez sur <span class="demph">＋</span> pour créer votre premier repère visuel (croix ou cercle gradué) à poser sur l'écran.</div>`;
+    return;
+  }
+  c.innerHTML = markers.map((m,i)=>{
+    const meta = m.type===1
+      ? `${TYPE_NAME[m.type]} · r ${m.r}% · ${m.divisions>1?m.divisions+' grad.':'sans grad.'}`
+      : `${TYPE_NAME[m.type]} · ${m.x}%, ${m.y}%`;
+    return `<div class="drow ${m.visible?'':'hidden-row'}">
+      <div class="dcheck ${m.visible?'on':''}" onclick="toggleVis(${i})" title="Afficher / masquer"></div>
+      <div class="dtype" style="color:${COLORS[m.color][1]}">${TYPE_ICON[m.type]}</div>
+      <div class="dinfo" onclick="openEditor(${i})" style="cursor:pointer">
+        <div class="dname">${esc(m.name)}</div>
+        <div class="dmeta"><span class="dswatch" style="background:${COLORS[m.color][1]}"></span>${meta}</div>
+      </div>
+      <div class="dactions">
+        <button class="dabtn" onclick="openEditor(${i})" title="Éditer">✎</button>
+        <button class="dabtn danger" onclick="removeMarker(${i})" title="Supprimer">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function toggleVis(i){markers[i].visible=!markers[i].visible;renderList();}
+function removeMarker(i){markers.splice(i,1);renderList();}
+function toggleAll(){const any=markers.some(m=>!m.visible);markers.forEach(m=>m.visible=any);closeMenu();renderList();}
+
+// ===== Editeur =====
+function newMarker(){
+  editIndex=-1;
+  draft={name:'Nouveau repère',type:0,x:50,y:50,r:10,divisions:12,color:6,visible:true};
+  openEditorView('Nouveau repère','Créer');
+}
+function openEditor(i){
+  editIndex=i;
+  draft=Object.assign({},markers[i]);
+  openEditorView('Éditer le repère','Enregistrer');
+}
+function openEditorView(title,saveLabel){
+  closeMenu();
+  document.getElementById('editor-title').textContent=title;
+  document.getElementById('save-btn').textContent=saveLabel;
+  document.getElementById('view-list').style.display='none';
+  document.getElementById('view-settings').style.display='none';
+  document.getElementById('view-editor').style.display='block';
+  renderColors();
+  bindDraft();
+}
+function bindDraft(){
+  document.getElementById('f-name').value=draft.name;
+  document.getElementById('f-x').value=draft.x;
+  document.getElementById('f-y').value=draft.y;
+  document.getElementById('f-r').value=draft.r;
+  setTypeUI();
+  updateLabels();
+  renderDivList();
+  renderPreview();
+}
+function setType(t){draft.type=t;setTypeUI();renderPreview();}
+function setTypeUI(){
+  document.getElementById('seg-cross').classList.toggle('sel',draft.type===0);
+  document.getElementById('seg-circle').classList.toggle('sel',draft.type===1);
+  document.getElementById('circle-props').style.display=draft.type===1?'block':'none';
+}
+function onName(v){draft.name=v;}
+function onX(v){draft.x=parseFloat(v);updateLabels();renderPreview();}
+function onY(v){draft.y=parseFloat(v);updateLabels();renderPreview();}
+function onR(v){draft.r=parseFloat(v);updateLabels();renderPreview();}
+function center(){draft.x=50;draft.y=50;document.getElementById('f-x').value=50;document.getElementById('f-y').value=50;updateLabels();renderPreview();}
+function updateLabels(){
+  document.getElementById('v-x').textContent=fmt(draft.x)+' %';
+  document.getElementById('v-y').textContent=fmt(draft.y)+' %';
+  document.getElementById('v-r').textContent=fmt(draft.r)+' %';
+}
+function fmt(n){return (Math.round(n*10)/10).toString();}
+
+// couleurs
+function renderColors(){
+  document.getElementById('colors').innerHTML=COLORS.map((c,i)=>
+    `<div class="dcolor ${draft.color===i?'sel':''}" style="background:${c[1]}" onclick="setColor(${i})" title="${c[0]}"></div>`
+  ).join('');
+  document.getElementById('colorname').textContent=COLORS[draft.color][0];
+}
+function setColor(i){draft.color=i;renderColors();renderPreview();}
+
+// divisions combo
+function renderDivList(){
+  document.getElementById('div-list').innerHTML=DIVISIONS.map(d=>{
+    const lbl=d===1?'Sans graduation':`${d} divisions (${Math.round(360/d)}°)`;
+    return `<div class="dcombo-item ${draft.divisions===d?'sel':''}" onclick="setDiv(${d})">${lbl}</div>`;
+  }).join('');
+  const cur=draft.divisions;
+  document.getElementById('div-label').textContent=cur===1?'Sans graduation':`${cur} divisions (${Math.round(360/cur)}°)`;
+}
+function toggleDiv(){document.getElementById('div-list').classList.toggle('open');}
+function setDiv(d){draft.divisions=d;document.getElementById('div-list').classList.remove('open');renderDivList();renderPreview();}
+
+// apercu : abandonne en in-app (le repere s'affiche deja en direct sur le vrai ecran de jeu)
+function renderPreview(){}
+
+function saveMarker(){
+  if(editIndex<0) markers.push(Object.assign({},draft));
+  else markers[editIndex]=Object.assign({},draft);
+  closeEditor();
+}
+function closeEditor(){
+  document.getElementById('view-editor').style.display='none';
+  document.getElementById('view-list').style.display='block';
+  renderList();
+}
+
+// ===== Settings =====
+function openSettings(){
+  closeMenu();
+  document.getElementById('view-list').style.display='none';
+  document.getElementById('view-editor').style.display='none';
+  document.getElementById('view-settings').style.display='block';
+  document.getElementById('debug-toggle').classList.toggle('on',debug);
+}
+function closeSettings(){
+  document.getElementById('view-settings').style.display='none';
+  document.getElementById('view-list').style.display='block';
+}
+function toggleDebug(){debug=!debug;document.getElementById('debug-toggle').classList.toggle('on',debug);}
+
+// ===== Menu =====
+function toggleMenu(){document.getElementById('dmenu').classList.toggle('open');}
+function closeMenu(){document.getElementById('dmenu').classList.remove('open');}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.dmenu-wrap'))closeMenu();
+  if(!e.target.closest('.dcombo'))document.getElementById('div-list')&&document.getElementById('div-list').classList.remove('open');
+});
+
+renderList();
+</script>
+</body>
+</html>

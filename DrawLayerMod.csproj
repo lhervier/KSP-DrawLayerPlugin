@@ -1,19 +1,21 @@
-﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <RuntimeIdentifiers>win;linux</RuntimeIdentifiers>
+    <AssemblyName>DrawLayerMod</AssemblyName>
+    <OutputType>Library</OutputType>
+    <OutputPath>Output\bin</OutputPath>
+    <IntermediateOutputPath>Output\obj</IntermediateOutputPath>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{abe9b45e-36f4-422f-b53d-ba63e9d2facb}</ProjectGuid>
-    <OutputType>Library</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
-    <AssemblyName>DrawLayerMod</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>Output\bin</OutputPath>
-    <IntermediateOutputPath>Output\obj</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -21,11 +23,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(KSPDIR)\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(KSP_DATA_DIR)\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>$(KSPDIR)\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>$(KSP_DATA_DIR)\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -34,29 +43,46 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>$(KSPDIR)\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(KSPDIR)\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>$(KSPDIR)\KSP_x64_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(KSPDIR)\KSP_x64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>$(KSPDIR)\KSP_x64_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.InputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(KSP_DATA_DIR)\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include=".gitignore" />
+    <!-- Mod sources -->
+    <Compile Include="Src/**/*.cs" />
+    <!-- Shared classes (KSP-Shared submodule) compiled into the same dll -->
+    <Compile Include="KSP-Shared/Src/**/*.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="*.cs" />
-  </ItemGroup>
-  
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
