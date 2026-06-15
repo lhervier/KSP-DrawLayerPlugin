@@ -1,25 +1,26 @@
 using KSP.UI.Screens;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
+using com.github.lhervier.ksp.ui;
+using com.github.lhervier.ksp.ui.ugui;
 
 namespace com.github.lhervier.ksp {
-	
-	[KSPAddon(KSPAddon.Startup.PSystemSpawn, true)]
+
+    [KSPAddon(KSPAddon.Startup.PSystemSpawn, true)]
     public class DrawLayerMod : MonoBehaviour {
-        
-        // Composants du mod
-        private UIManager uiManager;
-        private MarkerRenderer markerRenderer;
+
+        // Mod components
         private ConfigManager configManager;
-        
+        private MarkerRenderer markerRenderer;
+        private DrawLayerViewModel viewModel;
+        private DrawLayerWindow window;
+
         // Application launcher
         private ApplicationLauncherButton appLauncherButton;
 
         private void InitDebugMode() {
             try {
-                // Utiliser le ConfigManager pour lire la configuration
                 if (configManager != null) {
                     bool debugMode = configManager.DebugMode;
                     Logger.SetDebugMode(debugMode);
@@ -33,25 +34,31 @@ namespace com.github.lhervier.ksp {
             }
         }
 
-        protected void Awake() 
+        protected void Awake()
         {
             Logger.LogInfo("Awaked");
             DontDestroyOnLoad(this);
-            
-            // Initialiser les composants
+
             configManager = new ConfigManager();
             markerRenderer = new MarkerRenderer();
-            uiManager = new UIManager(configManager);
-            
-            // Initialiser le mode debug après avoir créé le ConfigManager
+
+            viewModel = gameObject.AddComponent<DrawLayerViewModel>();
+            viewModel.Initialize(configManager);
+
             InitDebugMode();
         }
 
         public void Start() {
             Logger.LogInfo("Plugin started");
             configManager.LoadConfig();
-            
-            // Ajouter le bouton à l'Application Launcher
+            InitDebugMode();
+
+            window = new DrawLayerWindow();
+            window.Initialize(viewModel);
+            window.OnClosed.Add(OnWindowClosed);
+            viewModel.OnWindowVisibleChanged.Add(OnWindowVisibleChanged);
+
+            // Add the button to the Application Launcher
             GameEvents.onGUIApplicationLauncherReady.Add(OnGUIApplicationLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIApplicationLauncherDestroyed);
         }
@@ -59,38 +66,68 @@ namespace com.github.lhervier.ksp {
         public void OnDestroy() {
             Logger.LogInfo("Plugin stopped");
             configManager.SaveConfig();
-            
-            // Nettoyer les composants
+
             markerRenderer?.Dispose();
-            
-            // Supprimer le bouton de l'Application Launcher
+
+            if (viewModel != null) {
+                viewModel.OnWindowVisibleChanged.Remove(OnWindowVisibleChanged);
+            }
+            if (window != null) {
+                window.OnClosed.Remove(OnWindowClosed);
+                window.Destroy();
+                window = null;
+            }
+
+            GameEvents.onGUIApplicationLauncherReady.Remove(OnGUIApplicationLauncherReady);
+            GameEvents.onGUIApplicationLauncherDestroyed.Remove(OnGUIApplicationLauncherDestroyed);
             RemoveAppLauncherButton();
         }
-        
+
+        // ==========================================================================
+        // Window visibility
+        // ==========================================================================
+
+        private void OnWindowVisibleChanged() {
+            if (viewModel.WindowVisible) {
+                window.Show();
+            } else {
+                // Reset to the list view (drops any editing draft, stops its live preview), then hide.
+                viewModel.BackToList();
+                window.Hide();
+                if (appLauncherButton != null) {
+                    appLauncherButton.SetFalse(false);
+                }
+            }
+        }
+
+        // The window was closed by KSP (Escape, scene change): fold the shared state back, which releases
+        // the toolbar button via OnWindowVisibleChanged.
+        private void OnWindowClosed() {
+            viewModel.WindowVisible = false;
+        }
+
+        // ==========================================================================
+        // Toolbar
+        // ==========================================================================
+
         private void OnGUIApplicationLauncherReady() {
             if (ApplicationLauncher.Instance != null && appLauncherButton == null) {
-                // Créer une texture pour l'icône (cercle simple)
                 Texture2D iconTexture = CreateIconTexture();
-                
                 appLauncherButton = ApplicationLauncher.Instance.AddModApplication(
-                    OnAppLauncherTrue,    // Callback quand le bouton est activé
-                    OnAppLauncherFalse,   // Callback quand le bouton est désactivé
-                    null,                 // Callback quand la souris survole le bouton
-                    null,                 // Callback quand la souris quitte le bouton
-                    null,                 // Callback quand le bouton est cliqué
-                    null,                 // Callback quand le bouton est cliqué avec le bouton droit
+                    OnAppLauncherTrue,
+                    OnAppLauncherFalse,
+                    null, null, null, null,
                     ApplicationLauncher.AppScenes.ALWAYS,
                     iconTexture
                 );
-                
                 Logger.LogInfo("Application Launcher button added");
             }
         }
-        
+
         private void OnGUIApplicationLauncherDestroyed() {
             RemoveAppLauncherButton();
         }
-        
+
         private void RemoveAppLauncherButton() {
             if (appLauncherButton != null) {
                 ApplicationLauncher.Instance.RemoveModApplication(appLauncherButton);
@@ -98,78 +135,68 @@ namespace com.github.lhervier.ksp {
                 Logger.LogInfo("Application Launcher button removed");
             }
         }
-        
+
         private void OnAppLauncherTrue() {
-            uiManager.ShowUI = true;
+            viewModel.WindowVisible = true;
             Logger.LogDebug("UI opened via Application Launcher");
         }
-        
+
         private void OnAppLauncherFalse() {
-            uiManager.ShowUI = false;
+            viewModel.WindowVisible = false;
             Logger.LogDebug("UI closed via Application Launcher");
         }
-        
+
         private Texture2D CreateIconTexture() {
-            // Créer une texture 24x24 pixels
+            // 24x24 icon: a simple circle with four markers.
             Texture2D texture = new Texture2D(24, 24);
             Color[] pixels = new Color[24 * 24];
-            
-            // Couleur de fond (transparente)
+
             Color backgroundColor = new Color(0, 0, 0, 0);
-            // Couleur de l'icône (blanc)
             Color iconColor = Color.white;
-            
-            // Remplir avec la couleur de fond
+
             for (int i = 0; i < pixels.Length; i++) {
                 pixels[i] = backgroundColor;
             }
-            
-            // Dessiner un cercle simple
+
             Vector2 center = new Vector2(12, 12);
             float radius = 8f;
-            
             for (int x = 0; x < 24; x++) {
                 for (int y = 0; y < 24; y++) {
                     Vector2 pos = new Vector2(x, y);
                     float distance = Vector2.Distance(pos, center);
-                    
                     if (distance <= radius && distance >= radius - 2) {
                         pixels[y * 24 + x] = iconColor;
                     }
                 }
             }
-            
-            // Ajouter quelques points pour représenter des repères
-            pixels[6 * 24 + 12] = iconColor;  // Point central vertical
-            pixels[12 * 24 + 6] = iconColor;  // Point central horizontal
-            pixels[12 * 24 + 18] = iconColor; // Point central horizontal
-            pixels[18 * 24 + 12] = iconColor; // Point central vertical
-            
+
+            pixels[6 * 24 + 12] = iconColor;
+            pixels[12 * 24 + 6] = iconColor;
+            pixels[12 * 24 + 18] = iconColor;
+            pixels[18 * 24 + 12] = iconColor;
+
             texture.SetPixels(pixels);
             texture.Apply();
-            
             return texture;
         }
-        
-        public void OnGUI() {
-            if( uiManager == null ) return;
-            uiManager.DrawUI();
-        }
-        
+
+        // ==========================================================================
+        // Full-screen marker rendering
+        // ==========================================================================
+
         public void OnRenderObject() {
-            if( markerRenderer == null ) return;
-            if( uiManager == null ) return;
-            
-            // Get a copy of the list of markers, excluding the edited one
+            if (markerRenderer == null || viewModel == null) return;
+
+            // Draw all saved markers, excluding the one currently being edited (its live draft is drawn
+            // instead, so the editor previews the changes on screen).
             List<VisualMarker> markers = new List<VisualMarker>(configManager.Markers);
-            if( uiManager.EditingMarkerIndex >= 0 ) {
-                markers.RemoveAt(uiManager.EditingMarkerIndex);
+            VisualMarker editing = viewModel.EditingMarker;
+            int editIndex = viewModel.EditingMarkerIndex;
+            if (editIndex >= 0 && editIndex < markers.Count) {
+                markers.RemoveAt(editIndex);
             }
-            
-            markerRenderer.DrawMarkers(
-                markers, 
-                uiManager.EditingMarker
-            );
+
+            markerRenderer.DrawMarkers(markers, editing);
         }
     }
 }

@@ -50,6 +50,11 @@ if errorlevel 1 (
     echo ERROR: Failed to create the Textures folder
     exit /b 1
 )
+mkdir Release\DrawLayerMod\Localization
+if errorlevel 1 (
+    echo ERROR: Failed to create the Localization folder
+    exit /b 1
+)
 
 echo Building Mod DLL
 dotnet build DrawLayerMod.sln
@@ -76,6 +81,13 @@ echo Copying shared TMP sprite textures
 copy /y "KSP-Shared\GameData\Textures\*" "Release\DrawLayerMod\Textures"
 if errorlevel 1 (
     echo ERROR: Failed to copy the shared textures
+    exit /b 1
+)
+
+echo Copying localization files
+copy /y "GameData\DrawLayerMod\Localization\*" "Release\DrawLayerMod\Localization"
+if errorlevel 1 (
+    echo ERROR: Failed to copy the localization files
     exit /b 1
 )
 

@@ -46,7 +46,7 @@ echo "Removing Release folder"
 rm -rf Release
 
 echo "Creating Release folder"
-mkdir -p Release/DrawLayerMod/Textures
+mkdir -p Release/DrawLayerMod/Textures Release/DrawLayerMod/Localization
 
 echo "Restoring NuGet packages"
 dotnet restore DrawLayerMod.sln "${MSBUILD_PROPS[@]}"
@@ -64,6 +64,9 @@ cp -v draw_layer.cfg Release/DrawLayerMod/
 # Read at runtime from GameData/.../Textures.
 echo "Copying shared textures (TMP sprites)"
 cp -v KSP-Shared/GameData/Textures/* Release/DrawLayerMod/Textures/
+
+echo "Copying localization files"
+cp -v GameData/DrawLayerMod/Localization/* Release/DrawLayerMod/Localization/
 
 echo "Creating the archive"
 (

@@ -212,5 +212,12 @@ namespace com.github.lhervier.ksp {
             markers[index] = marker;
             SaveConfig();
         }
+
+        public void SetDebugMode(bool value) {
+            if( debugMode == value ) return;
+            debugMode = value;
+            Logger.SetDebugMode(value);
+            SaveConfig();
+        }
     }
 } 
