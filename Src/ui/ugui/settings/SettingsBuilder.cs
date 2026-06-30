@@ -35,7 +35,7 @@ namespace com.github.lhervier.ksp.ui.ugui.settings
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
 
-            SubViewHeader.Build(rootGo.transform, ModLocalization.GetString("DLM_settingsTitle"),
+            SubViewHeader.Build(rootGo.transform, ModLocalization.GetString("settingsTitle"),
                 out ButtonController backButton, out TextMeshProUGUI _);
 
             // Section
@@ -57,7 +57,7 @@ namespace com.github.lhervier.ksp.ui.ugui.settings
             var sectionLabelGo = new GameObject("SectionLabel", typeof(RectTransform));
             sectionLabelGo.transform.SetParent(sectionGo.transform, false);
             var sectionLabel = UGUILabels.AddLabel(sectionLabelGo);
-            sectionLabel.text = ModLocalization.GetString("DLM_settingsSectionDisplay").ToUpperInvariant();
+            sectionLabel.text = ModLocalization.GetString("settingsSectionDisplay").ToUpperInvariant();
             sectionLabel.fontSize = DrawLayerPalette.SectionLabelFontSize;
             sectionLabel.fontStyle = FontStyles.Bold;
             sectionLabel.color = DrawLayerPalette.SectionLabelColor;
@@ -65,14 +65,14 @@ namespace com.github.lhervier.ksp.ui.ugui.settings
 
             // Debug checkbox (whole row clickable)
             CheckboxController debugCheckbox = new CheckboxBuilder()
-                .WithLabel(ModLocalization.GetString("DLM_settingsDebug"))
+                .WithLabel(ModLocalization.GetString("settingsDebug"))
                 .WithGreedyState(true)
                 .WithCheckedState(_viewModel.DebugMode)
                 .Build();
             debugCheckbox.transform.SetParent(sectionGo.transform, false);
 
             // Hint
-            BuildHint(sectionGo.transform, ModLocalization.GetString("DLM_settingsHint"));
+            BuildHint(sectionGo.transform, ModLocalization.GetString("settingsHint"));
 
             return rootGo
                 .AddComponent<SettingsController>()

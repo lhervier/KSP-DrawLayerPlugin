@@ -45,7 +45,7 @@ namespace com.github.lhervier.ksp.ui.ugui
         {
             var popupBuilder = new PopupBuilder<TitleBarController, ContentController>()
                 .WithPopupID(DIALOG_ID)
-                .WithTitle(ModLocalization.GetString("DLM_windowTitle"))
+                .WithTitle(ModLocalization.GetString("windowTitle"))
                 .WithTitleBarBuilder(
                     new TitleBarBuilder().WithViewModel(_viewModel)
                 )

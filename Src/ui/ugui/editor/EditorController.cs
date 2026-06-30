@@ -59,11 +59,11 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
             bool creating = _viewModel.IsCreatingMarker;
             if (_titleLabel != null)
             {
-                _titleLabel.text = ModLocalization.GetString(creating ? "DLM_editorTitleNew" : "DLM_editorTitleEdit").ToUpperInvariant();
+                _titleLabel.text = ModLocalization.GetString(creating ? "editorTitleNew" : "editorTitleEdit").ToUpperInvariant();
             }
             if (_saveButton != null)
             {
-                _saveButton.SetLabel(ModLocalization.GetString(creating ? "DLM_buttonCreate" : "DLM_buttonSave"));
+                _saveButton.SetLabel(ModLocalization.GetString(creating ? "buttonCreate" : "buttonSave"));
             }
         }
 

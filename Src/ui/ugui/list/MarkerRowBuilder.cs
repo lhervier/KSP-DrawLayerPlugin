@@ -85,7 +85,7 @@ namespace com.github.lhervier.ksp.ui.ugui.list
                 .WithCheckedState(visible)
                 .Build();
             checkbox.transform.SetParent(rowGo.transform, false);
-            Tooltips.Attach(checkbox.gameObject, ModLocalization.GetString("DLM_tooltipVisible"));
+            Tooltips.Attach(checkbox.gameObject, ModLocalization.GetString("tooltipVisible"));
 
             // Colored type icon
             BuildTypeIcon(rowGo.transform, markerColor);
@@ -219,19 +219,19 @@ namespace com.github.lhervier.ksp.ui.ugui.list
         private string BuildMetaText()
         {
             string typeName = ModLocalization.GetString(
-                _marker.type == MarkerType.CrossLines ? "DLM_typeCross" : "DLM_typeCircle");
+                _marker.type == MarkerType.CrossLines ? "typeCross" : "typeCircle");
             string details;
             if (_marker.type == MarkerType.CrossLines)
             {
-                details = ModLocalization.GetString("DLM_metaCrossPosition", Fmt(_marker.positionX), Fmt(_marker.positionY));
+                details = ModLocalization.GetString("metaCrossPosition", Fmt(_marker.positionX), Fmt(_marker.positionY));
             }
             else if (_marker.divisions > 1)
             {
-                details = ModLocalization.GetString("DLM_metaCircleGrad", Fmt(_marker.radius), _marker.divisions);
+                details = ModLocalization.GetString("metaCircleGrad", Fmt(_marker.radius), _marker.divisions);
             }
             else
             {
-                details = ModLocalization.GetString("DLM_metaCircleNoGrad", Fmt(_marker.radius));
+                details = ModLocalization.GetString("metaCircleNoGrad", Fmt(_marker.radius));
             }
             return typeName + "  ·  " + details;
         }
@@ -263,7 +263,7 @@ namespace com.github.lhervier.ksp.ui.ugui.list
                 .WithHoverColor(DrawLayerPalette.RowButtonDangerHoverColor)
                 .Build();
             removeButton.transform.SetParent(groupGo.transform, false);
-            Tooltips.Attach(removeButton.gameObject, ModLocalization.GetString("DLM_tooltipRemove"));
+            Tooltips.Attach(removeButton.gameObject, ModLocalization.GetString("tooltipRemove"));
 
             return group;
         }
