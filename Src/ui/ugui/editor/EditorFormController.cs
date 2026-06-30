@@ -174,7 +174,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
 
         private static void UpdateValueLabel(TextMeshProUGUI label, float value)
         {
-            if (label != null) label.text = ModLocalization.GetString("valuePercent", value.ToString("0.#"));
+            if (label != null) label.text = ModLocalization.GetString("DLM_valuePercent", value.ToString("0.#"));
         }
     }
 }

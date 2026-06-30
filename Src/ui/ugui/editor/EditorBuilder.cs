@@ -36,7 +36,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
             layout.childForceExpandHeight = false;
 
             // Header (back + title)
-            SubViewHeader.Build(rootGo.transform, ModLocalization.GetString("editorTitleNew"),
+            SubViewHeader.Build(rootGo.transform, ModLocalization.GetString("DLM_editorTitleNew"),
                 out ButtonController backButton, out TextMeshProUGUI titleLabel);
 
             // Scrollable form — fills the height between header and footer
@@ -85,11 +85,11 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
             layout.childForceExpandWidth = false;
             layout.childForceExpandHeight = false;
 
-            cancelButton = NewFooterButton("Cancel", ModLocalization.GetString("buttonCancel"),
+            cancelButton = NewFooterButton("Cancel", ModLocalization.GetString("DLM_buttonCancel"),
                 DrawLayerPalette.FooterCancelTextColor, DrawLayerPalette.FooterCancelBgColor, DrawLayerPalette.FooterCancelHoverColor);
             cancelButton.transform.SetParent(footerGo.transform, false);
 
-            saveButton = NewFooterButton("Save", ModLocalization.GetString("buttonSave"),
+            saveButton = NewFooterButton("Save", ModLocalization.GetString("DLM_buttonSave"),
                 DrawLayerPalette.FooterOkTextColor, DrawLayerPalette.FooterOkBgColor, DrawLayerPalette.FooterOkHoverColor);
             saveButton.transform.SetParent(footerGo.transform, false);
         }

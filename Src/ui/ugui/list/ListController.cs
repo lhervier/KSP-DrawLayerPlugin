@@ -86,7 +86,7 @@ namespace com.github.lhervier.ksp.ui.ugui.list
             var titleGo = new GameObject("Title", typeof(RectTransform));
             titleGo.transform.SetParent(go.transform, false);
             var title = UGUILabels.AddLabel(titleGo);
-            title.text = ModLocalization.GetString("listEmptyTitle").ToUpperInvariant();
+            title.text = ModLocalization.GetString("DLM_listEmptyTitle").ToUpperInvariant();
             title.fontSize = DrawLayerPalette.EmptyTitleFontSize;
             title.fontStyle = FontStyles.Bold;
             title.color = DrawLayerPalette.EmptyTitleColor;
@@ -95,7 +95,7 @@ namespace com.github.lhervier.ksp.ui.ugui.list
             var hintGo = new GameObject("Hint", typeof(RectTransform));
             hintGo.transform.SetParent(go.transform, false);
             var hint = UGUILabels.AddLabel(hintGo);
-            hint.text = ModLocalization.GetString("listEmptyHint");
+            hint.text = ModLocalization.GetString("DLM_listEmptyHint");
             hint.fontSize = DrawLayerPalette.EmptyHintFontSize;
             hint.color = DrawLayerPalette.EmptyHintColor;
             hint.alignment = TextAlignmentOptions.Center;

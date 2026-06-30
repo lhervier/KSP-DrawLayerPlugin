@@ -42,9 +42,9 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = true;
 
-            Image crossBg = BuildSegment(rootGo.transform, CrossGlyph + " " + ModLocalization.GetString("typeCross"), out PointerHandler crossPointer, out TextMeshProUGUI crossLabel);
+            Image crossBg = BuildSegment(rootGo.transform, CrossGlyph + " " + ModLocalization.GetString("DLM_typeCross"), out PointerHandler crossPointer, out TextMeshProUGUI crossLabel);
             BuildDivider(rootGo.transform);
-            Image circleBg = BuildSegment(rootGo.transform, CircleGlyph + " " + ModLocalization.GetString("typeCircle"), out PointerHandler circlePointer, out TextMeshProUGUI circleLabel);
+            Image circleBg = BuildSegment(rootGo.transform, CircleGlyph + " " + ModLocalization.GetString("DLM_typeCircle"), out PointerHandler circlePointer, out TextMeshProUGUI circleLabel);
 
             TypeSelectorController controller = rootGo
                 .AddComponent<TypeSelectorController>()

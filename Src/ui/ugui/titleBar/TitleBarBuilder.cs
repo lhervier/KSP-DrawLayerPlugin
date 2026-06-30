@@ -56,13 +56,13 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
             ButtonController add = NewButton("New", NewGlyph);
             add.OnClick.Add(() => _viewModel.NewMarker());
             add.transform.SetParent(right, false);
-            Tooltips.Attach(add.gameObject, ModLocalization.GetString("buttonNew"));
+            Tooltips.Attach(add.gameObject, ModLocalization.GetString("DLM_buttonNew"));
 
             // "Settings" button
             ButtonController settings = NewButton("Settings", DefaultPalette.PickGlyph("⚙", "≡", "…", "*"));
             settings.OnClick.Add(() => _viewModel.OpenSettings());
             settings.transform.SetParent(right, false);
-            Tooltips.Attach(settings.gameObject, ModLocalization.GetString("buttonSettings"));
+            Tooltips.Attach(settings.gameObject, ModLocalization.GetString("DLM_buttonSettings"));
 
             return rightColumnGo
                 .AddComponent<TitleBarController>()
@@ -114,7 +114,7 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
             label.color = DefaultPalette.AccentColor;
             label.alignment = TextAlignmentOptions.Center;
 
-            Tooltips.Attach(badgeGo, ModLocalization.GetString("countTooltip"));
+            Tooltips.Attach(badgeGo, ModLocalization.GetString("DLM_countTooltip"));
 
             return label;
         }

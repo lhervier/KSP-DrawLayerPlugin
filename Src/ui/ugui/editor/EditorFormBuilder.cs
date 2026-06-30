@@ -43,23 +43,23 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
             rootLayout.childForceExpandHeight = false;
 
             // ---- Section: common properties ----
-            GameObject propsSection = NewSection(rootGo.transform, "editorSectionProperties");
+            GameObject propsSection = NewSection(rootGo.transform, "DLM_editorSectionProperties");
 
-            BuildFieldLabel(propsSection.transform, "fieldName");
+            BuildFieldLabel(propsSection.transform, "DLM_fieldName");
             TextFieldController name = new TextFieldBuilder()
                 .WithParent(propsSection.transform)
                 .Build();
 
-            BuildFieldLabel(propsSection.transform, "fieldType");
+            BuildFieldLabel(propsSection.transform, "DLM_fieldType");
             TypeSelectorController type = new TypeSelectorBuilder().Build();
             type.transform.SetParent(propsSection.transform, false);
 
-            SliderController xSlider = BuildSliderField(propsSection.transform, "fieldPositionX", 0f, 100f, out TextMeshProUGUI xValue);
-            SliderController ySlider = BuildSliderField(propsSection.transform, "fieldPositionY", 0f, 100f, out TextMeshProUGUI yValue);
+            SliderController xSlider = BuildSliderField(propsSection.transform, "DLM_fieldPositionX", 0f, 100f, out TextMeshProUGUI xValue);
+            SliderController ySlider = BuildSliderField(propsSection.transform, "DLM_fieldPositionY", 0f, 100f, out TextMeshProUGUI yValue);
 
             ButtonController recenter = new ButtonBuilder()
                 .WithObjectName("Recenter")
-                .WithLabel(ModLocalization.GetString("buttonRecenter"))
+                .WithLabel(ModLocalization.GetString("DLM_buttonRecenter"))
                 .WithAutoWidth(10f)
                 .WithBackgroundColor(DrawLayerPalette.RowButtonBgColor)
                 .WithHoverColor(DrawLayerPalette.RowButtonHoverColor)
@@ -69,11 +69,11 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
             BuildSeparator(rootGo.transform);
 
             // ---- Section: circle (shown only for circle markers) ----
-            GameObject circleSection = NewSection(rootGo.transform, "editorSectionCircle");
+            GameObject circleSection = NewSection(rootGo.transform, "DLM_editorSectionCircle");
 
-            SliderController rSlider = BuildSliderField(circleSection.transform, "fieldRadius", 1f, 50f, out TextMeshProUGUI rValue);
+            SliderController rSlider = BuildSliderField(circleSection.transform, "DLM_fieldRadius", 1f, 50f, out TextMeshProUGUI rValue);
 
-            BuildFieldLabel(circleSection.transform, "fieldDivisions");
+            BuildFieldLabel(circleSection.transform, "DLM_fieldDivisions");
             ComboController divisions = new ComboBuilder()
                 .WithParent(circleSection.transform)
                 .WithLabelFor(DivisionLabel)
@@ -82,7 +82,7 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
             BuildSeparator(rootGo.transform);
 
             // ---- Section: color ----
-            GameObject colorSection = NewSection(rootGo.transform, "editorSectionColor");
+            GameObject colorSection = NewSection(rootGo.transform, "DLM_editorSectionColor");
             ColorGridController colorGrid = new ColorGridBuilder().Build();
             colorGrid.transform.SetParent(colorSection.transform, false);
 
@@ -96,8 +96,8 @@ namespace com.github.lhervier.ksp.ui.ugui.editor
         public static string DivisionLabel(string value)
         {
             if (!int.TryParse(value, out int n)) return value;
-            if (n <= 1) return ModLocalization.GetString("divisionsNone");
-            return ModLocalization.GetString("divisionsValue", n, Mathf.RoundToInt(360f / n));
+            if (n <= 1) return ModLocalization.GetString("DLM_divisionsNone");
+            return ModLocalization.GetString("DLM_divisionsValue", n, Mathf.RoundToInt(360f / n));
         }
 
         // ----------------------------------------------------------------
