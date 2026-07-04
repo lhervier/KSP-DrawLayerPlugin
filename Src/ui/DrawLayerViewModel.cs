@@ -14,23 +14,6 @@ namespace com.github.lhervier.ksp.ui
         private ConfigManager _config;
 
         // =============================================================
-        // Window visibility (drives the PopupDialog spawn/despawn)
-        // =============================================================
-
-        public bool WindowVisible
-        {
-            get => _windowVisible;
-            set
-            {
-                if (_windowVisible == value) return;
-                _windowVisible = value;
-                OnWindowVisibleChanged.Fire();
-            }
-        }
-        private bool _windowVisible = false;
-        public readonly EventVoid OnWindowVisibleChanged = new EventVoid("DrawLayerViewModel.OnWindowVisibleChanged");
-
-        // =============================================================
         // Current sub-view (list / editor / settings)
         // =============================================================
 

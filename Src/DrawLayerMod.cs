@@ -3,7 +3,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using com.github.lhervier.ksp.shared;
+using com.github.lhervier.ksp.shared.ugui.popup;
 using com.github.lhervier.ksp.ui;
+using com.github.lhervier.ksp.ui.styles;
+using com.github.lhervier.ksp.ui.ugui;
+using com.github.lhervier.ksp.ui.ugui.titleBar;
 
 namespace com.github.lhervier.ksp {
 
@@ -11,12 +15,16 @@ namespace com.github.lhervier.ksp {
     public class DrawLayerMod : MonoBehaviour {
 
         private static readonly ModLogger LOGGER = new ModLogger("DrawLayerMod");
+        private const string DIALOG_ID = "DrawLayerUGUI";
 
         // Mod components
         private ConfigManager configManager;
         private MarkerRenderer markerRenderer;
         private DrawLayerViewModel viewModel;
-        private DrawLayerWindow window;
+
+        // uGUI window: a (shared) PopupController living on this GameObject that owns its own lazy
+        // spawn, position, and open state. We only Show/Hide it and react to OnOpenChanged.
+        private PopupController popupController;
 
         // Application launcher
         private ApplicationLauncherButton appLauncherButton;
@@ -55,10 +63,23 @@ namespace com.github.lhervier.ksp {
             configManager.LoadConfig();
             InitDebugMode();
 
-            window = new DrawLayerWindow();
-            window.Initialize(viewModel);
-            window.OnClosed.Add(OnWindowClosed);
-            viewModel.OnWindowVisibleChanged.Add(OnWindowVisibleChanged);
+            // The popup controller is a component on THIS GameObject: it survives KSP destroying the
+            // window (Escape) and persists its own open state, so we no longer track visibility ourselves.
+            // No overlay in DrawLayer (deletion is immediate, the type picker is inline, and list / editor /
+            // settings are replacing views): O is a bare MonoBehaviour, WithOverlayBuilder skipped.
+            popupController = new PopupBuilder<TitleBarController, ContentController, MonoBehaviour>()
+                .WithHost(gameObject)
+                .WithPopupID(DIALOG_ID)
+                .WithTitle(ModLocalization.GetString("windowTitle"))
+                .WithTitleBarBuilder(new TitleBarBuilder().WithViewModel(viewModel))
+                .WithContentBuilder(new ContentBuilder().WithViewModel(viewModel))
+                .WithSize(new Vector2(DrawLayerPalette.WindowWidth, DrawLayerPalette.WindowHeight))
+                .Build();
+            // The controller restores its own open state (in its Start, after this method returns), so we
+            // only subscribe: a restored-open window then syncs the toolbar through this handler.
+            if (popupController != null) {
+                popupController.OnOpenChanged.Add(OnPopupOpenChanged);
+            }
 
             // Add the button to the Application Launcher
             GameEvents.onGUIApplicationLauncherReady.Add(OnGUIApplicationLauncherReady);
@@ -71,13 +92,11 @@ namespace com.github.lhervier.ksp {
 
             markerRenderer?.Dispose();
 
-            if (viewModel != null) {
-                viewModel.OnWindowVisibleChanged.Remove(OnWindowVisibleChanged);
-            }
-            if (window != null) {
-                window.OnClosed.Remove(OnWindowClosed);
-                window.Destroy();
-                window = null;
+            // popupController is a component on this GO: Unity destroys it with us, and it dismisses a still-
+            // open window in its own OnDestroy. We only drop our reference and unsubscribe.
+            if (popupController != null) {
+                popupController.OnOpenChanged.Remove(OnPopupOpenChanged);
+                popupController = null;
             }
 
             GameEvents.onGUIApplicationLauncherReady.Remove(OnGUIApplicationLauncherReady);
@@ -89,23 +108,23 @@ namespace com.github.lhervier.ksp {
         // Window visibility
         // ==========================================================================
 
-        private void OnWindowVisibleChanged() {
-            if (viewModel.WindowVisible) {
-                window.Show();
-            } else {
-                // Reset to the list view (drops any editing draft, stops its live preview), then hide.
-                viewModel.BackToList();
-                window.Hide();
-                if (appLauncherButton != null) {
+        // The window's open state changed (button, ×, Escape, or restore-at-load): sync the toolbar
+        // button, and on close reset to the list view (drops any editing draft, stops its live preview).
+        private void OnPopupOpenChanged() {
+            bool open = popupController != null && popupController.IsOpen;
+            // Keep the toolbar button pressed state in sync, notably when the change is driven by KSP
+            // (Escape) or by restore-at-load rather than by a click. SetTrue/SetFalse(false): do not
+            // re-fire the toggle callbacks.
+            if (appLauncherButton != null) {
+                if (open) {
+                    appLauncherButton.SetTrue(false);
+                } else {
                     appLauncherButton.SetFalse(false);
                 }
             }
-        }
-
-        // The window was closed by KSP (Escape, scene change): fold the shared state back, which releases
-        // the toolbar button via OnWindowVisibleChanged.
-        private void OnWindowClosed() {
-            viewModel.WindowVisible = false;
+            if (!open) {
+                viewModel.BackToList();
+            }
         }
 
         // ==========================================================================
@@ -123,6 +142,11 @@ namespace com.github.lhervier.ksp {
                     iconTexture
                 );
                 LOGGER.LogInfo("Application Launcher button added");
+                // The launcher may become ready after the window state was restored at load: press the
+                // button now to reflect an already-open window (false: no callback).
+                if (appLauncherButton != null && popupController != null && popupController.IsOpen) {
+                    appLauncherButton.SetTrue(false);
+                }
             }
         }
 
@@ -139,12 +163,12 @@ namespace com.github.lhervier.ksp {
         }
 
         private void OnAppLauncherTrue() {
-            viewModel.WindowVisible = true;
+            if (popupController != null) popupController.Show();
             LOGGER.LogDebug("UI opened via Application Launcher");
         }
 
         private void OnAppLauncherFalse() {
-            viewModel.WindowVisible = false;
+            if (popupController != null) popupController.Hide();
             LOGGER.LogDebug("UI closed via Application Launcher");
         }
 
