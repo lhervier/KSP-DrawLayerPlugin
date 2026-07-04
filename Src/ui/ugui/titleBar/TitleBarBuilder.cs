@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using com.github.lhervier.ksp.ui.styles;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui;
+using com.github.lhervier.ksp.shared.ugui.badge;
 using com.github.lhervier.ksp.shared.ugui.button;
 using com.github.lhervier.ksp.shared.ugui.sprites;
 using com.github.lhervier.ksp.shared.ugui.styles;
@@ -50,7 +50,7 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
             Transform right = rightColumnGo.transform;
 
             // "visible / total" count badge — first element of the right column
-            TextMeshProUGUI countLabel = BuildCountBadge(right);
+            BadgeController countBadge = BuildCountBadge(right);
 
             // "New marker" button
             ButtonController add = NewButton("New", NewGlyph);
@@ -67,7 +67,7 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
             return rightColumnGo
                 .AddComponent<TitleBarController>()
                 .WithViewModel(_viewModel)
-                .WithCountLabelComponent(countLabel);
+                .WithCountBadge(countBadge);
         }
 
         // Square title-bar button matching the shared ✕ close button (same size and colors), so the
@@ -83,40 +83,16 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
                 .Build();
         }
 
-        // Chip: sliced accent-border Image + accent Text. Size driven by content + padding.
-        private TextMeshProUGUI BuildCountBadge(Transform parent)
+        // "visible / total" accent count badge. Returns the badge so the controller keeps its text updated.
+        private BadgeController BuildCountBadge(Transform parent)
         {
-            var badgeGo = new GameObject("Count", typeof(RectTransform));
-            badgeGo.transform.SetParent(parent, false);
-
-            var image = badgeGo.AddComponent<Image>();
-            image.sprite = SpritesGlobal.Border(DefaultPalette.AccentBgColor, DefaultPalette.AccentBorderColor, 1);
-            image.type = Image.Type.Sliced;
-            image.color = Color.white;
-            image.raycastTarget = false;
-
-            var layout = badgeGo.AddComponent<HorizontalLayoutGroup>();
-            layout.padding = new RectOffset(
-                Mathf.RoundToInt(DrawLayerPalette.CountPaddingH),
-                Mathf.RoundToInt(DrawLayerPalette.CountPaddingH),
-                2, 2);
-            layout.spacing = 0f;
-            layout.childAlignment = TextAnchor.MiddleCenter;
-            layout.childControlWidth = true;
-            layout.childControlHeight = true;
-            layout.childForceExpandWidth = false;
-            layout.childForceExpandHeight = false;
-
-            var labelGo = new GameObject("Label", typeof(RectTransform));
-            labelGo.transform.SetParent(badgeGo.transform, false);
-            var label = UGUILabels.AddLabel(labelGo);
-            label.fontSize = DrawLayerPalette.CountFontSize;
-            label.color = DefaultPalette.AccentColor;
-            label.alignment = TextAlignmentOptions.Center;
-
-            Tooltips.Attach(badgeGo, ModLocalization.GetString("countTooltip"));
-
-            return label;
+            return new BadgeBuilder()
+                .WithParent(parent)
+                .WithObjectName("Count")
+                .WithFontSize(DrawLayerPalette.CountFontSize)
+                .WithPadding(DrawLayerPalette.CountPaddingH, 2)
+                .WithTooltip(ModLocalization.GetString("countTooltip"))
+                .Build();
         }
     }
 }

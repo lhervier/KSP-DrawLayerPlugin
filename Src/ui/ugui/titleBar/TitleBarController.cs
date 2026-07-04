@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPro;
+using com.github.lhervier.ksp.shared.ugui.badge;
 
 namespace com.github.lhervier.ksp.ui.ugui.titleBar
 {
@@ -12,10 +12,10 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
             return this;
         }
 
-        private TextMeshProUGUI _countLabel;
-        public TitleBarController WithCountLabelComponent(TextMeshProUGUI label)
+        private BadgeController _countBadge;
+        public TitleBarController WithCountBadge(BadgeController badge)
         {
-            this._countLabel = label;
+            this._countBadge = badge;
             return this;
         }
 
@@ -38,8 +38,8 @@ namespace com.github.lhervier.ksp.ui.ugui.titleBar
 
         private void UpdateCount()
         {
-            if (_countLabel == null) return;
-            _countLabel.text = $"{_viewModel.VisibleMarkersCount} / {_viewModel.TotalMarkersCount}";
+            if (_countBadge == null) return;
+            _countBadge.SetText($"{_viewModel.VisibleMarkersCount} / {_viewModel.TotalMarkersCount}");
         }
     }
 }
