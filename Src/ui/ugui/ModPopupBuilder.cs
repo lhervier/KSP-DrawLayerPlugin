@@ -34,7 +34,9 @@ namespace com.github.lhervier.ksp.ui.ugui
 
         public PopupController Build()
         {
-            var popupBuilder = new PopupBuilder<TitleBarController, ContentController>()
+            // No overlay in DrawLayer (deletion is immediate, the type picker is inline, and list / editor
+            // / settings are replacing views): O is a bare MonoBehaviour and WithOverlayBuilder is skipped.
+            var popupBuilder = new PopupBuilder<TitleBarController, ContentController, MonoBehaviour>()
                 .WithPopupID(DIALOG_ID)
                 .WithTitle(ModLocalization.GetString("windowTitle"))
                 .WithTitleBarBuilder(
