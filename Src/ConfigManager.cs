@@ -21,9 +21,11 @@ namespace com.github.lhervier.ksp {
         public bool DebugMode => debugMode;
         
         public ConfigManager() {
+            // The config lives in PluginData/ next to the DLL, like the other mods' settings:
+            // GameDatabase ignores PluginData, so KSP never parses this file as a part config.
             string dllPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string modDirectory = Path.GetDirectoryName(dllPath);
-            configFilePath = Path.Combine(modDirectory, CONFIG_FILE);
+            configFilePath = Path.Combine(modDirectory, "PluginData", CONFIG_FILE);
             markers = new List<VisualMarker>();
             ResetConfig();
         }
@@ -168,7 +170,8 @@ namespace com.github.lhervier.ksp {
                 );
             }
             
-            // Save the configuration file
+            // Save the configuration file (create PluginData/ on first save)
+            Directory.CreateDirectory(Path.GetDirectoryName(configFilePath));
             configNode.Save(configFilePath);
             LOGGER.LogInfo($"Configuration saved to {configFilePath}");
         }
