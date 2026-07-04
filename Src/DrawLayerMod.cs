@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.ui;
-using com.github.lhervier.ksp.ui.ugui;
 
 namespace com.github.lhervier.ksp {
 

@@ -3,8 +3,9 @@ using com.github.lhervier.ksp.ui.styles;
 using com.github.lhervier.ksp.ui.ugui.titleBar;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui.popup;
+using com.github.lhervier.ksp.ui.ugui;
 
-namespace com.github.lhervier.ksp.ui.ugui
+namespace com.github.lhervier.ksp.ui
 {
     /// <summary>
     /// Manages the uGUI window lifecycle: lazy spawn, show/hide, in-session position memory, and OnClosed
