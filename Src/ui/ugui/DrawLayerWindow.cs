@@ -12,7 +12,6 @@ namespace com.github.lhervier.ksp.ui.ugui
     {
         private PopupController _popup = null;
         private DrawLayerViewModel _viewModel;
-        private Vector2? _savedPosition;
 
         public EventVoid OnClosed = new EventVoid("DrawLayer.Window.OnClosed");
 
@@ -28,14 +27,9 @@ namespace com.github.lhervier.ksp.ui.ugui
             if (_popup == null)
             {
                 var builder = new ModPopupBuilder().WithViewModel(_viewModel);
-                if (_savedPosition.HasValue)
-                {
-                    builder = builder.WithPosition(_savedPosition.Value);
-                }
                 _popup = builder.Build();
                 if (_popup == null) return;   // KSP spawn failed
                 _popup.OnClosed.Add(OnPopupClosed);
-                _popup.OnPositionCaptured.Add(OnPopupPositionCaptured);
             }
             _popup.Show();
         }
@@ -62,11 +56,6 @@ namespace com.github.lhervier.ksp.ui.ugui
         private void OnPopupClosed()
         {
             OnClosed.Fire();
-        }
-
-        private void OnPopupPositionCaptured(Vector2 position)
-        {
-            _savedPosition = position;
         }
     }
 }

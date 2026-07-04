@@ -28,15 +28,6 @@ namespace com.github.lhervier.ksp.ui.ugui
             return this;
         }
 
-        private Vector2 _position;
-        private bool _hasPosition;
-        public ModPopupBuilder WithPosition(Vector2 position)
-        {
-            this._position = position;
-            this._hasPosition = true;
-            return this;
-        }
-
         // =============================================
         // Builder
         // =============================================
@@ -53,10 +44,6 @@ namespace com.github.lhervier.ksp.ui.ugui
                     new ContentBuilder().WithViewModel(_viewModel)
                 )
                 .WithSize(new Vector2(DrawLayerPalette.WindowWidth, DrawLayerPalette.WindowHeight));
-            if (this._hasPosition)
-            {
-                popupBuilder = popupBuilder.WithPosition(this._position);
-            }
             return popupBuilder.Build();
         }
     }
