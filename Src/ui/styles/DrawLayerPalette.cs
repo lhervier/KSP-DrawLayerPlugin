@@ -133,6 +133,20 @@ namespace com.github.lhervier.ksp.ui.styles
         public static readonly Color FooterCancelHoverColor = Rgb(72, 72, 72);   // #484848
 
         // ==============================================================
+        // Remove-confirmation overlay (internal popup)
+        // ==============================================================
+        public const int CardMsgFontSize = 13;
+        public static readonly Color CardMsgColor = Rgb(204, 204, 204);        // #ccc
+        public const float CardFootSpacing = 8f;
+
+        // Card buttons (Cancel / Remove)
+        public const float CardButtonHeight = 28f;
+        public const float CardButtonPaddingH = 14f;
+        public const int CardButtonFontSize = 12;
+        public static readonly Color CardButtonDangerTextColor = DefaultPalette.DangerColor;
+        public static readonly Color CardButtonDangerBgColor = Rgba(192, 89, 79, 0.12f);
+
+        // ==============================================================
         // Settings
         // ==============================================================
         public const int SettingsRowFontSize = 12;

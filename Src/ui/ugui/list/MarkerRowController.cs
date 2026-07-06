@@ -111,7 +111,7 @@ namespace com.github.lhervier.ksp.ui.ugui.list
 
         private void OnRemove()
         {
-            _viewModel.RemoveMarker(_index);
+            _viewModel.RequestRemoval(_index);
         }
 
         private void SetHover(bool hovered)
