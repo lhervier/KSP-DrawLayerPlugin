@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui.button;
-using com.github.lhervier.ksp.shared.ugui.internalpopup;
+using com.github.lhervier.ksp.shared.ugui.popin;
 
 namespace com.github.lhervier.ksp.ui.ugui.overlays.remove
 {
@@ -20,8 +20,8 @@ namespace com.github.lhervier.ksp.ui.ugui.overlays.remove
             return this;
         }
 
-        private InternalPopupController _popup;
-        public RemoveConfirmOverlayController WithPopupController(InternalPopupController popup)
+        private PopinController _popup;
+        public RemoveConfirmOverlayController WithPopupController(PopinController popup)
         {
             this._popup = popup;
             return this;

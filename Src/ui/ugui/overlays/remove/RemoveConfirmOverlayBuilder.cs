@@ -1,7 +1,7 @@
 using UnityEngine;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui;
-using com.github.lhervier.ksp.shared.ugui.internalpopup;
+using com.github.lhervier.ksp.shared.ugui.popin;
 using com.github.lhervier.ksp.shared.ugui.styles;
 
 namespace com.github.lhervier.ksp.ui.ugui.overlays.remove
@@ -28,14 +28,14 @@ namespace com.github.lhervier.ksp.ui.ugui.overlays.remove
 
         public RemoveConfirmOverlayController Build()
         {
-            var popupBuilder = new InternalPopupBuilder<RemoveConfirmContentController, RemoveConfirmFooterController>()
+            var popupBuilder = new PopinBuilder<RemoveConfirmContentController, RemoveConfirmFooterController>()
                 .WithParent(_parent)
                 .WithTitle(ModLocalization.GetString("dialogRemoveTitle"))
                 .WithTitleColor(DefaultPalette.DangerColor)
                 .WithContentBuilder(new RemoveConfirmContentBuilder())
                 .WithFooterBuilder(new RemoveConfirmFooterBuilder());
 
-            InternalPopupController popup = popupBuilder.Build();
+            PopinController popup = popupBuilder.Build();
             RemoveConfirmContentController content = popupBuilder.ContentController;
             RemoveConfirmFooterController footer = popupBuilder.FooterController;
 
