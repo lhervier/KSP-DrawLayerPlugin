@@ -7,7 +7,7 @@ using com.github.lhervier.ksp.shared.ugui.popup;
 using com.github.lhervier.ksp.ui;
 using com.github.lhervier.ksp.ui.styles;
 using com.github.lhervier.ksp.ui.ugui;
-using com.github.lhervier.ksp.ui.ugui.overlays;
+using com.github.lhervier.ksp.ui.ugui.popins;
 using com.github.lhervier.ksp.ui.ugui.titleBar;
 
 namespace com.github.lhervier.ksp {
@@ -68,13 +68,13 @@ namespace com.github.lhervier.ksp {
             // window (Escape) and persists its own open state, so we no longer track visibility ourselves.
             // The single overlay is the modal remove-confirmation popup (deletion asks for confirmation);
             // the type picker is inline and list / editor / settings are replacing views.
-            popupController = new PopupBuilder<TitleBarController, ContentController, DrawLayerOverlaysController>()
+            popupController = new PopupBuilder<TitleBarController, ContentController, DrawLayerPopinsController>()
                 .WithHost(gameObject)
                 .WithPopupID(DIALOG_ID)
                 .WithTitle(ModLocalization.GetString("windowTitle"))
                 .WithTitleBarBuilder(new TitleBarBuilder().WithViewModel(viewModel))
                 .WithContentBuilder(new ContentBuilder().WithViewModel(viewModel))
-                .WithOverlayBuilder(new DrawLayerOverlaysBuilder().WithViewModel(viewModel))
+                .WithOverlayBuilder(new DrawLayerPopinsBuilder().WithViewModel(viewModel))
                 .WithSize(new Vector2(DrawLayerPalette.WindowWidth, DrawLayerPalette.WindowHeight))
                 .Build();
             // The controller restores its own open state (in its Start, after this method returns), so we
@@ -125,9 +125,8 @@ namespace com.github.lhervier.ksp {
                 }
             }
             if (!open) {
-                // Drop any pending delete confirmation so a reopened window starts clean (the toolbar
-                // button can close the window while the modal is up).
-                viewModel.CancelPendingRemoval();
+                // Reset to the list so a reopened window starts clean. The remove-confirmation popin
+                // closes itself when the window is hidden (see RemoveConfirmPopinController.OnDisable).
                 viewModel.BackToList();
             }
         }

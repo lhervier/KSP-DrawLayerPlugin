@@ -71,25 +71,14 @@ namespace com.github.lhervier.ksp.ui
         public bool IsCreatingMarker => _editingMarkerIndex < 0;
 
         // =============================================================
-        // Pending removal (confirmation)
+        // Removal (confirmation)
         // =============================================================
 
-        // Index of the marker awaiting a delete confirmation, or -1 when none is pending. Kept as an
-        // index (removal is by index) rather than a marker reference: the confirmation popup is modal, so
-        // the list cannot change under it while a removal is pending.
-        private int _pendingRemovalIndex = -1;
-
-        /// <summary>Whether a marker removal is awaiting confirmation.</summary>
-        public bool HasPendingRemoval => _pendingRemovalIndex >= 0;
-
-        /// <summary>The marker awaiting a delete confirmation, or null when none is pending.</summary>
-        public VisualMarker PendingRemovalMarker =>
-            (_pendingRemovalIndex >= 0 && _pendingRemovalIndex < _config.Markers.Count)
-                ? _config.Markers[_pendingRemovalIndex]
-                : null;
-
-        /// <summary>Fired whenever the pending removal changes (request / confirm / cancel).</summary>
-        public readonly EventVoid OnPendingRemovalChanged = new EventVoid("DrawLayerViewModel.OnPendingRemovalChanged");
+        /// <summary>
+        /// Raised when the user asks to remove a marker. Carries that marker. The removal-confirmation
+        /// popin listens to it; the ViewModel only relays the request and never tracks its outcome.
+        /// </summary>
+        public readonly EventData<VisualMarker> OnRemovalRequested = new EventData<VisualMarker>("DrawLayerViewModel.OnRemovalRequested");
 
         // =============================================================
         // Debug flag
@@ -177,37 +166,24 @@ namespace com.github.lhervier.ksp.ui
             BackToList();
         }
 
-        public void RemoveMarker(int index)
+        /// <summary>Remove the given marker from the saved list.</summary>
+        public void RemoveMarker(VisualMarker marker)
         {
-            if (index < 0 || index >= _config.Markers.Count) return;
+            int index = _config.Markers.IndexOf(marker);
+            if (index < 0) return;
             _config.RemoveMarker(index);
             OnMarkersChanged.Fire();
         }
 
-        /// <summary>Ask to remove the marker at the given index: opens the confirmation popup.</summary>
+        /// <summary>
+        /// Ask to remove the marker at the given index: relays it through <see cref="OnRemovalRequested"/>
+        /// for the confirmation popin to handle. The actual removal happens later through
+        /// <see cref="RemoveMarker"/> if the user confirms.
+        /// </summary>
         public void RequestRemoval(int index)
         {
             if (index < 0 || index >= _config.Markers.Count) return;
-            _pendingRemovalIndex = index;
-            OnPendingRemovalChanged.Fire();
-        }
-
-        /// <summary>Confirm the pending removal: actually remove the marker and close the popup.</summary>
-        public void ConfirmPendingRemoval()
-        {
-            if (_pendingRemovalIndex < 0) return;
-            int index = _pendingRemovalIndex;
-            _pendingRemovalIndex = -1;
-            RemoveMarker(index);
-            OnPendingRemovalChanged.Fire();
-        }
-
-        /// <summary>Dismiss the pending removal without removing anything.</summary>
-        public void CancelPendingRemoval()
-        {
-            if (_pendingRemovalIndex < 0) return;
-            _pendingRemovalIndex = -1;
-            OnPendingRemovalChanged.Fire();
+            OnRemovalRequested.Fire(_config.Markers[index]);
         }
 
         /// <summary>Flip the visibility of the marker at the given index and persist it.</summary>
