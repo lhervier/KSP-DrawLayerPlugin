@@ -1,6 +1,5 @@
 using System.Reflection;
 
-[assembly: AssemblyTitle("DrawLayerMod")]
 [assembly: AssemblyDescription("Mod for drawing static visual markers on screen")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]

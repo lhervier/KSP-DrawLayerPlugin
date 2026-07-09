@@ -2,6 +2,5 @@
 # Thin wrapper: delegates to the shared generic build in KSP-Shared/tools.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
-export MOD_NAME="DrawLayerMod"
-export MOD_SLN="DrawLayerMod.sln"
+export MOD_CSPROJ="DrawLayerMod.csproj"
 exec bash KSP-Shared/tools/build.sh
