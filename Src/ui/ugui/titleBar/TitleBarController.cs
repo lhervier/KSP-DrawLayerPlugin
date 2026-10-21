@@ -1,7 +1,7 @@
 using UnityEngine;
 using com.github.lhervier.ksp.shared.ugui.badge;
 
-namespace com.github.lhervier.ksp.ui.ugui.titleBar
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.titleBar
 {
     public class TitleBarController : MonoBehaviour
     {

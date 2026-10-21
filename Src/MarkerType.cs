@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace com.github.lhervier.ksp {
+namespace com.github.lhervier.ksp.mod.drawlayer {
     public enum MarkerType {
         CrossLines,
         Circle

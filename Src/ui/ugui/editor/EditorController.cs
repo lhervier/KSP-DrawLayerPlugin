@@ -3,7 +3,7 @@ using TMPro;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui.button;
 
-namespace com.github.lhervier.ksp.ui.ugui.editor
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.editor
 {
     /// <summary>
     /// Orchestrates the editor sub-view: wires the back/cancel/save navigation, and on each open refreshes

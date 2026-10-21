@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace com.github.lhervier.ksp.ui.ugui
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui
 {
     /// <summary>
     /// Toggles the three sub-views (list / editor / settings) so that only the one matching

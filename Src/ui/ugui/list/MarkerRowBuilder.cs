@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using com.github.lhervier.ksp.ui.styles;
+using com.github.lhervier.ksp.mod.drawlayer.ui.styles;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui;
 using com.github.lhervier.ksp.shared.ugui.button;
@@ -9,7 +9,7 @@ using com.github.lhervier.ksp.shared.ugui.checkbox;
 using com.github.lhervier.ksp.shared.ugui.sprites;
 using com.github.lhervier.ksp.shared.ugui.styles;
 
-namespace com.github.lhervier.ksp.ui.ugui.list
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.list
 {
     /// <summary>
     /// One marker row: visibility checkbox + colored type icon + name and meta line (color swatch +

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace com.github.lhervier.ksp {
+namespace com.github.lhervier.ksp.mod.drawlayer {
     
     public class CircleMarker {
         private static readonly int SEGMENTS = 64;

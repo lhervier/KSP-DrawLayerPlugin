@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using com.github.lhervier.ksp.shared;
 
-namespace com.github.lhervier.ksp {
+namespace com.github.lhervier.ksp.mod.drawlayer {
 
     public class MarkerRenderer {
         private static readonly ModLogger LOGGER = new ModLogger("MarkerRenderer");

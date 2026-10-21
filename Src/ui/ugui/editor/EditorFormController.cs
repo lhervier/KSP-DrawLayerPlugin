@@ -4,10 +4,10 @@ using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui.button;
 using com.github.lhervier.ksp.shared.ugui.combo;
 using com.github.lhervier.ksp.shared.ugui.slider;
-using com.github.lhervier.ksp.ui.ugui.editor;
+using com.github.lhervier.ksp.mod.drawlayer.ui.ugui.editor;
 using com.github.lhervier.ksp.shared.ugui.textfield;
 
-namespace com.github.lhervier.ksp.ui.ugui.editor
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.editor
 {
     /// <summary>
     /// Binds the editor form fields to the ViewModel's editing draft. Field-change handlers (wired once

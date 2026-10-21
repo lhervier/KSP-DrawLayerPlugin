@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using com.github.lhervier.ksp.shared;
 
-namespace com.github.lhervier.ksp {
+namespace com.github.lhervier.ksp.mod.drawlayer {
 
     public class ConfigManager {
         private static readonly ModLogger LOGGER = new ModLogger("ConfigManager");

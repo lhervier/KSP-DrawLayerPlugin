@@ -2,10 +2,10 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using com.github.lhervier.ksp.ui.styles;
+using com.github.lhervier.ksp.mod.drawlayer.ui.styles;
 using com.github.lhervier.ksp.shared.ugui.sprites;
 
-namespace com.github.lhervier.ksp.ui.ugui.editor
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.editor
 {
     /// <summary>
     /// Drives the color grid: highlights the selected swatch (white border) and shows its name. Selection

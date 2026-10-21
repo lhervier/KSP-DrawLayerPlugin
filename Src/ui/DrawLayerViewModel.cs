@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace com.github.lhervier.ksp.ui
+namespace com.github.lhervier.ksp.mod.drawlayer.ui
 {
     /// <summary>
     /// UI state of the DrawLayer window, wrapping the ConfigManager (markers + debug flag). Mirrors the

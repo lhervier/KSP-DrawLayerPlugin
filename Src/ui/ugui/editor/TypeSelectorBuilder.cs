@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using com.github.lhervier.ksp.ui.styles;
+using com.github.lhervier.ksp.mod.drawlayer.ui.styles;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui;
 using com.github.lhervier.ksp.shared.ugui.sprites;
 using com.github.lhervier.ksp.shared.ugui.styles;
 
-namespace com.github.lhervier.ksp.ui.ugui.editor
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.editor
 {
     /// <summary>
     /// Segmented control to pick the marker type (Cross / Circle): two side-by-side cells inside a

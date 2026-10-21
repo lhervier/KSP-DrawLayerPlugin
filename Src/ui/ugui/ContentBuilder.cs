@@ -1,11 +1,11 @@
 using UnityEngine;
-using com.github.lhervier.ksp.ui.ugui.editor;
-using com.github.lhervier.ksp.ui.ugui.list;
-using com.github.lhervier.ksp.ui.ugui.settings;
+using com.github.lhervier.ksp.mod.drawlayer.ui.ugui.editor;
+using com.github.lhervier.ksp.mod.drawlayer.ui.ugui.list;
+using com.github.lhervier.ksp.mod.drawlayer.ui.ugui.settings;
 using com.github.lhervier.ksp.shared.ugui;
 using com.github.lhervier.ksp.shared.ugui.scrollableview;
 
-namespace com.github.lhervier.ksp.ui.ugui
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui
 {
     /// <summary>
     /// Popup content (everything below the shared title bar): the three sub-views (scrollable marker

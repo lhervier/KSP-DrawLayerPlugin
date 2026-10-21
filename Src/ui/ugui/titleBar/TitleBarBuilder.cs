@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using com.github.lhervier.ksp.ui.styles;
+using com.github.lhervier.ksp.mod.drawlayer.ui.styles;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui;
 using com.github.lhervier.ksp.shared.ugui.badge;
@@ -8,7 +8,7 @@ using com.github.lhervier.ksp.shared.ugui.button;
 using com.github.lhervier.ksp.shared.ugui.sprites;
 using com.github.lhervier.ksp.shared.ugui.styles;
 
-namespace com.github.lhervier.ksp.ui.ugui.titleBar
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.titleBar
 {
     /// <summary>
     /// Right-side content of the popup's title bar: the "visible / total" count badge, then the ＋ (new

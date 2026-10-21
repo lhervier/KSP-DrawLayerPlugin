@@ -1,8 +1,8 @@
 using UnityEngine;
-using com.github.lhervier.ksp.ui.ugui.popins.remove;
+using com.github.lhervier.ksp.mod.drawlayer.ui.ugui.popins.remove;
 using com.github.lhervier.ksp.shared.ugui;
 
-namespace com.github.lhervier.ksp.ui.ugui.popins
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.popins
 {
     /// <summary>
     /// Builds the DrawLayer window popins (currently the remove-confirmation internal popup) on a root.

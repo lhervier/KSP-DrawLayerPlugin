@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace com.github.lhervier.ksp.ui.ugui.popins
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.popins
 {
     /// <summary>
     /// Marker component on the window popins root. The popins it hosts self-manage their visibility

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using com.github.lhervier.ksp.shared.ugui;
 
-namespace com.github.lhervier.ksp.ui.ugui.list
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.list
 {
     /// <summary>
     /// Scrolled content of the marker list: a vertical stack rebuilt from the ViewModel. Mounted by the

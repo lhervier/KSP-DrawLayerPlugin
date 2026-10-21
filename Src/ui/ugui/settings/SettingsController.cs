@@ -2,7 +2,7 @@ using UnityEngine;
 using com.github.lhervier.ksp.shared.ugui.button;
 using com.github.lhervier.ksp.shared.ugui.checkbox;
 
-namespace com.github.lhervier.ksp.ui.ugui.settings
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.settings
 {
     /// <summary>
     /// Behaviour of the settings sub-view: the back button returns to the list, the checkbox drives the

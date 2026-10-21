@@ -1,10 +1,10 @@
 using UnityEngine;
-using com.github.lhervier.ksp.ui.styles;
+using com.github.lhervier.ksp.mod.drawlayer.ui.styles;
 using com.github.lhervier.ksp.shared.ugui;
 using com.github.lhervier.ksp.shared.ugui.button;
 using com.github.lhervier.ksp.shared.ugui.checkbox;
 
-namespace com.github.lhervier.ksp.ui.ugui.list
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.list
 {
     /// <summary>
     /// Behaviour of a marker row: hover reveals the delete button and tints the background, clicking the

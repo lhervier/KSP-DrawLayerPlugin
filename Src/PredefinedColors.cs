@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 
-namespace com.github.lhervier.ksp {
+namespace com.github.lhervier.ksp.mod.drawlayer {
 
     public class ColorAttribute : Attribute {
         public ColorAttribute(float r, float g, float b) {

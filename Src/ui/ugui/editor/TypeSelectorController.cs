@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using com.github.lhervier.ksp.ui.styles;
+using com.github.lhervier.ksp.mod.drawlayer.ui.styles;
 
-namespace com.github.lhervier.ksp.ui.ugui.editor
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.editor
 {
     /// <summary>
     /// Drives the two-cell type selector. Index 0 = Cross, 1 = Circle (matches MarkerType order).

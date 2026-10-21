@@ -4,7 +4,7 @@ using com.github.lhervier.ksp.shared.ugui;
 using com.github.lhervier.ksp.shared.ugui.popin;
 using com.github.lhervier.ksp.shared.ugui.styles;
 
-namespace com.github.lhervier.ksp.ui.ugui.popins.remove
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.popins.remove
 {
     /// <summary>
     /// Assembles the remove-confirmation internal popin: a shared <see cref="ConfirmPopinBuilder"/> (danger

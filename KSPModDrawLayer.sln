@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawLayerMod", "DrawLayerMod.csproj", "{ABE9B45E-36F4-422F-B53D-BA63E9D2FACB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KSPModDrawLayer", "KSPModDrawLayer.csproj", "{ABE9B45E-36F4-422F-B53D-BA63E9D2FACB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

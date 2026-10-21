@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui.popup;
-using com.github.lhervier.ksp.ui;
-using com.github.lhervier.ksp.ui.styles;
-using com.github.lhervier.ksp.ui.ugui;
-using com.github.lhervier.ksp.ui.ugui.popins;
-using com.github.lhervier.ksp.ui.ugui.titleBar;
+using com.github.lhervier.ksp.mod.drawlayer.ui;
+using com.github.lhervier.ksp.mod.drawlayer.ui.styles;
+using com.github.lhervier.ksp.mod.drawlayer.ui.ugui;
+using com.github.lhervier.ksp.mod.drawlayer.ui.ugui.popins;
+using com.github.lhervier.ksp.mod.drawlayer.ui.ugui.titleBar;
 
-namespace com.github.lhervier.ksp {
+namespace com.github.lhervier.ksp.mod.drawlayer {
 
     [KSPAddon(KSPAddon.Startup.PSystemSpawn, true)]
-    public class DrawLayerMod : MonoBehaviour {
+    public class KSPModDrawLayer : MonoBehaviour {
 
-        private static readonly ModLogger LOGGER = new ModLogger("DrawLayerMod");
+        private static readonly ModLogger LOGGER = new ModLogger("KSPModDrawLayer");
         private const string DIALOG_ID = "DrawLayerUGUI";
 
         // Mod components

@@ -15,7 +15,7 @@ This mod allows you to display static visual markers on the KSP screen, like a t
 ## Installation
 
 1. Download the mod
-2. Place the `DrawLayerMod` folder in the KSP `GameData` directory
+2. Place the `KSPModDrawLayer` folder in the KSP `GameData` directory
 3. Launch KSP
 
 ## Usage

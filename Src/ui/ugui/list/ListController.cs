@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using com.github.lhervier.ksp.ui.styles;
+using com.github.lhervier.ksp.mod.drawlayer.ui.styles;
 using com.github.lhervier.ksp.shared;
 using com.github.lhervier.ksp.shared.ugui;
 
-namespace com.github.lhervier.ksp.ui.ugui.list
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.ugui.list
 {
     /// <summary>
     /// Builds and refreshes the marker rows. Rebuilds the whole list on OnMarkersChanged (add / remove /

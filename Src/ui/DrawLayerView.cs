@@ -1,4 +1,4 @@
-namespace com.github.lhervier.ksp.ui
+namespace com.github.lhervier.ksp.mod.drawlayer.ui
 {
     /// <summary>
     /// The sub-view currently shown inside the window content host. They replace one another

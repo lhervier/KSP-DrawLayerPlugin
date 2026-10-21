@@ -2,7 +2,7 @@ using UnityEngine;
 using com.github.lhervier.ksp.shared.ugui.styles;
 using static com.github.lhervier.ksp.shared.ugui.styles.Utils;
 
-namespace com.github.lhervier.ksp.ui.styles
+namespace com.github.lhervier.ksp.mod.drawlayer.ui.styles
 {
     /// <summary>
     /// Colors and metrics of the DrawLayer uGUI interface, mirroring the validated mockup
